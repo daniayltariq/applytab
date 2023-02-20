@@ -114,6 +114,10 @@ Route::group([
 require __DIR__.'/auth.php';
 
 
+Route::get('{id}', function (Request $request,$id) {
+    return $id;
+})->name('job-post');
+
 Route::get('terms_and_condition', function () {
     return view('frontend.pages.terms_and_condition');
  });

@@ -68,7 +68,7 @@
                                     <p class="m-b-0 text-muted">Clicks</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-bullseye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">USD {{$data['revenue'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val"> {{$data['clicks'] ?? ''}}</h2>
                                     </div>
                                     {{-- <span class="badge badge-pill badge-cyan font-size-12">
                                         <i class="anticon anticon-arrow-up"></i>
@@ -97,7 +97,7 @@
                                     <p class="m-b-0 text-muted">Views</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-eye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['vendors'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val">{{$data['views'] ?? ''}}</h2>
                                     </div>
                                     
                                 </div>
@@ -111,7 +111,7 @@
                                     <p class="m-b-0 text-muted">Jobs</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-tasks stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['orders'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val">{{$data['active_jobs'] ?? ''}}</h2>
                                     </div>
                                     
                                 </div>
@@ -125,7 +125,7 @@
                                     <p class="m-b-0 text-muted">Institutes</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-regular fa-building stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['customers'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val">{{$data['institutions'] ?? ''}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -143,13 +143,13 @@
                             <div class="d-inline-block m-{{$alignShort}}-30">
                                 <p class="m-b-0 d-flex align-items-center">
                                     <span class="badge badge-primary badge-dot m-{{$alignShort}}-10"></span>
-                                    <span>Completed Contracts</span>
+                                    <span>Views</span>
                                 </p>
                             </div>
                             <div class="d-inline-block">
                                 <p class="m-b-0 d-flex align-items-center">
                                     <span class="badge badge-blue badge-dot m-{{$alignShort}}-10"></span>
-                                    <span>Uncompleted Contracts</span>
+                                    <span>Clicks</span>
                                 </p>
                             </div>
                         </div>
@@ -160,70 +160,8 @@
                 </div>
             </div>
             
-            {{-- <div class="col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>Top Vendors</h5>
-                        </div>
-                        <div class="m-t-30">
-                            <ul class="list-group list-group-flush">
-                                @foreach ($top_services as $ser)
-                                    <li class="list-group-item p-h-0">
-                                        <div class="d-flex align-items-center justify-content-between">
-                                            <div class="d-flex">
-                                                <div class="avatar avatar-image m-{{$alignShort}}-15">
-                                                    <img src="assets/images/others/thumb-9.jpg" alt="">
-                                                </div>
-                                                <div>
-                                                    <h6 class="m-b-0">
-                                                        <a href="javascript:void(0);" class="text-dark">{{$ser->service_data->category_name ?? ''}}</a>
-                                                    </h6>
-                                                    <span class="text-muted font-size-13">{{$ser->company->name ?? ''}}</span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                @endforeach
-                                
-
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div> --}}
         </div>
-        {{-- <div class="row">
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>Revenue</h5>
-                        </div>
-                        <div class="m-t-30">
-                            <div class="d-md-flex">
-                                <div class="p{{$alignShort}}-4 m-v-10 border-hide-md">
-                                    <p class="m-b-0">Net Revenue</p>
-                                    <h3 class="m-b-0">
-                                        <span>{{danishFormat($data['revenue'] ?? '')}}</span>
-                                    </h3>
-                                </div>
-                                <div class="px-md-4 m-v-10">
-                                    <p class="m-b-0">Profit</p>
-                                    <h3 class="m-b-0">
-                                        <span>$17,523</span>
-                                        <span class="text-danger m-{{$alignShortRev}}-10 font-size-14">+1.82%</span>
-                                    </h3>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="m-t-50" style="height: 240px">
-                            <canvas class="chart" id="revenue_chart"></canvas>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> --}}
+        
         <div class="row">
             <div class="col-lg-4 d-none">
                 <div class="card">
@@ -265,6 +203,7 @@
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
                             <h5>Recent Jobs</h5>
+                            <hr>
                             {{-- <div>
                                 <a href="javascript:void(0);" class="btn btn-sm btn-default">View All</a>
                             </div> --}}
@@ -274,28 +213,35 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="bold">Posting no</th>
+                                            <th class="bold w-10">Job url</th>
                                             <th>Title</th>
+                                            <th>Position</th>
+                                            {{-- <th>Summary</th> --}}
                                             <th>Category</th>
+                                            <th>Type</th>
                                             <th>Institute</th>
-                                            <th>Entry date</th>
-                                            <th>Status</th>
+                                            <th>Date Open</th>
+                                            <th>Date Close</th>
                                             {{-- <th>Renewal date</th>
                                             <th>Renewal Deadline date</th>
                                             <th>Contract value</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($recent_contracts as $key => $contract)
+                                        @forelse($recent_jobs as $key => $job)
                                             <tr>
-                                                <td>{{++$key}}</td>
-                                                <td class="name-badge p-3">{{ $contract->user_type ?? '' }}</td>
-                                                <td>{{ $contract->association->name ?? '' }}</td>
-                                                <td>{{ $contract->start_date ?? '' }}</td>
-                                                <td>{{ $contract->end_date ?? '' }}</td>
-                                                {{-- <td class="{{\Carbon\Carbon::parse($contract->renewal_date)->lt(now()) ? 'text-danger' : ''}}">{{ $contract->renewal_date ?? '' }}</td>
-                                                <td>{{ $contract->renewal_reminder_date ?? '' }}</td>
-                                                <td>{{ $contract->contract_value ?? '' }}</td> --}}
+                                                <td>
+                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',md5($job->id)) }}"><i class="fa fa-clipboard"></i>
+                                                     Copy</a>
+                                                </td>
+                                                <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
+                                                <td>{{ $job->position ?? '' }}</td>
+                                                {{-- <td class="w-20">{!! $job->summary ?? '' !!}</td> --}}
+                                                <td>{{ $job->category ?? '' }}</td>
+                                                <td>{{ $job->type ?? '' }}</td>
+                                                <td>{{ $job->institution->name ?? '' }}</td>
+                                                <td>{{ $job->date_open ?? '' }}</td>
+                                                <td>{{ $job->date_close ?? '' }}</td>
                                                 
                                             </tr>
                                         @empty
@@ -351,68 +297,6 @@
         transparent: 'rgba(255, 255, 255, 0)'
     };
     $(document).ready(function(){
-        /* const revenueChartConfig = new Chart(document.getElementById("revenue_chart"), {
-            type: 'line',
-            data: {
-                labels: {!!$graph->pluck('months')!!},
-                datasets: [{
-                    label: 'Revenue',
-                    backgroundColor: colors.transparent,
-                    borderColor: colors.blue,
-                    pointBackgroundColor: colors.blue,
-                    pointBorderColor: colors.white,
-                    pointHoverBackgroundColor: colors.blueLight,
-                    pointHoverBorderColor: colors.blueLight,
-                    data: {!!$graph->pluck('revenue')!!}
-                }]
-            },
-            options: {
-                legend: {
-                    display: false
-                },
-                maintainAspectRatio: false,
-                responsive: true,
-                
-                tooltips: {
-                    mode: 'index'
-                },
-                scales: {
-                    xAxes: [{ 
-                        gridLines: [{
-                            display: false,
-                        }],
-                        ticks: {
-                            display: true,
-                            fontColor: colors.grayLight,
-                            fontSize: 13,
-                            padding: 10
-                        }
-                    }],
-                    yAxes: [{
-                        gridLines: {
-                            drawBorder: false,
-                            drawTicks: false,
-                            borderDash: [3, 4],
-                            zeroLineWidth: 1,
-                            zeroLineBorderDash: [3, 4]  
-                        },
-                        ticks: {
-                            display: true,
-                            min:0,
-                            max: 2000,                            
-                            stepSize: 200,
-                            fontColor: colors.grayLight,
-                            fontSize: 13,
-                            padding: 10
-                        }  
-                    }],
-                },
-                zoom: {
-                    enabled: true,
-                    mode: 'xy',
-                },
-            }
-        }); */
 
         const salesChart = document.getElementById("sales_chart");
         const salesChartCtx = salesChart.getContext('2d');

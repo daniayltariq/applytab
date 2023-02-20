@@ -4,12 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
-use App\Models\Order;
-use App\Models\Contract;
-use App\Models\OrderItem;
-use App\Models\UserRequest;
+use App\Models\JobPost;
+use App\Models\Institution;
 use Illuminate\Http\Request;
-use App\Models\CompanyProfile;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -20,32 +17,22 @@ class DashboardController extends Controller
 {
   	public function index() 
   	{
-		$revenue=Contract::sum('contract_value_usd');
-		$orders=Contract::count();
+		$institutions=Institution::count();
 
-		$customers=User::whereHas('roles',function($q){
-			$q->whereIn('name',['customer']);
-		})->count();
+		$active_jobs=JobPost::where('active',1);
 
-		$vendors=User::whereHas('roles',function($q){
-			$q->whereIn('name',['vendor']);
-		})->count();
-
-		$recent_contracts=Contract::latest()->limit(10)->get();
+		$recent_jobs=(clone $active_jobs)->latest()->limit(10)->get();
 		
-		$graph=Contract::select(
-            DB::raw('sum(contract_value_usd) as `revenue`'), 
-            DB::raw("DATE_FORMAT(created_at,'%b %Y') as months")
-  		)->groupBy('months')->get();
+		$active_jobs=$active_jobs->count();
 		// dd($graph->pluck('months')->toArray());
 		$data=[
-			'revenue'=>$revenue,
-			'orders'=>$orders,
-			'customers'=>$customers,
-			'vendors'=>$vendors,
+			'clicks'=>0,
+			'views'=>0,
+			'institutions'=>$institutions,
+			'active_jobs'=>$active_jobs,
 		];
-		// dd($data);
-	    return view('backend.index',compact('data','recent_contracts','graph'));
+		
+	    return view('backend.index',compact('data','recent_jobs'));
   	}
 	  
   	public function terms_and_condition(Request $request) 

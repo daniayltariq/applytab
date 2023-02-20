@@ -94,7 +94,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
+                {{-- <div class="col-md-6">
                     <div class="text-md-{{$alignreverse}} m-v-10">
                         @if (hasPermission('Add Data'))
                             <a href="javascript:void(0)" class="btn btn-primary m-{{$alignShortRev}}-15">
@@ -102,7 +102,7 @@
                             </a>
                         @endif
                     </div>
-                </div>
+                </div> --}}
             </div>
         </div>
         <div class="card">
@@ -117,9 +117,9 @@
                         <button class="btn btn-primary search__" type="button">Go</button>
                     </div>
                     
-                    <div class="form-group col-md-6">
+                    {{-- <div class="form-group col-md-6">
                         <button class="btn btn-primary float-right" type="button" onclick="openNav()"><i class="fa fa-filter"></i> Filter</button>
-                    </div>
+                    </div> --}}
                 </form>
             </div>
         </div>
@@ -135,33 +135,42 @@
                                     <table class="table table-hover">
                                         <thead>
 											<tr>
-                                                <th class="bold">Posting no</th>
+                                                <th class="bold w-10">Job url</th>
                                                 <th>Title</th>
+                                                <th>Position</th>
+                                                {{-- <th>Summary</th> --}}
                                                 <th>Category</th>
+                                                <th>Type</th>
                                                 <th>Institute</th>
-                                                <th>Entry date</th>
-                                                <th>Status</th>
-                                                <th>Summary</th>
+                                                <th>Date Open</th>
+                                                <th>Date Close</th>
 											</tr>
 										</thead>
 										<tbody>
-											@forelse($contracts as $key => $contract)
-												<tr>
-													<td>{{++$key}}</td>
-													<td class="name-badge p-3">{{ $contract->user_type ?? '' }}</td>
-													<td>{{ $contract->association->name ?? '' }}</td>
-													<td>{{ $contract->start_date ?? '' }}</td>
-													<td>{{ $contract->end_date ?? '' }}</td>
-												</tr>
+											@forelse($jobs as $key => $job)
+                                                <tr>
+                                                    <td>
+                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',md5($job->id)) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                    </td>
+                                                    <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
+                                                    <td>{{ $job->position ?? '' }}</td>
+                                                    {{-- <td class="w-20">{!! $job->summary ?? '' !!}</td> --}}
+                                                    <td>{{ $job->category ?? '' }}</td>
+                                                    <td>{{ $job->type ?? '' }}</td>
+                                                    <td>{{ $job->institution->name ?? '' }}</td>
+                                                    <td>{{ $job->date_open ?? '' }}</td>
+                                                    <td>{{ $job->date_close ?? '' }}</td>
+                                                    
+                                                </tr>
                                             @empty
                                                 <tr>
                                                     <td colspan="7" class="text-center">No Jobs found</td>
                                                 </tr>
-											@endforelse
+                                            @endforelse
 										</tbody>
                                     </table>
                                 </div>
-                                {!!$contracts->links()!!}
+                                {!!$jobs->appends($_GET)->links()!!}
                             </div>
                         </div>
                     </div>
@@ -229,9 +238,9 @@
 	$(document).ready(function(){
 		/* $("[name='status']").bootstrapSwitch(); */
 
-		@if(request()->query() && !request()->query('type'))
+		/* @if(request()->query() && !request()->query('type'))
             openNav();
-		@endif
+		@endif */
 		
         $('.search__').on('click', function(){
             var search = new URLSearchParams(location.search);

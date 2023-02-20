@@ -10,6 +10,7 @@
 
 <script src="{{asset('js/confirm-dialog.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/clipboard.js/1.5.12/clipboard.min.js"></script>
 <script>
     $(document).ready(function () {
         @if(session()->has('error'))
@@ -30,6 +31,10 @@
             success: function(html){
                 $("#notify_div").append(html);
             }
+        });
+        
+        $(function(){
+            new Clipboard('.copy-job-url');
         });
     });
 </script>

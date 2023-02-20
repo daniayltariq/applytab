@@ -4,13 +4,10 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Category;
 
-use App\Models\Contract;
-use App\Models\UserCompany;
-use App\Models\UserRequest;
+use App\Models\JobPost;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Models\ContractMedia;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
@@ -28,35 +25,23 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        $categories=Category::where('category_type','product')->get();
-        $contracts=Contract::when($request->query('type'),function($q)use($request){
+        $jobs=JobPost::when($request->query('type'),function($q)use($request){
             $q->where('user_type',$request->type);
         })
         ->when($request->query('search_text'),function($q)use($request){
             $search=$request->query('search_text');
             $q->where(function($q)use($search){
-                $q->where('user_type',$search)
-                    ->orWhereHas('user',function($q)use($search){
-                        $q->where('first_name','LIKE','%'.$search.'%')->orWhere('last_name','LIKE','%'.$search.'%');
+                $q->where('title','LIKE','%'.$search.'%')
+                    ->orWhereHas('institution',function($q)use($search){
+                        $q->where('name','LIKE','%'.$search.'%');
                     })
-                    ->orWhereHas('association',function($q)use($search){
-                        $q->where('first_name','LIKE','%'.$search.'%')->orWhere('last_name','LIKE','%'.$search.'%');
-                    })
-                    ->orWhere('start_date',$search)
-                    ->orWhere('end_date',$search)
-                    ->orWhere('renewal_date',$search)
-                    ->orWhere('renewal_reminder_date',$search)
-                    ->orWhere('contract_value',$search)
-                    ->orWhere('contract_type',$search)
-                    ->orWhere('extension',$search)
-                    ->orWhere('extension_period',$search)
-                    ->orWhere('performance_delivery_degree',$search)
-                    ->orWhere('performance_delivery_time',$search)
-                    ->orWhere('performance_quality',$search)
-                    ->orWhere('element_delivery_degree',$search)
-                    ->orWhere('element_delivery_time',$search)
-                    ->orWhere('element_quality',$search)
-                    ->orWhere('delivery_instructions','LIKE','%'.$search.'%');
+                    ->orWhere('summary','LIKE','%'.$search.'%')
+                    ->orWhere('position','LIKE','%'.$search.'%')
+                    ->orWhere('department','LIKE','%'.$search.'%')
+                    ->orWhere('category','LIKE','%'.$search.'%')
+                    ->orWhere('type','LIKE','%'.$search.'%')
+                    ->orWhere('date_open','LIKE','%'.$search.'%')
+                    ->orWhere('date_close','LIKE','%'.$search.'%');
             });
         })
         ->when($request->query('product_category'),function($q)use($request){
@@ -74,7 +59,7 @@ class JobController extends Controller
             $q->where('extension_period',$request->extension_period);
         })->latest()->paginate(15);
 
-        return view('backend.contract.list',compact('contracts','categories'));
+        return view('backend.contract.list',compact('jobs'));
     }
 
     /**
