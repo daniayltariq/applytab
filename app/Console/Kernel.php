@@ -27,10 +27,6 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        // $schedule->command('inspire')->hourly();
-        $schedule->job(new ContractRenewJob)->everyMinute()->withoutOverlapping();
-        $schedule->job(new ContractEndReminderJob)->everyMinute()->withoutOverlapping();
-        // $schedule->job(new ChargePremiumUserJob)->monthlyOn(1, '05:00')->withoutOverlapping(15);
     }
 
     /**
