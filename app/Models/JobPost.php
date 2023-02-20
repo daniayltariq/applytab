@@ -11,6 +11,9 @@ class JobPost extends Model
 {
     use LogsActivity;
 
+    protected $table = 'job';
+
+
     public function getActivitylogOptions(): LogOptions
     {
         return LogOptions::defaults();
