@@ -132,6 +132,7 @@
                                     <table class="table table-hover">
                                         <thead>
 											<tr>
+                                                <th>#</th>
                                                 <th>Name</th>
                                                 <th>Type</th>
                                                 <th>Website</th>
