@@ -64,10 +64,6 @@
     .fa, .fas{
         line-height: unset !important;
     }
-
-    .dropdown-item{
-        cursor: pointer;
-    }
 </style>
 @endsection
 
@@ -76,11 +72,11 @@
     <!-- Content Wrapper START -->
     <div class="main-content">
         <div class="page-header">
-            <h2 class="header-title">Jobs</h2>
+            <h2 class="header-title">Institutions</h2>
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash">
                     <a href="{{route('backend.job.index')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
-                    <span class="breadcrumb-item active">Jobs</span>
+                    <span class="breadcrumb-item active">Institutions</span>
                 </nav>
             </div>
         </div>
@@ -93,7 +89,7 @@
                             <i class="fas fa-building"></i>
                         </div>
                         <div class="media-body m-{{$alignShortRev}}-15">
-                            <h6 class="mb-0">All Jobs</h6>
+                            <h6 class="mb-0">All Institutions</h6>
                             {{-- <span class="text-gray font-size-13">Sanad Team</span> --}}
                         </div>
                     </div>
@@ -109,7 +105,7 @@
                 </div> --}}
             </div>
         </div>
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-body">
                 <form class="form-row" action="{{ getFullUrl() }}">
                     <h3 class="col-md-12">Search Jobs</h3>
@@ -121,12 +117,9 @@
                         <button class="btn btn-primary search__" type="button">Go</button>
                     </div>
                     
-                    {{-- <div class="form-group col-md-6">
-                        <button class="btn btn-primary float-right" type="button" onclick="openNav()"><i class="fa fa-filter"></i> Filter</button>
-                    </div> --}}
                 </form>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-lg-12">
@@ -139,44 +132,23 @@
                                     <table class="table table-hover">
                                         <thead>
 											<tr>
-                                                <th class="bold w-10">Job url</th>
-                                                <th>Title</th>
-                                                <th>Position</th>
-                                                {{-- <th>Summary</th> --}}
-                                                <th>Category</th>
+                                                <th>Name</th>
                                                 <th>Type</th>
-                                                <th>Institute</th>
-                                                <th>Date Open</th>
-                                                <th>Date Close</th>
-                                                <th>Action</th>
+                                                <th>Website</th>
+                                                <th>System</th>
+                                                <th>Jobs</th>
 											</tr>
 										</thead>
 										<tbody>
-											@forelse($jobs as $key => $job)
+											@forelse($institution as $key => $inst)
                                                 <tr>
-                                                    <td>
-                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',md5($job->id)) }}"><i class="fa fa-clipboard"></i> Copy</a>
-                                                    </td>
-                                                    <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
-                                                    <td>{{ $job->position ?? '' }}</td>
-                                                    {{-- <td class="w-20">{!! $job->summary ?? '' !!}</td> --}}
-                                                    <td>{{ $job->category ?? '' }}</td>
-                                                    <td>{{ $job->type ?? '' }}</td>
-                                                    <td>{{ $job->institution->name ?? '' }}</td>
-                                                    <td>{{ $job->date_open ?? '' }}</td>
-                                                    <td>{{ $job->date_close ?? '' }}</td>
-                                                    <td>
-                                                        <div class="dropdown dropdown-inline">
-                                                            <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fa fa-ellipsis-h"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Url</a>
-                                                                <a class="dropdown-item edit_budget" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </td>
+                                                    <td>{{++$key}}</td>
+                                                    <td>{{ $inst->name ?? '' }}</td>
+                                                    <td>{{ $inst->type ?? '' }}</td>
+                                                    <td>{{ $inst->website ?? '' }}</td>
+                                                    <td>{{ $inst->system ?? '' }}</td>
+                                                    <td>{{ $inst->jobs->count() ?? '' }}</td>
+                                                    
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -186,7 +158,7 @@
 										</tbody>
                                     </table>
                                 </div>
-                                {!!$jobs->appends($_GET)->links()!!}
+                                {!!$institution->appends($_GET)->links()!!}
                             </div>
                         </div>
                     </div>
@@ -244,12 +216,6 @@
 		</form>
 	</div>
 
-
-    <div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog  modal-lg job_modal_div" role="document">
-            
-        </div>
-    </div>
 @endsection
 
 @section('scripts')
@@ -279,50 +245,6 @@
             window.location.reload();
         })
 	});
-
-    $(document).on('click','.edit_url',function(e){
-        e.preventDefault();
-        // fullPageLoader(true);
-        var cat_id=$(this).data('job-id');
-
-        $.ajax({
-            url: "{{ url('/') }}/backend/job_update/"+cat_id+"?type=url",
-            type: 'GET',
-            success: function (res) {
-                // fullPageLoader(false);
-                if (res.status=='success') {
-                    $(' .job_modal_div').html(res.data);
-                    $('#jobModal').modal('toggle');
-                }
-                else if(res.status=='error') {
-                    toastr.success(res.message)
-                }
-            }
-        });
-        
-    });
-
-    $(document).on('click','.edit_budget',function(e){
-        e.preventDefault();
-        // fullPageLoader(true);
-        var cat_id=$(this).data('job-id');
-
-        $.ajax({
-            url: "{{ url('/') }}/backend/job_update/"+cat_id+"?type=budget",
-            type: 'GET',
-            success: function (res) {
-                // fullPageLoader(false);
-                if (res.status=='success') {
-                    $(' .job_modal_div').html(res.data);
-                    $('#jobModal').modal('toggle');
-                }
-                else if(res.status=='error') {
-                    toastr.success(res.message)
-                }
-            }
-        });
-        
-    });
 
     function openNav() {
         document.getElementById("filterSidenav").style.width = "400px";

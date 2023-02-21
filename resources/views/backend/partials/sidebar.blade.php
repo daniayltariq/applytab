@@ -13,7 +13,14 @@
                     <span class="title">Home</span>
                 </a>
             </li>
-
+            <li class="nav-item {{url()->current() == route('backend.institution.index') ? 'active' :''}}">
+                <a href="{{route('backend.institution.index')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-building"></i>
+                    </span>
+                    <span class="title">Institutions </span>
+                </a>
+            </li>
             <li class="nav-item {{url()->current() == route('backend.job.index') ? 'active' :''}}">
                 <a href="{{route('backend.job.index')}}">
                     <span class="icon-holder">

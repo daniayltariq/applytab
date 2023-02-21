@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Category;
 
-use App\Models\JobPost;
+use App\Models\Institution;
 
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -15,9 +15,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ContractProductCategory;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\Facades\Response;
 
-class JobController extends Controller
+class InstitutionController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +25,7 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        $jobs=JobPost::when($request->query('type'),function($q)use($request){
+        $institution=Institution::when($request->query('type'),function($q)use($request){
             $q->where('user_type',$request->type);
         })
         ->when($request->query('search_text'),function($q)use($request){
@@ -60,7 +59,7 @@ class JobController extends Controller
             $q->where('extension_period',$request->extension_period);
         })->latest()->paginate(15);
 
-        return view('backend.contract.list',compact('jobs'));
+        return view('backend.institution.list',compact('institution'));
     }
 
     /**
@@ -230,47 +229,6 @@ class JobController extends Controller
     {
         $contract=Contract::where('order_id',$id)->first();
         return view('backend.contract.report',compact('contract'));
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Content  $content
-     * @return \Illuminate\Http\Response
-     */
-    public function fieldUpdate(Request $request,$id)
-    {
-        $job=JobPost::where('id',$id)->first();
-        if (request()->isMethod('get')) {
-            
-            if ($job) {
-                $type=$request->type;
-                $view_data=view('backend.contract.component.modal',compact('job','type'))->render();
-                $res=array(
-                    'status' => 'success',
-                    'data' => $view_data
-            
-                );
-                
-            }else{
-                $res=array(
-                    'status' => 'error',
-                    'message'=>"data not found"
-            
-                );
-            }
-    
-            return Response::json($res);
-        }
-        else if (request()->isMethod('post')) {
-            if ($request->type=='url') {
-                $job->apply_details=$request->url;
-            } else {
-                $job->budget=$request->budget;
-            }
-            $job->save();
-        }
-        return redirect()->back()->with("status", "Job updated.");
     }
 
     /**

@@ -165,6 +165,7 @@ return [
         Lab404\Impersonate\ImpersonateServiceProvider::class,
         Maatwebsite\Excel\ExcelServiceProvider::class,
         Kawankoding\Fcm\FcmServiceProvider::class,
+        Biscolab\ReCaptcha\ReCaptchaServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -231,6 +232,8 @@ return [
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
         'Fcm' => Kawankoding\Fcm\FcmFacade::class,
+        'ReCaptcha' => Biscolab\ReCaptcha\Facades\ReCaptcha::class,
+
     ],
 
 ];

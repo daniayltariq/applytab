@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Institution extends Model
 {
     protected $table = 'institution';
+
+    public function jobs()
+    {
+        return $this->hasMany('App\Models\JobPost','institution_id');
+    }
 }

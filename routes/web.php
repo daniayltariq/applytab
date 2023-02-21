@@ -17,7 +17,7 @@ use App\Http\Controllers\Admin\{
     OrderController,
     ReportController,
     BlogController,
-    BannerController
+    InstitutionController
 };
 
 /*
@@ -75,6 +75,7 @@ Route::group([
         Route::get('user/{id}', [UserController::class, 'show'])->name('user.show');
         
         Route::get('job', [JobController::class, 'index'])->name('job.index');
+        Route::get('institution', [InstitutionController::class, 'index'])->name('institution.index');
         Route::get('contract/{id}', [JobController::class, 'show'])->name('contract.show');
     });
 
@@ -86,6 +87,8 @@ Route::group([
         Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
         Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
         Route::get('contract/{id}/edit', [ContractController::class, 'edit'])->name('contract.edit');
+        Route::get('job_update/{id}', [JobController::class, 'fieldUpdate'])->name('job_update');
+        Route::post('job_update/{id}', [JobController::class, 'fieldUpdate'])->name('job_update');
         Route::get('updateStatus/{id}', [ContractController::class, 'updateStatus'])->name('contract.update_status');
 
         Route::put('category/{id}', [CategoryController::class, 'update'])->name('category.update');

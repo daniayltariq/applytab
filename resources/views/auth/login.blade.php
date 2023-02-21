@@ -44,6 +44,9 @@
             background-color: rgba(47, 54, 95);
         }
     </style>
+    {!! htmlScriptTagJsApi([
+        'action' => 'login',
+    ]) !!}
 </head>
 
 <body>
@@ -88,6 +91,12 @@
                                                 </span>
                                             @enderror
                                         </div>
+                                        {!! htmlFormSnippet() !!}
+                                        @error('g-recaptcha-response')
+                                                <span class="invalid-feedback d-block" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 {{-- <span class="font-size-13 text-muted">
