@@ -29,6 +29,44 @@
                     <span class="title">Jobs </span>
                 </a>
             </li>
+
+
+            <li class="nav-item dropdown {{\Route::is('backend.contract.*') ? 'active' :''}}">
+                <a class="dropdown-toggle" href="javascript:void(0);">
+                    <span class="icon-holder">
+                        <i class="fas fa-list-alt"></i>
+                    </span>
+                    <span class="title">Reports</span>
+                    <span class="arrow">
+                        <i class="arrow-icon" style="color:#fff"></i>
+                    </span>
+                </a>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a href="#">Cost per Click</a>
+                    </li>
+                    <li>
+                        <a href="#">Institutions</a>
+                    </li>
+                    <li>
+                        <a href="#">Job Type</a>
+                    </li>
+                    <li>
+                        <a href="#">Region</a>
+                    </li>
+                </ul>
+            </li>
+
+            <li class="nav-item {{\Route::is('backend.view_notifications') ? 'active' :''}}">
+                <a href="{{route('backend.view_notifications')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-bell"></i>
+                    </span>
+                    <span class="title">Notifications </span>
+                </a>
+            </li>
+
+            
             {{-- <li class="nav-item {{url()->current() == route('backend.orders.index') ? 'active' :''}}">
                 <a href="{{route('backend.orders.index')}}">
                     <span class="icon-holder">
