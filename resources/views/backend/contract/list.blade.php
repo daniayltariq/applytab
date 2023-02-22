@@ -155,7 +155,7 @@
 											@forelse($jobs as $key => $job)
                                                 <tr>
                                                     <td>
-                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',md5($job->id)) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                     </td>
                                                     <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
                                                     <td>{{ $job->position ?? '' }}</td>

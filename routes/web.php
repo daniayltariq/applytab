@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Controllers\Admin\{
@@ -117,9 +118,7 @@ Route::group([
 require __DIR__.'/auth.php';
 
 
-Route::get('{id}', function (Request $request,$id) {
-    return $id;
-})->name('job-post');
+Route::get('{id}',[App\Http\Controllers\FrontPageController::class, 'storeStats'])->name('job-post');
 
 Route::get('terms_and_condition', function () {
     return view('frontend.pages.terms_and_condition');

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Faqs;
+use App\Models\Stats;
 use App\Models\JoinUs;
+use App\Models\JobPost;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -32,31 +34,19 @@ class FrontPageController extends Controller
 		}
 	}
 
-	public function joinUs(Request $request)
+	public function storeStats(Request $request,$id)
 	{
-		$validator = validator($request->all(), [
-            'company_name' => 'required|string',
-            'worker_name'=>'required|unique:join_us,worker_name,company_name'.$request->company_name,
-            'city' => 'required|string',
-            'phone'=>'required|unique:join_us,phone',
-			
-        ]);
+		$job=JobPost::where('unique_id',$id)->first();
+		if ($job) {
+			$stats=new Stats;
+			$stats->job_id=$job->id;
+			$stats->type='click';
+			$stats->source=request()->headers->get('referer');
+			$stats->save();
 
-		if ($validator->fails()) {
-			return redirect()->back()
-						->withErrors($validator)
-						->withInput()
-						->with('error','Validation error.')
-						->with('join-error','Validation error.');
+			return redirect()->to($job->apply_details);
+		} else {
+			return 'Link not found';
 		}
-
-		$data=JoinUs::create([
-			'company_name'=>$request->company_name,
-			'worker_name'=>$request->worker_name,
-			'city'=>$request->city,
-			'phone'=>$request->phone,
-		]);
-
-		return redirect()->back()->with('status','Data Saved.');
 	}
 }

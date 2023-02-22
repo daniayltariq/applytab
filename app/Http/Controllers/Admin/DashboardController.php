@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use Carbon\Carbon;
 use App\Models\User;
+use App\Models\Stats;
 use App\Models\JobPost;
 use App\Models\Institution;
 use Illuminate\Http\Request;
@@ -25,8 +26,9 @@ class DashboardController extends Controller
 		
 		$active_jobs=$active_jobs->count();
 		// dd($graph->pluck('months')->toArray());
+		$clicks=Stats::where('type', 'click')->count();
 		$data=[
-			'clicks'=>0,
+			'clicks'=>$clicks,
 			'views'=>0,
 			'institutions'=>$institutions,
 			'active_jobs'=>$active_jobs,
