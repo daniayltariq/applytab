@@ -29,6 +29,14 @@
                     <span class="title">Jobs </span>
                 </a>
             </li>
+            <li class="nav-item {{url()->current() == route('backend.jobstats.index') ? 'active' :''}}">
+                <a href="{{route('backend.jobstats.index')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-list-alt"></i>
+                    </span>
+                    <span class="title">Job Stats </span>
+                </a>
+            </li>
             {{-- <li class="nav-item {{url()->current() == route('backend.orders.index') ? 'active' :''}}">
                 <a href="{{route('backend.orders.index')}}">
                     <span class="icon-holder">

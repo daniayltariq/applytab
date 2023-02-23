@@ -109,6 +109,10 @@ Route::group([
         Route::get('job', [JobController::class, 'index'])->name('job.index');
         Route::get('institution', [InstitutionController::class, 'index'])->name('institution.index');
         Route::get('contract/{id}', [JobController::class, 'show'])->name('contract.show');
+
+        Route::get('jobstats', [JobController::class, 'jobStats'])->name('jobstats.index');
+        Route::get('jobstats/details', [JobController::class, 'jobStatDetail'])->name('jobstats.detail');
+
     });
 
     // Update Permissions
