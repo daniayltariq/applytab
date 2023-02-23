@@ -2,10 +2,11 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\User;
-use App\Models\Category;
+use App\Models\Stats;
 
 use App\Models\JobPost;
 
+use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -14,8 +15,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use App\Models\ContractProductCategory;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Response;
+use Illuminate\Support\Facades\Validator;
 
 class JobController extends Controller
 {
@@ -61,6 +62,65 @@ class JobController extends Controller
         })->latest()->paginate(15);
 
         return view('backend.contract.list',compact('jobs'));
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function jobStats(Request $request)
+    {
+        $stats = Stats::select('job_id','type',DB::raw('count(job_id) as clicks'))
+                        ->whereHas('job',function($query)use($request){
+                            $query->when($request->query('search_text'),function($q)use($request){
+                                    $search=$request->query('search_text');
+                                    $q->where(function($q)use($search){
+                                        $q->where('title','LIKE','%'.$search.'%')
+                                            ->orWhereHas('institution',function($q)use($search){
+                                                $q->where('name','LIKE','%'.$search.'%');
+                                            })
+                                            ->orWhere('summary','LIKE','%'.$search.'%')
+                                            ->orWhere('position','LIKE','%'.$search.'%')
+                                            ->orWhere('department','LIKE','%'.$search.'%')
+                                            ->orWhere('category','LIKE','%'.$search.'%')
+                                            ->orWhere('type','LIKE','%'.$search.'%')
+                                            ->orWhere('date_open','LIKE','%'.$search.'%')
+                                            ->orWhere('date_close','LIKE','%'.$search.'%');
+                                    });
+                                });
+                        })
+                        ->groupBy('job_id','type')
+                        ->paginate(10);
+
+        return view('backend.jobstats.list',compact('stats'));
+    }
+    public function jobStatDetail(Request $request)
+    {
+        $stats = Stats::select('job_id','type',DB::raw('count(job_id) as clicks'))
+                        ->whereHas('job',function($query)use($request){
+                            $query->when($request->query('search_text'),function($q)use($request){
+                                    $search=$request->query('search_text');
+                                    $q->where(function($q)use($search){
+                                        $q->where('title','LIKE','%'.$search.'%')
+                                            ->orWhereHas('institution',function($q)use($search){
+                                                $q->where('name','LIKE','%'.$search.'%');
+                                            })
+                                            ->orWhere('summary','LIKE','%'.$search.'%')
+                                            ->orWhere('position','LIKE','%'.$search.'%')
+                                            ->orWhere('department','LIKE','%'.$search.'%')
+                                            ->orWhere('category','LIKE','%'.$search.'%')
+                                            ->orWhere('type','LIKE','%'.$search.'%')
+                                            ->orWhere('date_open','LIKE','%'.$search.'%')
+                                            ->orWhere('date_close','LIKE','%'.$search.'%');
+                                    });
+                                });
+                        })
+                        ->groupBy('job_id','type')
+                        ->latest()
+                        ->paginate(10);
+
+        return view('backend.jobstats.detail',compact('stats'));
     }
 
     /**
