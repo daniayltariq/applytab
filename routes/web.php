@@ -39,6 +39,37 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('/');
 
+Route::get('/test_pixel', function (Request $request) {
+    // Create an image, 1x1 pixel in size
+  $im=imagecreate(1,1);
+
+  // Set the background colour
+  $white=imagecolorallocate($im,255,255,255);
+
+  // Allocate the background colour
+  imagesetpixel($im,1,1,$white);
+
+  // Set the image type
+  header("content-type:image/jpg");
+
+  // Create a JPEG file from the image
+  imagejpeg($im);
+
+  // Free memory associated with the image
+  imagedestroy($im);
+  if (isset($_GET['jID'])) {
+    createLog('PAGE_VIEW',[
+        'job_id'       => $_GET['jID'],
+        'ip'        => $_SERVER['REMOTE_ADDR'],
+        'date'      => date('Y-m-d H:i:s'),
+        'referer'   => $_SERVER['HTTP_REFERER'],
+        'useragent' => $_SERVER['HTTP_USER_AGENT']/* ,
+        'browser'   => get_browser(null, true) */
+    ]);
+  }
+  
+});
+
 Route::group([
 	'prefix' => 'backend',
     'as' => 'backend.',
