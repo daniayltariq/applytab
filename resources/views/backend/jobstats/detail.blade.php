@@ -146,26 +146,29 @@
                                         <span class="detail-bold">Total Views on all sites:</span>
                                     </div>
                                     <div class="col-md-6">
-                                        <span class="detail">{{$statdetails['view']->count()}}</span>
+                                        <span class="detail">{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}</span>
                                     </div>
                                 </div>
 
-                                @foreach ($statdetails['view'] as $statdetail)
-                                <div class="row mb-4">
-                                    <div class="col-md-12">
-                                        <span class="detail-bold">{{$statdetail->source}}</span>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <span class="detail">Views :</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                {{$statdetail->views}}
+                                @if (isset($statdetails['view']))
+                                    @foreach ($statdetails['view'] as $statdetail)
+                                    <div class="row mb-4">
+                                        <div class="col-md-12">
+                                            <span class="detail-bold">{{$statdetail->source}}</span>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <span class="detail">Views :</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{$statdetail->views}}
+                                                </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
-                                    
-                                </div>
-                                @endforeach
+                                    @endforeach
+                                @endif
+                                
                                 
                             </div>
                         </div>
@@ -178,27 +181,27 @@
                                         <span class="detail-bold">Total Clicks on all sites:</span>
                                     </div>
                                     <div class="col-md-6">
-                                        <span class="detail">{{$statdetails['click']->count()}}</span>
+                                        <span class="detail">{{isset($statdetails['click']) ? $statdetails['click']->count() : 0}}</span>
                                     </div>
                                 </div>
-
-                                @foreach ($statdetails['click'] as $statdetail)
-                                <div class="row mb-4">
-                                    <div class="col-md-12">
-                                        <span class="detail-bold">{{$statdetail->source}}</span>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <span class="detail">Clicks :</span>
-                                            </div>
-                                            <div class="col-md-6">
-                                                {{$statdetail->clicks}}
+                                @if (isset($statdetails['click']))
+                                    @foreach ($statdetails['click'] as $statdetail)
+                                    <div class="row mb-4">
+                                        <div class="col-md-12">
+                                            <span class="detail-bold">{{$statdetail->source}}</span>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <span class="detail">Clicks :</span>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    {{$statdetail->clicks}}
+                                                </div>
                                             </div>
                                         </div>
+                                        
                                     </div>
-                                    
-                                </div>
-                                @endforeach
-                                
+                                    @endforeach
+                                @endif
                             </div>
                         </div>
                     </div>
