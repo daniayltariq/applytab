@@ -45,6 +45,15 @@
 		margin-left: 50px;
 	}
 
+    .detail{
+        font-size: 16px;
+    }
+
+    .detail-bold{
+        font-size: 16px;
+        font-weight: bolder;
+    }
+    
 	@media screen and (max-height: 450px) {
 		.sidenav {padding-top: 15px;}
 		.sidenav a {font-size: 18px;}
@@ -80,7 +89,7 @@
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash">
                     <a href="{{route('backend.jobstats.index')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
-                    <span class="breadcrumb-item active">Job Stats</span>
+                    <span class="breadcrumb-item active">Job Stats Details</span>
                     <span class="breadcrumb-item active">Details</span>
                 </nav>
             </div>
@@ -94,7 +103,7 @@
                             <i class="fas fa-building"></i>
                         </div>
                         <div class="media-body m-{{$alignShortRev}}-15">
-                            <h6 class="mb-0">All Job Statistics</h6>
+                            <h6 class="mb-0">All Job Statistics Details</h6>
                             {{-- <span class="text-gray font-size-13">Sanad Team</span> --}}
                         </div>
                     </div>
@@ -110,7 +119,7 @@
                 </div> --}}
             </div>
         </div>
-        <div class="card">
+        {{-- <div class="card">
             <div class="card-body">
                 <form class="form-row" action="{{ getFullUrl() }}">
                     <h3 class="col-md-12">Search Job Stats</h3>
@@ -121,13 +130,9 @@
                     <div class="form-group col-md-2">
                         <button class="btn btn-primary search__" type="button">Go</button>
                     </div>
-                    
-                    {{-- <div class="form-group col-md-6">
-                        <button class="btn btn-primary float-right" type="button" onclick="openNav()"><i class="fa fa-filter"></i> Filter</button>
-                    </div> --}}
                 </form>
             </div>
-        </div>
+        </div> --}}
 
         <div class="row">
             <div class="col-lg-12">
@@ -136,60 +141,32 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
-                                <div class="table-responsive">
-                                    <table class="table table-hover">
-                                        <thead>
-											<tr>
-                                                {{-- <th class="bold w-10">Job url</th> --}}
-                                                <th>Title</th>
-                                                <th>Position</th>
-                                                {{-- <th>Summary</th> --}}
-                                                {{-- <th>Category</th> --}}
-                                                {{-- <th>Type</th> --}}
-                                                <th>Institute</th>
-                                                <th>No of Clicks</th>
-
-                                                {{-- <th>Date Open</th> --}}
-                                                {{-- <th>Date Close</th> --}}
-                                                <th>Action</th>
-											</tr>
-										</thead>
-										<tbody>
-											@forelse($stats as $key => $stat)
-                                                <tr>
-                                                    {{-- <td>
-                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
-                                                    </td> --}}
-                                                    <td class="name-badge p-3 w-20">{{ $stat->job->title ?? '' }}</td>
-                                                    <td>{{ $stat->job->position ?? '' }}</td>
-                                                    {{-- <td class="w-20">{!! $stat->summary ?? '' !!}</td> --}}
-                                                    {{-- <td>{{ $stat->category ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $stat->type ?? '' }}</td> --}}
-                                                    <td>{{ $stat->job->institution->name ?? '' }}</td>
-                                                    <td>{{$stat->clicks}}</td>
-                                                    {{-- <td>{{ $stat->date_open ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $stat->date_close ?? '' }}</td> --}}
-                                                    <td>
-                                                        <div class="dropdown dropdown-inline">
-                                                            <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fa fa-ellipsis-h"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" data-stat-id="{{$stat->id}}"><i class="fa fa-pencil"></i> View Details</a>
-                                                            </div>
-                                                        </div>
-                                                        
-                                                    </td>
-                                                </tr>
-                                            @empty
-                                                <tr>
-                                                    <td colspan="7" class="text-center">No Jobs found</td>
-                                                </tr>
-                                            @endforelse
-										</tbody>
-                                    </table>
+                                <div class="row mb-5">
+                                    <div class="col-md-6">
+                                        <span class="detail-bold">Total Clicks on all sites:</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="detail">@if($totalclicks) {{$totalclicks->clicks}} @else 0 @endif</span>
+                                    </div>
                                 </div>
-                                {!!$stats->appends($_GET)->links()!!}
+
+                                @foreach ($statdetails as $statdetail)
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <span class="detail-bold">{{$statdetail->source}}</span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span class="detail">Clicks :</span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{$statdetail->clicks}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                @endforeach
+                                
                             </div>
                         </div>
                     </div>

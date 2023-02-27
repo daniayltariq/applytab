@@ -80,7 +80,7 @@ Route::group([
         Route::get('contract/{id}', [JobController::class, 'show'])->name('contract.show');
 
         Route::get('jobstats', [JobController::class, 'jobStats'])->name('jobstats.index');
-        Route::get('jobstats/details', [JobController::class, 'jobStatDetail'])->name('jobstats.detail');
+        Route::get('jobstats/details/{jobid}', [JobController::class, 'jobStatDetail'])->name('jobstats.detail');
 
     });
 
