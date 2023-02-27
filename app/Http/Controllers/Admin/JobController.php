@@ -14,6 +14,7 @@ use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Crypt;
 use App\Models\ContractProductCategory;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
@@ -71,7 +72,7 @@ class JobController extends Controller
      */
     public function jobStats(Request $request)
     {
-        $stats = Stats::select('job_id','type',DB::raw('count(job_id) as clicks'))
+        $stats = Stats::select('job_id',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
                         ->whereHas('job',function($query)use($request){
                             $query->when($request->query('search_text'),function($q)use($request){
                                     $search=$request->query('search_text');
@@ -90,37 +91,26 @@ class JobController extends Controller
                                     });
                                 });
                         })
-                        ->groupBy('job_id','type')
+                        ->groupBy('job_id')
                         ->paginate(10);
 
         return view('backend.jobstats.list',compact('stats'));
     }
-    public function jobStatDetail(Request $request)
+    public function jobStatDetail(Request $request , $jobid)
     {
-        $stats = Stats::select('job_id','type',DB::raw('count(job_id) as clicks'))
-                        ->whereHas('job',function($query)use($request){
-                            $query->when($request->query('search_text'),function($q)use($request){
-                                    $search=$request->query('search_text');
-                                    $q->where(function($q)use($search){
-                                        $q->where('title','LIKE','%'.$search.'%')
-                                            ->orWhereHas('institution',function($q)use($search){
-                                                $q->where('name','LIKE','%'.$search.'%');
-                                            })
-                                            ->orWhere('summary','LIKE','%'.$search.'%')
-                                            ->orWhere('position','LIKE','%'.$search.'%')
-                                            ->orWhere('department','LIKE','%'.$search.'%')
-                                            ->orWhere('category','LIKE','%'.$search.'%')
-                                            ->orWhere('type','LIKE','%'.$search.'%')
-                                            ->orWhere('date_open','LIKE','%'.$search.'%')
-                                            ->orWhere('date_close','LIKE','%'.$search.'%');
-                                    });
-                                });
-                        })
-                        ->groupBy('job_id','type')
-                        ->latest()
-                        ->paginate(10);
+        $jobid = Crypt::decrypt($jobid);
+        // dd($jobid);
 
-        return view('backend.jobstats.detail',compact('stats'));
+        $statdetails = Stats::select('job_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+                        ->whereHas('job')
+                        ->where('job_id',$jobid)
+                        ->groupBy('job_id','source','type')
+                        ->get()
+                        ->groupBy('type');
+        // dd($statdetails);
+        $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('job_id',$jobid)->first();
+        
+        return view('backend.jobstats.detail',compact('statdetails','totalclicks'));
     }
 
     /**

@@ -33,4 +33,9 @@ class JobPost extends Model
     {
         return $this->belongsTo('App\Models\Institution','institution_id');
     }
+
+    public function stats()
+    {
+        return $this->hasMany('App\Models\Stats','job_id');
+    }
 }

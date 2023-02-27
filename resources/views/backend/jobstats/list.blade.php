@@ -148,7 +148,7 @@
                                                 <th>Institute</th>
                                                 <th>No of Clicks</th>
 
-                                                {{-- <th>Date Open</th> --}}
+                                                <th>Total Views</th>
                                                 {{-- <th>Date Close</th> --}}
                                                 <th>Action</th>
 											</tr>
@@ -167,14 +167,14 @@
                                                     <td>{{ $stat->job->institution->name ?? '' }}</td>
                                                     <td>{{$stat->clicks}}</td>
                                                     {{-- <td>{{ $stat->date_open ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $stat->date_close ?? '' }}</td> --}}
+                                                    <td>{{ $stat->views ?? '' }}</td>
                                                     <td>
                                                         <div class="dropdown dropdown-inline">
                                                             <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-h"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" href="{{route('backend.jobstats.index')}}"><i class="fa fa-pencil"></i> View Details</a>
+                                                                <a class="dropdown-item" href="{{route('backend.jobstats.detail',Crypt::encrypt($stat->job_id))}}"><i class="fa fa-pencil"></i> View Details</a>
                                                             </div>
                                                         </div>
                                                         
