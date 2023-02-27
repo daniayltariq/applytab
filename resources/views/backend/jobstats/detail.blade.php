@@ -143,14 +143,46 @@
                             <div class="card-body">
                                 <div class="row mb-5">
                                     <div class="col-md-6">
-                                        <span class="detail-bold">Total Clicks on all sites:</span>
+                                        <span class="detail-bold">Total Views on all sites:</span>
                                     </div>
                                     <div class="col-md-6">
-                                        <span class="detail">@if($totalclicks) {{$totalclicks->clicks}} @else 0 @endif</span>
+                                        <span class="detail">{{$statdetails['view']->count()}}</span>
                                     </div>
                                 </div>
 
-                                @foreach ($statdetails as $statdetail)
+                                @foreach ($statdetails['view'] as $statdetail)
+                                <div class="row mb-4">
+                                    <div class="col-md-12">
+                                        <span class="detail-bold">{{$statdetail->source}}</span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <span class="detail">Views :</span>
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{$statdetail->views}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                                @endforeach
+                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row mb-5">
+                                    <div class="col-md-6">
+                                        <span class="detail-bold">Total Clicks on all sites:</span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <span class="detail">{{$statdetails['click']->count()}}</span>
+                                    </div>
+                                </div>
+
+                                @foreach ($statdetails['click'] as $statdetail)
                                 <div class="row mb-4">
                                     <div class="col-md-12">
                                         <span class="detail-bold">{{$statdetail->source}}</span>

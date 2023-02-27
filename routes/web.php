@@ -41,7 +41,7 @@ Route::get('/', function () {
     return redirect()->route('login');
 })->name('/');
 
-Route::get('/test_pixel', function (Request $request) {
+Route::get('/watch/{id}', function (Request $request,$id) {
     // Create an image, 1x1 pixel in size
   $im=imagecreate(1,1);
 
@@ -59,7 +59,7 @@ Route::get('/test_pixel', function (Request $request) {
 
   // Free memory associated with the image
   imagedestroy($im);
-  if (isset($_GET['jID'])) {
+  if ($id) {
     // createLog('PAGE_VIEW',[
     //     'job_id'       => $_GET['jID'],
     //     'ip'        => $_SERVER['REMOTE_ADDR'],
@@ -69,14 +69,14 @@ Route::get('/test_pixel', function (Request $request) {
     //     'browser'   => get_browser(null, true) */
     // ]);
 
-    $job=JobPost::where('unique_id', $_GET['jID'])->first();
+    $job=JobPost::where('unique_id', $id)->first();
     if ($job) {
         $stats=new Stats;
         $stats->job_id=$job->id;
         $stats->type='view';
         $stats->source=$_SERVER['HTTP_REFERER'];
         $stats->object=json_encode([
-            'job_id'       => $_GET['jID'],
+            'job_id'       => $job->id,
             'ip'        => $_SERVER['REMOTE_ADDR'],
             'date'      => date('Y-m-d H:i:s'),
             'referer'   => $_SERVER['HTTP_REFERER'],
@@ -87,7 +87,7 @@ Route::get('/test_pixel', function (Request $request) {
     
   }
   
-});
+})->name('pixel.watch');
 
 Route::group([
 	'prefix' => 'backend',

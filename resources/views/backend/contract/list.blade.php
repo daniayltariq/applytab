@@ -68,6 +68,17 @@
     .dropdown-item{
         cursor: pointer;
     }
+
+    .codeblock{
+        background: black;
+        color: white;
+        height: 67px !important;
+    }
+
+    .codeblock:focus {
+        color: white !important ;
+        background-color: black !important;
+    }
 </style>
 @endsection
 
@@ -173,6 +184,7 @@
                                                             <div class="dropdown-menu dropdown-menu-right">
                                                                 <a class="dropdown-item edit_url" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Url</a>
                                                                 <a class="dropdown-item edit_budget" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
+                                                                <a class="dropdown-item job_pixel" data-job-id="{{$job->id}}">Get Pixel</a>
                                                             </div>
                                                         </div>
                                                         
@@ -309,6 +321,28 @@
 
         $.ajax({
             url: "{{ url('/') }}/backend/job_update/"+cat_id+"?type=budget",
+            type: 'GET',
+            success: function (res) {
+                // fullPageLoader(false);
+                if (res.status=='success') {
+                    $(' .job_modal_div').html(res.data);
+                    $('#jobModal').modal('toggle');
+                }
+                else if(res.status=='error') {
+                    toastr.success(res.message)
+                }
+            }
+        });
+        
+    });
+
+    $(document).on('click','.job_pixel',function(e){
+        e.preventDefault();
+        // fullPageLoader(true);
+        var cat_id=$(this).data('job-id');
+
+        $.ajax({
+            url: "{{ url('/') }}/backend/job_update/"+cat_id+"?type=pixel",
             type: 'GET',
             success: function (res) {
                 // fullPageLoader(false);

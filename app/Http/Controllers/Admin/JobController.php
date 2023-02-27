@@ -72,7 +72,7 @@ class JobController extends Controller
      */
     public function jobStats(Request $request)
     {
-        $stats = Stats::select('job_id','type',DB::raw('count(job_id) as clicks'))
+        $stats = Stats::select('job_id',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
                         ->whereHas('job',function($query)use($request){
                             $query->when($request->query('search_text'),function($q)use($request){
                                     $search=$request->query('search_text');
@@ -91,7 +91,7 @@ class JobController extends Controller
                                     });
                                 });
                         })
-                        ->groupBy('job_id','type')
+                        ->groupBy('job_id')
                         ->paginate(10);
 
         return view('backend.jobstats.list',compact('stats'));
@@ -101,13 +101,14 @@ class JobController extends Controller
         $jobid = Crypt::decrypt($jobid);
         // dd($jobid);
 
-        $statdetails = Stats::select('job_id','type','source',DB::raw('count(job_id) as clicks'))
+        $statdetails = Stats::select('job_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
                         ->whereHas('job')
                         ->where('job_id',$jobid)
-                        ->groupBy('job_id','type','source')
-                        ->get();
-
-        $totalclicks = Stats::select(DB::raw('count(job_id) as clicks'))->where('job_id',$jobid)->first();
+                        ->groupBy('job_id','source','type')
+                        ->get()
+                        ->groupBy('type');
+        // dd($statdetails);
+        $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('job_id',$jobid)->first();
         
         return view('backend.jobstats.detail',compact('statdetails','totalclicks'));
     }
