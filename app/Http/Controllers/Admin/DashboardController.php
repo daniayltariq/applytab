@@ -27,9 +27,10 @@ class DashboardController extends Controller
 		$active_jobs=$active_jobs->count();
 		// dd($graph->pluck('months')->toArray());
 		$clicks=Stats::where('type', 'click')->count();
+		$views=Stats::where('type', 'view')->count();
 		$data=[
 			'clicks'=>$clicks,
-			'views'=>0,
+			'views'=>$views,
 			'institutions'=>$institutions,
 			'active_jobs'=>$active_jobs,
 		];
