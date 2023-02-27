@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
+use App\Models\Stats;
+use App\Models\JobPost;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Controllers\Admin\{
     CategoryController,
@@ -58,14 +60,31 @@ Route::get('/test_pixel', function (Request $request) {
   // Free memory associated with the image
   imagedestroy($im);
   if (isset($_GET['jID'])) {
-    createLog('PAGE_VIEW',[
-        'job_id'       => $_GET['jID'],
-        'ip'        => $_SERVER['REMOTE_ADDR'],
-        'date'      => date('Y-m-d H:i:s'),
-        'referer'   => $_SERVER['HTTP_REFERER'],
-        'useragent' => $_SERVER['HTTP_USER_AGENT']/* ,
-        'browser'   => get_browser(null, true) */
-    ]);
+    // createLog('PAGE_VIEW',[
+    //     'job_id'       => $_GET['jID'],
+    //     'ip'        => $_SERVER['REMOTE_ADDR'],
+    //     'date'      => date('Y-m-d H:i:s'),
+    //     'referer'   => $_SERVER['HTTP_REFERER'],
+    //     'useragent' => $_SERVER['HTTP_USER_AGENT']/* ,
+    //     'browser'   => get_browser(null, true) */
+    // ]);
+
+    $job=JobPost::where('unique_id', $_GET['jID'])->first();
+    if ($job) {
+        $stats=new Stats;
+        $stats->job_id=$job->id;
+        $stats->type='view';
+        $stats->source=$_SERVER['HTTP_REFERER'];
+        $stats->object=json_encode([
+            'job_id'       => $_GET['jID'],
+            'ip'        => $_SERVER['REMOTE_ADDR'],
+            'date'      => date('Y-m-d H:i:s'),
+            'referer'   => $_SERVER['HTTP_REFERER'],
+            'useragent' => $_SERVER['HTTP_USER_AGENT']
+        ]);
+        $stats->save();
+    }
+    
   }
   
 });

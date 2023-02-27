@@ -148,7 +148,7 @@
                                                 <th>Institute</th>
                                                 <th>No of Clicks</th>
 
-                                                {{-- <th>Date Open</th> --}}
+                                                <th>Total Views</th>
                                                 {{-- <th>Date Close</th> --}}
                                                 <th>Action</th>
 											</tr>
@@ -167,7 +167,7 @@
                                                     <td>{{ $stat->job->institution->name ?? '' }}</td>
                                                     <td>{{$stat->clicks}}</td>
                                                     {{-- <td>{{ $stat->date_open ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $stat->date_close ?? '' }}</td> --}}
+                                                    <td>{{ $stat->views ?? '' }}</td>
                                                     <td>
                                                         <div class="dropdown dropdown-inline">
                                                             <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
