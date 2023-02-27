@@ -174,7 +174,7 @@
                                                                 <i class="fa fa-ellipsis-h"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" href="{{route('backend.jobstats.index')}}"><i class="fa fa-pencil"></i> View Details</a>
+                                                                <a class="dropdown-item" href="{{route('backend.jobstats.detail',Crypt::encrypt($stat->job_id))}}"><i class="fa fa-pencil"></i> View Details</a>
                                                             </div>
                                                         </div>
                                                         
