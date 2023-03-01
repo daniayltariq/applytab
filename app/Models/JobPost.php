@@ -11,8 +11,8 @@ class JobPost extends Model
 {
     use LogsActivity;
 
-    protected $table = 'job';
-
+    protected $table = 'jobs';
+    public $timestamps = false;
 
     public function getActivitylogOptions(): LogOptions
     {

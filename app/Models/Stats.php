@@ -10,7 +10,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 class Stats extends Model
 {
 
-    protected $table = 'stats';
+    protected $table = 'applytab_stats';
 
     public function job()
     {

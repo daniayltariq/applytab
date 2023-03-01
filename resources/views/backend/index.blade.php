@@ -213,36 +213,42 @@
                                 <table class="table table-hover">
                                     <thead>
                                         <tr>
-                                            <th class="bold w-10">Job url</th>
+                                            {{-- <th class="bold w-10">Job url</th>
                                             <th>Title</th>
                                             <th>Position</th>
-                                            {{-- <th>Summary</th> --}}
                                             <th>Category</th>
                                             <th>Type</th>
                                             <th>Institute</th>
                                             <th>Date Open</th>
-                                            <th>Date Close</th>
-                                            {{-- <th>Renewal date</th>
-                                            <th>Renewal Deadline date</th>
-                                            <th>Contract value</th> --}}
+                                            <th>Date Close</th> --}}
+                                            <th class="bold w-10">Job url</th>
+                                            <th>Title</th>
+                                            <th>Institute</th>
+                                            <th>City</th>
+                                            <th>Date Open</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         @forelse($recent_jobs as $key => $job)
                                             <tr>
-                                                <td>
+                                                {{-- <td>
                                                     <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i>
                                                      Copy</a>
                                                 </td>
                                                 <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
                                                 <td>{{ $job->position ?? '' }}</td>
-                                                {{-- <td class="w-20">{!! $job->summary ?? '' !!}</td> --}}
                                                 <td>{{ $job->category ?? '' }}</td>
                                                 <td>{{ $job->type ?? '' }}</td>
                                                 <td>{{ $job->institution->name ?? '' }}</td>
                                                 <td>{{ $job->date_open ?? '' }}</td>
-                                                <td>{{ $job->date_close ?? '' }}</td>
-                                                
+                                                <td>{{ $job->date_close ?? '' }}</td> --}}
+                                                <td>
+                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                </td>
+                                                <td class="name-badge p-3 w-20">{{ $job->job_title ?? '' }}</td>
+                                                <td>{{ $job->institution_name ?? '' }}</td>
+                                                <td>{{ $job->institution_city ?? '' }}</td>
+                                                <td>{{ $job->post_date ?? '' }}</td>
                                             </tr>
                                         @empty
                                             <tr>

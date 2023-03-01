@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Http\Request;
 use App\Models\Stats;
 use App\Models\JobPost;
+use App\Models\Institution;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Controllers\Admin\{
     CategoryController,
@@ -40,6 +41,19 @@ Route::get('lang/{locale}', [App\Http\Controllers\LocalizationController::class,
 Route::get('/', function () {
     return redirect()->route('login');
 })->name('/');
+
+Route::get('/job-update', function () {
+    $jobs=JobPost::select('id','institution_name','institution_id')->get();
+    foreach($jobs as $job)
+    {
+        $ins=Institution::where('inst_name',$job->institution_name)->first();
+        if ($ins) {
+            $job->institution_id=$ins->id;
+            $job->save();
+        }
+    }
+    return 123;
+});
 
 Route::get('/watch/{id}', function (Request $request,$id) {
     // Create an image, 1x1 pixel in size

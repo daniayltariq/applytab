@@ -18,6 +18,7 @@ class User extends Authenticatable implements MustVerifyEmail
 {
     use HasFactory, Notifiable,HasRoles,HasApiTokens,LogsActivity;
 
+    protected $table='applytab_users';
     /**
      * The attributes that are mass assignable.
      *

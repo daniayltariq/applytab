@@ -28,7 +28,7 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        $jobs=JobPost::when($request->query('type'),function($q)use($request){
+        $jobs=JobPost::whereNotNull('unique_id')->when($request->query('type'),function($q)use($request){
             $q->where('user_type',$request->type);
         })
         ->when($request->query('search_text'),function($q)use($request){
@@ -60,7 +60,7 @@ class JobController extends Controller
         })
         ->when($request->query('extension_period'),function($q)use($request){
             $q->where('extension_period',$request->extension_period);
-        })->latest()->paginate(15);
+        })->orderBy('post_date','desc')->paginate(15);
 
         return view('backend.contract.list',compact('jobs'));
     }

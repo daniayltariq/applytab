@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Institution extends Model
 {
-    protected $table = 'institution';
+    protected $table = 'institution_list';
 
     public function jobs()
     {
