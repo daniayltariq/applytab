@@ -185,6 +185,7 @@
                                                                 <a class="dropdown-item edit_url" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Url</a>
                                                                 <a class="dropdown-item edit_budget" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
                                                                 <a class="dropdown-item job_pixel" data-job-id="{{$job->id}}">Get Pixel</a>
+                                                                <a href="{{route('backend.job.report',$job->unique_id)}}" class="dropdown-item">Download Report</a>
                                                             </div>
                                                         </div>
                                                         

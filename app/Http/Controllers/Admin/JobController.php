@@ -28,7 +28,7 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        $jobs=JobPost::whereNotNull('unique_id')->when($request->query('type'),function($q)use($request){
+        $jobs=JobPost::select('id','unique_id','job_title','institution_name','institution_city','post_date')->whereNotNull('unique_id')->when($request->query('type'),function($q)use($request){
             $q->where('user_type',$request->type);
         })
         ->when($request->query('search_text'),function($q)use($request){
@@ -61,7 +61,7 @@ class JobController extends Controller
         ->when($request->query('extension_period'),function($q)use($request){
             $q->where('extension_period',$request->extension_period);
         })->orderBy('post_date','desc')->paginate(15);
-
+        
         return view('backend.contract.list',compact('jobs'));
     }
 
@@ -111,6 +111,18 @@ class JobController extends Controller
         $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('job_id',$jobid)->first();
         
         return view('backend.jobstats.detail',compact('statdetails','totalclicks'));
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Content  $content
+     * @return \Illuminate\Http\Response
+     */
+    public function report($id)
+    {
+        $job=JobPost::select('id','unique_id','job_title','institution_name','institution_city','post_date','app_deadline','job_description')->where('unique_id',$id)->first();
+        return view('backend.contract.report',compact('job'));
     }
 
     /**
