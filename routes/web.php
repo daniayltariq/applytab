@@ -46,7 +46,7 @@ Route::get('/job-update', function () {
     $jobs=JobPost::select('id','unique_id')->get();
     foreach($jobs as $job)
     {
-        $job->unique_id=hexdec(uniqid());
+        $job->unique_id=uniqid();
         $job->save();
     }
     return 123;
