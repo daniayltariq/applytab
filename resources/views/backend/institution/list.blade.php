@@ -134,9 +134,9 @@
 											<tr>
                                                 <th>#</th>
                                                 <th>Name</th>
-                                                <th>Type</th>
+                                                {{-- <th>Type</th>
                                                 <th>Website</th>
-                                                <th>System</th>
+                                                <th>System</th> --}}
                                                 <th>Jobs</th>
 											</tr>
 										</thead>
@@ -144,10 +144,10 @@
 											@forelse($institution as $key => $inst)
                                                 <tr>
                                                     <td>{{++$key}}</td>
-                                                    <td>{{ $inst->name ?? '' }}</td>
-                                                    <td>{{ $inst->type ?? '' }}</td>
+                                                    <td>{{ $inst->inst_name ?? '' }}</td>
+                                                    {{-- <td>{{ $inst->type ?? '' }}</td>
                                                     <td>{{ $inst->website ?? '' }}</td>
-                                                    <td>{{ $inst->system ?? '' }}</td>
+                                                    <td>{{ $inst->system ?? '' }}</td> --}}
                                                     <td>{{ $inst->jobs->count() ?? '' }}</td>
                                                     
                                                 </tr>

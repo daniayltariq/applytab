@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserDevice extends Model
 {
-	protected $table = 'user_devices';
+	protected $table = 'applytab_user_devices';
 
 	protected $fillable = [
 	    'device_id', 'user_id'

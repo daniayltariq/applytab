@@ -20,9 +20,9 @@ class DashboardController extends Controller
   	{
 		$institutions=Institution::count();
 
-		$active_jobs=JobPost::where('active',1);
+		$active_jobs=JobPost::where('status',1)->whereNotNull('unique_id');
 
-		$recent_jobs=(clone $active_jobs)->latest()->limit(10)->get();
+		$recent_jobs=(clone $active_jobs)->orderBy('post_date','desc')->limit(10)->get();
 		
 		$active_jobs=$active_jobs->count();
 		// dd($graph->pluck('months')->toArray());
