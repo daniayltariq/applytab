@@ -43,14 +43,11 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/job-update', function () {
-    $jobs=JobPost::select('id','institution_name','institution_id')->get();
+    $jobs=JobPost::select('id','unique_id')->get();
     foreach($jobs as $job)
     {
-        $ins=Institution::where('inst_name',$job->institution_name)->first();
-        if ($ins) {
-            $job->institution_id=$ins->id;
-            $job->save();
-        }
+        $job->unique_id=uniqid();
+        $job->save();
     }
     return 123;
 });
@@ -145,6 +142,7 @@ Route::group([
 
         Route::get('jobstats', [JobController::class, 'jobStats'])->name('jobstats.index');
         Route::get('jobstats/details/{jobid}', [JobController::class, 'jobStatDetail'])->name('jobstats.detail');
+        Route::get('report/{id}', [JobController::class, 'report'])->name('job.report');
 
     });
 
