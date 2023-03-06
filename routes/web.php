@@ -43,7 +43,6 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/job-update', function () {
-    dd(parse_url('https://developer.cybersource.com/apply.php'));
     $jobs=JobPost::select('id','unique_id')->get();
     foreach($jobs as $job)
     {
