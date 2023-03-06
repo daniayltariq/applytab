@@ -43,6 +43,7 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/job-update', function () {
+    dd(parse_url('https://developer.cybersource.com/apply.php'));
     $jobs=JobPost::select('id','unique_id')->get();
     foreach($jobs as $job)
     {
@@ -50,6 +51,16 @@ Route::get('/job-update', function () {
         $job->save();
     }
     return 123;
+});
+
+Route::get('/add-job-pixel', function () {
+    $jobs=JobPost::select('id','unique_id','job_description')->whereNotNull('unique_id')->get();
+    foreach($jobs as $job)
+    {
+        $job->job_description=$job->job_description."<img src=".url('/')."/watch/".$job->unique_id.">";
+        $job->save();
+    }
+    dd('done');
 });
 
 Route::get('/watch/{id}', function (Request $request,$id) {
@@ -111,7 +122,7 @@ Route::group([
 
     // Add Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Add Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         Route::get('user/create', [UserController::class, 'create'])->name('user.create');
         Route::get('category/create', [CategoryController::class, 'create'])->name('category.create');
@@ -148,7 +159,7 @@ Route::group([
 
     // Update Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Update Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         
         Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
@@ -165,7 +176,7 @@ Route::group([
 
     // Delete Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Delete Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         
         Route::delete('category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');
