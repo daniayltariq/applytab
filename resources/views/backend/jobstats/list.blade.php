@@ -141,7 +141,7 @@
 											<tr>
                                                 {{-- <th class="bold w-10">Job url</th> --}}
                                                 <th>Title</th>
-                                                <th>Position</th>
+                                                {{-- <th>Position</th> --}}
                                                 {{-- <th>Summary</th> --}}
                                                 {{-- <th>Category</th> --}}
                                                 {{-- <th>Type</th> --}}
@@ -159,12 +159,12 @@
                                                     {{-- <td>
                                                         <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                     </td> --}}
-                                                    <td class="name-badge p-3 w-20">{{ $stat->job->title ?? '' }}</td>
-                                                    <td>{{ $stat->job->position ?? '' }}</td>
+                                                    <td class="name-badge p-3 w-20">{{ $stat->job->job_title ?? '' }}</td>
+                                                    {{-- <td>{{ $stat->job->position ?? '' }}</td> --}}
                                                     {{-- <td class="w-20">{!! $stat->summary ?? '' !!}</td> --}}
                                                     {{-- <td>{{ $stat->category ?? '' }}</td> --}}
                                                     {{-- <td>{{ $stat->type ?? '' }}</td> --}}
-                                                    <td>{{ $stat->job->institution->name ?? '' }}</td>
+                                                    <td>{{ $stat->job->institution_name ?? '' }}</td>
                                                     <td>{{$stat->clicks}}</td>
                                                     {{-- <td>{{ $stat->date_open ?? '' }}</td> --}}
                                                     <td>{{ $stat->views ?? '' }}</td>

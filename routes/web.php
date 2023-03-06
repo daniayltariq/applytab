@@ -39,11 +39,11 @@ use App\Http\Controllers\Admin\{
 
 Route::get('lang/{locale}', [App\Http\Controllers\LocalizationController::class, 'index'])->name('lang_change');
 Route::get('/', function () {
-    return redirect()->route('login');
+    return redirect('http://www.jobadvertize.com/');
 })->name('/');
 
-Route::get('/job-update', function () {
-    $jobs=JobPost::select('id','unique_id')->get();
+Route::get('/job-uniqueid-update', function () {
+    $jobs=JobPost::select('id','unique_id')->whereNull('unique_id')->get();
     foreach($jobs as $job)
     {
         $job->unique_id=uniqid();
@@ -51,6 +51,21 @@ Route::get('/job-update', function () {
     }
     return 123;
 });
+
+
+Route::get('/job-institution-update', function () {
+    $jobs=JobPost::select('id','institution_name','institution_id')->get();
+    foreach($jobs as $job)
+    {
+        $ins=Institution::where('inst_name',$job->institution_name)->first();
+        if ($ins) {
+            $job->institution_id=$ins->id;
+            $job->save();
+        }
+    }
+    return 123;
+});
+
 
 Route::get('/watch/{id}', function (Request $request,$id) {
     // Create an image, 1x1 pixel in size
@@ -111,7 +126,7 @@ Route::group([
 
     // Add Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Add Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         Route::get('user/create', [UserController::class, 'create'])->name('user.create');
         Route::get('category/create', [CategoryController::class, 'create'])->name('category.create');
@@ -148,7 +163,7 @@ Route::group([
 
     // Update Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Update Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         
         Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
@@ -165,7 +180,7 @@ Route::group([
 
     // Delete Permissions
     Route::group([
-        'middleware' => ['role_or_permission:superadmin|Delete Data'],
+        'middleware' => ['role:superadmin'],
     ],function(){
         
         Route::delete('category/{id}', [CategoryController::class, 'destroy'])->name('category.destroy');

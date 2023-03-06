@@ -36,7 +36,7 @@ class FrontPageController extends Controller
 
 	public function storeStats(Request $request,$id)
 	{
-		$job=JobPost::where('unique_id',$id)->first();
+		$job = JobPost::where('unique_id',$id)->first();
 		if ($job) {
 			$stats=new Stats;
 			$stats->job_id=$job->id;
@@ -44,7 +44,7 @@ class FrontPageController extends Controller
 			$stats->source=request()->headers->get('referer');
 			$stats->save();
 
-			return redirect()->to($job->apply_details);
+			return redirect()->to($job->actual_apply_link);
 		} else {
 			return 'Link not found';
 		}

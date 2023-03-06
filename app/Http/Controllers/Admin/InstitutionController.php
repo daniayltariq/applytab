@@ -57,7 +57,7 @@ class InstitutionController extends Controller
         })
         ->when($request->query('extension_period'),function($q)use($request){
             $q->where('extension_period',$request->extension_period);
-        })->latest()->paginate(15);
+        })->paginate(15);
 
         return view('backend.institution.list',compact('institution'));
     }

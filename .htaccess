@@ -1,0 +1,6 @@
+Options +FollowSymlinks
+RewriteEngine on
+rewritecond %{http_host} ^applytab.com [nc]
+rewriterule ^(.*)$ https://www.jobadvertising.com/$1 [r=301,nc] 
+
+redirect 301 / https://www.jobadvertising.com/

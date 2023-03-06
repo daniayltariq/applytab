@@ -9,7 +9,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 
 class JobPost extends Model
 {
-    use LogsActivity;
+    // use LogsActivity;
 
     protected $table = 'jobs';
     public $timestamps = false;
@@ -32,6 +32,26 @@ class JobPost extends Model
     public function institution()
     {
         return $this->belongsTo('App\Models\Institution','institution_id');
+    }
+
+    public function type()
+    {
+        return $this->belongsTo('App\Models\JobType','job_type');
+    }
+
+    // public function city()
+    // {
+    //     return $this->belongsTo('App\Models\City','institution_city');
+    // }
+
+    public function country()
+    {
+        return $this->belongsTo('App\Models\Country','institution_country_id');
+    }
+
+    public function state()
+    {
+        return $this->belongsTo('App\Models\State','institution_state_id');
     }
 
     public function stats()

@@ -34,17 +34,25 @@ class JobController extends Controller
         ->when($request->query('search_text'),function($q)use($request){
             $search=$request->query('search_text');
             $q->where(function($q)use($search){
-                $q->where('title','LIKE','%'.$search.'%')
+                $q->where('job_title','LIKE','%'.$search.'%')
                     ->orWhereHas('institution',function($q)use($search){
-                        $q->where('name','LIKE','%'.$search.'%');
+                        $q->where('inst_name','LIKE','%'.$search.'%');
                     })
-                    ->orWhere('summary','LIKE','%'.$search.'%')
-                    ->orWhere('position','LIKE','%'.$search.'%')
-                    ->orWhere('department','LIKE','%'.$search.'%')
-                    ->orWhere('category','LIKE','%'.$search.'%')
-                    ->orWhere('type','LIKE','%'.$search.'%')
-                    ->orWhere('date_open','LIKE','%'.$search.'%')
-                    ->orWhere('date_close','LIKE','%'.$search.'%');
+                    // ->orWhereHas('city',function($q)use($search){
+                    //     $q->where('city_name','LIKE','%'.$search.'%');
+                    // })
+                    ->orWhereHas('country',function($q)use($search){
+                        $q->where('country_name','LIKE','%'.$search.'%');
+                    })
+                    ->orWhereHas('state',function($q)use($search){
+                        $q->where('state_name','LIKE','%'.$search.'%');
+                    })
+                    ->orWhereHas('type',function($q)use($search){
+                        $q->where('job_type_name','LIKE','%'.$search.'%');
+                    })
+                    ->orWhere('job_description','LIKE','%'.$search.'%')
+                    ->orWhere('institution_website','LIKE','%'.$search.'%')
+                    ;
             });
         })
         ->when($request->query('product_category'),function($q)use($request){
@@ -77,17 +85,27 @@ class JobController extends Controller
                             $query->when($request->query('search_text'),function($q)use($request){
                                     $search=$request->query('search_text');
                                     $q->where(function($q)use($search){
-                                        $q->where('title','LIKE','%'.$search.'%')
+                                        $q->where('job_title','LIKE','%'.$search.'%')
                                             ->orWhereHas('institution',function($q)use($search){
-                                                $q->where('name','LIKE','%'.$search.'%');
+                                                $q->where('inst_name','LIKE','%'.$search.'%');
                                             })
-                                            ->orWhere('summary','LIKE','%'.$search.'%')
-                                            ->orWhere('position','LIKE','%'.$search.'%')
-                                            ->orWhere('department','LIKE','%'.$search.'%')
-                                            ->orWhere('category','LIKE','%'.$search.'%')
-                                            ->orWhere('type','LIKE','%'.$search.'%')
-                                            ->orWhere('date_open','LIKE','%'.$search.'%')
-                                            ->orWhere('date_close','LIKE','%'.$search.'%');
+                                            // ->orWhereHas('city',function($q)use($search){
+                                            //     $q->where('city_name','LIKE','%'.$search.'%');
+                                            // })
+                                            ->orWhereHas('country',function($q)use($search){
+                                                $q->where('country_name','LIKE','%'.$search.'%');
+                                            })
+                                            ->orWhereHas('state',function($q)use($search){
+                                                $q->where('state_name','LIKE','%'.$search.'%');
+                                            })
+                                            ->orWhereHas('type',function($q)use($search){
+                                                $q->where('state_name','LIKE','%'.$search.'%');
+                                            })
+                                            ->orWhere('job_description','LIKE','%'.$search.'%')
+                                            ->orWhere('institution_website','LIKE','%'.$search.'%')
+                                            // ->orWhere('date_open','LIKE','%'.$search.'%')
+                                            // ->orWhere('date_close','LIKE','%'.$search.'%')
+                                            ;
                                     });
                                 });
                         })
