@@ -1,11 +1,12 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use App\Models\Site;
 use App\Models\User;
+
 use App\Models\Stats;
 
 use App\Models\JobPost;
-
 use App\Models\Category;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -307,7 +308,9 @@ class JobController extends Controller
             
             if ($job) {
                 $type=$request->type;
-                $view_data=view('backend.contract.component.modal',compact('job','type'))->render();
+
+                $sites=Site::all();
+                $view_data=view('backend.contract.component.modal',compact('job','type','sites'))->render();
                 $res=array(
                     'status' => 'success',
                     'data' => $view_data
