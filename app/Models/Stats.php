@@ -16,4 +16,9 @@ class Stats extends Model
     {
         return $this->belongsTo('App\Models\JobPost','job_id');
     }
+
+    public function getSourceAttribute()
+    {
+        return $this->attributes['source'] ? parse_url($this->attributes['source'])['scheme'].'://'.parse_url($this->attributes['source'])['host'] : '';
+    }
 }

@@ -43,28 +43,44 @@ Route::get('/', function () {
 })->name('/');
 
 Route::get('/job-uniqueid-update', function () {
-    $jobs=JobPost::select('id','unique_id')->whereNull('unique_id')->get();
+    $jobs = JobPost::select('id','unique_id')->whereNull('unique_id')->get();
     foreach($jobs as $job)
     {
-        $job->unique_id=uniqid();
+        $job->unique_id = uniqid();
         $job->save();
     }
-    return 123;
+    return 'Done';
 });
 
 
+
 Route::get('/job-institution-update', function () {
-    $jobs=JobPost::select('id','institution_name','institution_id')->get();
+    $jobs = JobPost::select('id','institution_name','institution_id')->get();
     foreach($jobs as $job)
     {
-        $ins=Institution::where('inst_name',$job->institution_name)->first();
+        $ins = Institution::where('inst_name',$job->institution_name)->first();
         if ($ins) {
             $job->institution_id=$ins->id;
             $job->save();
         }
     }
-    return 123;
+    return 'Done';
 });
+
+
+
+Route::get('/add-job-pixel', function () {
+    $jobs = JobPost::select('id','unique_id','job_description')->whereNotNull('unique_id')->where('id' , '<', 10)->get();
+    foreach($jobs as $job)
+    {
+        $job->job_description_no_pixel = $job->job_description . '    ' . "<img src=".url('/')."/watch/".$job->unique_id.">";
+        $job->save();
+    }
+    dd('Done');
+});
+
+
+
 
 
 Route::get('/watch/{id}', function (Request $request,$id) {
