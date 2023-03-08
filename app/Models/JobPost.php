@@ -63,4 +63,12 @@ class JobPost extends Model
     {
         return $this->hasMany('App\Models\JobBudget','job_id');
     }
+
+    public function getSiteBudget($site){
+        $budget = $this->budgets()->whereHas('site',function($q) use ($site) {
+            $q->where('site_name','LIKE','%'.$site.'%');
+        })->first();
+
+        return $budget ? $budget->budget : null;
+    }
 }

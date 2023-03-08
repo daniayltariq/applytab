@@ -37,9 +37,6 @@ class FrontPageController extends Controller
 
 	public function storeStats(Request $request,$id)
 	{
-
-		$job = JobPost::where('id',$id)->first();
-		
 		$ids = explode('-',$id);
 
 		$job_id = null;
@@ -65,7 +62,7 @@ class FrontPageController extends Controller
 			$stats->job_id = $job->id;
 			$stats->type = 'click';
 			
-			$stats->source = $referrer;
+			$stats->source = $referrer ? parse_url($referrer)['scheme'].'://'.parse_url($referrer)['host'] : $referrer;
 			$stats->save();
 
 			return redirect()->to($job->apply_link);

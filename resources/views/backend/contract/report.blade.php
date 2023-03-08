@@ -5,7 +5,7 @@
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <meta http-equiv="X-UA-Compatible" content="ie=edge">
    <title>Document</title>
-   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" integrity="sha384-xOolHFLEh07PJGoPkLv1IbcEPTNtaed2xpHsD9ESMhqIYd0nLMwNLD69Npy4HI+N" crossorigin="anonymous">
+   <link href="{{ asset("css/bootstrap.min.css") }}" rel="stylesheet">
    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.css" />
 
    <style>
@@ -155,21 +155,24 @@
           opacity: 0.6;
       }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"
+  integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg=="
+  crossorigin="anonymous"></script>
 </head>
 <body>
    <div class="main-content">
       {{-- <div class="section mt-4">
           <div class="container p-0">
-              <a href="{{route('backend.contract.print', $contract->id)}}" target="_blank" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Print</a>
+              <a href="javascript:void(0)" onclick="window.print()" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Print</a>
           </div>
       </div> --}}
       <div class="section blog picklist mb-5" id="resume_div">
-          <div class="card mt-3 bg-white pb-5">
+          <div class="container-fluid mt-3 bg-white pb-5">
               <div class="row">
                   <div class="blog__posts col-md-12">
                       <div class="blog__list mt-5">
-                          <div class="row" id="printToPDF">
-                              <div class="col-sm-8 mx-auto col-centered">
+                          <div class="row">
+                              <div class="col-sm-10 mx-auto col-centered">
                                   {{-- < class="single-talent mb-5" style="font-size: 1.6rem;"> --}}
                                   <div class="row">
                                       <div class="col-xs-12 col-sm-12 col-md-12 text-center">
@@ -177,7 +180,7 @@
                                           <h2 class="logo-report"><b class="text-color1">Apply</b><b class="text-color2"> Tab</b></h2>
                                       </div>
                                   </div>
-                                  <div id="collapseDoughnutChart" class="row collapse show">
+                                  <div class="row">
                                       <div class="col-md-12">
                                           <table class="reports-info" width="100%" cellspacing="0" cellpadding="0"
                                               border="0">
@@ -252,77 +255,52 @@
                                                 </tbody>
                                              </table>
                                        </div>
-                                       <div class="col-md-6 mt-3">
-                                             <h3 class="b_bottom_light">Clicks</h3>
-                                             <table class="reports-info" width="100%" cellspacing="0" cellpadding="0"
+                                       <div class="col-md-12 mt-5">
+                                            <table class="reports-info" width="100%" cellspacing="0" cellpadding="0"
                                                 border="0">
+                                                <thead class="b_bottom_light">
+                                                    <th>
+                                                        <h5>Site</h5>
+                                                    </th>
+                                                    <th>
+                                                        <h5>Clicks</h5>
+                                                    </th>
+                                                    <th>
+                                                        <h5>Views</h5>
+                                                    </th>
+                                                    <th>
+                                                        <h5>Cost per click</h5>
+                                                    </th>
+                                                </thead>
                                                 <tbody>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                            <p>Google.com</p>
-                                                      </td>
-                                                      <td>
-                                                            <h6>40
-                                                            </h6>
-                                                      </td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                         <p>Indeed.com</p>
-                                                      </td>
-                                                      <td>
-                                                         <h6>40
-                                                         </h6>
-                                                      </td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                         <p>LinkedIn.com</p>
-                                                      </td>
-                                                      <td>
-                                                         <h6>40
-                                                         </h6>
-                                                      </td>
-                                                   </tr>
+                                                    @foreach ($stats as $key => $stat)
+                                                        <tr>
+                                                            <td class="pl-0">
+                                                                <p>{{$key}}</p>
+                                                            </td>
+                                                            <td>
+                                                                <h6>{{$stat->where('type','click')->count() ?? ''}}</h6>
+                                                            </td>
+                                                            
+                                                            <td>
+                                                                <h6>{{$stat->where('type','view')->count() ?? ''}}</h6>
+                                                            </td>
+                                                            <td>
+                                                                @php
+                                                                    $site_budget = $job->getSiteBudget($key);
+                                                                    $cost = $site_budget && $stat->where('type','click')->count() 
+                                                                                ? $site_budget/$stat->where('type','click')->count()
+                                                                                : ($site_budget ?? 0);
+                                                                @endphp
+                                                                {{$cost}}
+                                                            </td>
+                                                    </tr>
+                                                    @endforeach
+                                                   
                                                 </tbody>
-                                             </table>
+                                            </table>
                                        </div>
                                        
-                                       <div class="col-md-6 mt-3">
-                                             <h3 class="b_bottom_light">Views</h3>
-                                             <table class="reports-info" width="100%" cellspacing="0" cellpadding="0"
-                                                border="0">
-                                                <tbody>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                            <p>Google.com</p>
-                                                      </td>
-                                                      <td>
-                                                            <h6>40
-                                                            </h6>
-                                                      </td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                         <p>Indeed.com</p>
-                                                      </td>
-                                                      <td>
-                                                         <h6>40
-                                                         </h6>
-                                                      </td>
-                                                   </tr>
-                                                   <tr>
-                                                      <td class="pl-0">
-                                                         <p>LinkedIn.com</p>
-                                                      </td>
-                                                      <td>
-                                                         <h6>40
-                                                         </h6>
-                                                      </td>
-                                                   </tr>
-                                                </tbody>
-                                             </table>
-                                       </div>
                                     </div>
                                   
                               </div>
@@ -333,6 +311,8 @@
           </div>
       </div>
   </div>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js" integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+" crossorigin="anonymous"></script>
 </body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"
+        integrity="sha512-d5Jr3NflEZmFDdFHZtxeJtBzk0eB+kkRXWFQqEc1EKmolXjHm2IKCA7kTvXBNjIYzjXfD5XzIjaaErpkZHCkBg=="
+        crossorigin="anonymous"></script>
 </html>
