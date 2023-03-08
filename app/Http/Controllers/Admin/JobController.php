@@ -8,6 +8,7 @@ use App\Models\Stats;
 
 use App\Models\JobPost;
 use App\Models\Category;
+use App\Models\JobBudget;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -330,10 +331,39 @@ class JobController extends Controller
         else if (request()->isMethod('post')) {
             if ($request->type=='url') {
                 $job->apply_details=$request->url;
+                $job->save();
             } else {
-                $job->budget=$request->budget;
+
+                $validator = Validator::make($request->all(),[
+                    "budget" => ['required', 'array'],
+                    "budget.*.site_id" => ['required', 'distinct'],
+                    "budget.*.budget" => ['required'],
+                ],[
+                    "budget.*.site_id.distinct"=>"The budget site_id field should be distinct"
+                ],[
+                   "budget.*.site_id"=>"Site",
+                   "budget.*.budget"=>"Budget" 
+                ]);
+                
+                if ($validator->fails()) {
+                    return redirect()->back()
+                            ->withErrors($validator)
+                            ->withInput()
+                            ->with('error','validation error')
+                            ->with('budget_error',$job->id);
+                }
+                foreach ($request->budget as $key => $job_budget) {
+                    $budget=JobBudget::updateOrCreate([
+                        'job_id' => $job->id,
+                        'site_id' => $job_budget['site_id'],
+                    ],[
+                        'job_id' => $job->id,
+                        'site_id' => $job_budget['site_id'],
+                        'budget' => $job_budget['budget']
+                    ]);
+                    $budget->save();
+                }
             }
-            $job->save();
         }
         return redirect()->back()->with("status", "Job updated.");
     }
