@@ -142,7 +142,7 @@ class JobController extends Controller
     public function report($id)
     {
         $job=JobPost::select('id','unique_id','job_title','institution_name','institution_city','post_date','app_deadline','job_description')
-                    ->where('unique_id',$id)
+                    ->where('id',$id)
                     ->with('stats')->first();
         $stats=(clone $job)->stats->groupBy('source');
 

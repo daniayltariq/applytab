@@ -35,7 +35,7 @@
           max-width: 24px;
           margin-top: 1px;
           font-size: 25px;
-          color: #c9cbd2;
+          color: #ffb2b2;
       }
   
       .reports-info td p {
@@ -130,7 +130,8 @@
       }
   
       .bg__border{
-          background: #ececec;
+        background: #5661b3;
+    color: white;
           border-bottom: 2px solid grey;
       }
   
@@ -161,12 +162,12 @@
 </head>
 <body>
    <div class="main-content">
-      {{-- <div class="section mt-4">
-          <div class="container p-0">
-              <a href="javascript:void(0)" onclick="window.print()" class="btn btn-primary"><i class="fas fa-file-pdf"></i> Print</a>
+      <div class="row">
+          <div class="col-md-10 mx-auto p-3">
+              <a href="javascript:void(0)" class="btn btn-primary print__btn"><i class="fas fa-file-pdf"></i> Download report</a>
           </div>
-      </div> --}}
-      <div class="section blog picklist mb-5" id="resume_div">
+      </div>
+      <div class="section blog picklist mb-5" id="print_div">
           <div class="container-fluid mt-3 bg-white pb-5">
               <div class="row">
                   <div class="blog__posts col-md-12">
@@ -315,4 +316,16 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/printThis/1.15.0/printThis.min.js"
         integrity="sha512-d5Jr3NflEZmFDdFHZtxeJtBzk0eB+kkRXWFQqEc1EKmolXjHm2IKCA7kTvXBNjIYzjXfD5XzIjaaErpkZHCkBg=="
         crossorigin="anonymous"></script>
+<script>
+    $(document).ready(function(){
+        $('.print__btn').click(function(){
+            $('#print_div').printThis({
+                importCSS: true,            // import parent page css
+                importStyle: true,          // import style tags
+                printContainer: true,       // print outer container/$.selector
+                printDelay: 1000           
+            });
+        })
+    })
+</script>
 </html>
