@@ -58,4 +58,9 @@ class JobPost extends Model
     {
         return $this->hasMany('App\Models\Stats','job_id');
     }
+
+    public function budgets()
+    {
+        return $this->hasMany('App\Models\JobBudget','job_id');
+    }
 }
