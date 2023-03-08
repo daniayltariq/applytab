@@ -290,7 +290,7 @@
                                                                 @php
                                                                     $site_budget = $job->getSiteBudget($key);
                                                                     $cost = $site_budget && $stat->where('type','click')->count() 
-                                                                                ? $site_budget/$stat->where('type','click')->count()
+                                                                                ? '$'.number_format($site_budget/$stat->where('type','click')->count(), 2, '.', '')
                                                                                 : ($site_budget ?? 0);
                                                                 @endphp
                                                                 {{$cost}}
