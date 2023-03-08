@@ -38,35 +38,37 @@ class FrontPageController extends Controller
 	public function storeStats(Request $request,$id)
 	{
 
-		$job = JobPost::where('unique_id',$id)->first();
+		$job = JobPost::where('id',$id)->first();
 		
-		$ids=explode('-',$id);
+		$ids = explode('-',$id);
 
-		$job_id=null;$referrer=null;
-		if (count($ids) ==1) {
-			$job_id=$ids[0];
-			$referrer=request()->headers->get('referer');
+		$job_id = null;
+		$referrer = null;
+		
+		if (count($ids) == 1) {
+			$job_id = $ids[0];
+			$referrer = request()->headers->get('referer');
 		}else{
-			$job_id=$ids[1];
-			$site=Site::where('id',$ids[0])->first();
+			$job_id = $ids[1];
+			$site = Site::where('id',$ids[0])->first();
 
 			if ($site) {
-				$referrer=$site->site_url;
+				$referrer = $site->site_url;
 			}
 			
 		}
 
-		$job=JobPost::where('id',$job_id)->first();
+		$job = JobPost::where('id',$job_id)->first();
 
 		if ($job) {
-			$stats=new Stats;
-			$stats->job_id=$job->id;
-			$stats->type='click';
+			$stats = new Stats;
+			$stats->job_id = $job->id;
+			$stats->type = 'click';
 			
-			$stats->source=$referrer;
+			$stats->source = $referrer;
 			$stats->save();
 
-			return redirect()->to($job->actual_apply_link);
+			return redirect()->to($job->apply_link);
 		} else {
 			return 'Link not found';
 		}

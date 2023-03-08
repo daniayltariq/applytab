@@ -37,6 +37,18 @@ use App\Http\Controllers\Admin\{
 //test notification
 // Route::get('test_notification',[App\Http\Controllers\App\DataController::class, 'testNotify']);
 
+
+Route::get('/clear', function () {
+   Artisan::call('cache:clear');
+   Artisan::call('config:cache');
+   Artisan::call('view:clear');
+   Artisan::call('route:clear');
+
+   return "Cache cleared successfully";
+});
+
+
+
 Route::get('lang/{locale}', [App\Http\Controllers\LocalizationController::class, 'index'])->name('lang_change');
 Route::get('/', function () {
     return redirect('http://www.jobadvertize.com/');
