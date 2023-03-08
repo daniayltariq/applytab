@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Faqs;
+use App\Models\Site;
 use App\Models\Stats;
 use App\Models\JoinUs;
 use App\Models\JobPost;
@@ -36,12 +37,33 @@ class FrontPageController extends Controller
 
 	public function storeStats(Request $request,$id)
 	{
+
 		$job = JobPost::where('unique_id',$id)->first();
+		
+		$ids=explode('-',$id);
+
+		$job_id=null;$referrer=null;
+		if (count($ids) ==1) {
+			$job_id=$ids[0];
+			$referrer=request()->headers->get('referer');
+		}else{
+			$job_id=$ids[1];
+			$site=Site::where('id',$ids[0])->first();
+
+			if ($site) {
+				$referrer=$site->site_url;
+			}
+			
+		}
+
+		$job=JobPost::where('id',$job_id)->first();
+
 		if ($job) {
 			$stats=new Stats;
 			$stats->job_id=$job->id;
 			$stats->type='click';
-			$stats->source=request()->headers->get('referer');
+			
+			$stats->source=$referrer;
 			$stats->save();
 
 			return redirect()->to($job->actual_apply_link);
