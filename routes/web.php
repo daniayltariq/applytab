@@ -85,7 +85,7 @@ Route::get('/add-job-pixel', function () {
     $jobs = JobPost::select('id','unique_id','job_description','dummy_job_description')->whereNotNull('unique_id')->get();
     foreach($jobs as $job)
     {
-        $job->job_description = $job->job_description . '    ' . "<img width='1' height='1' src=".url('/')."/watch/".$job->unique_id.">";
+        $job->job_description = $job->job_description . '    ' . "<img width='0' height='0' src=".url('/')."/watch/".$job->unique_id.">";
         $job->save();
     }
     dd('Done');
