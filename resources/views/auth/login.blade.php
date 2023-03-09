@@ -63,7 +63,7 @@
                                         {{-- <h2 class="m-b-0 text-color2">Sign In</h2> --}}
                                     </div>
                                     
-                                    <form method="POST" action="{{ route('login') }}">
+                                    <form method="POST" action="{{ url('/') }}/login">
                                         {{ csrf_field() }}
                                         <div class="form-group">
                                             <label class="font-weight-semibold" for="email">Email:</label>
