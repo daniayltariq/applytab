@@ -7,6 +7,7 @@ use App\Models\Site;
 use App\Models\Stats;
 use App\Models\JoinUs;
 use App\Models\JobPost;
+use App\Models\SiteHaveJob;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,16 @@ class FrontPageController extends Controller
 			$stats->source = $referrer ? parse_url($referrer)['scheme'].'://'.parse_url($referrer)['host'] : $referrer;
 			$stats->save();
 
+			if (isset($site) && $site) {
+				$job->total_applied = $job->total_applied+1;
+				$job->save();
+
+				$site_have_job=SiteHaveJob::where('sites_id',$site->id)->where('jobs_id',$job->id)->first();
+				if($site_have_job){
+					$site_have_job->applied=$site_have_job->applied +1;
+					$site_have_job->save();
+				}
+			}
 			return redirect()->to($job->apply_link);
 		} else {
 			return 'Link not found';
