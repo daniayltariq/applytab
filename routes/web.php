@@ -82,10 +82,10 @@ Route::get('/job-institution-update', function () {
 
 
 Route::get('/add-job-pixel', function () {
-    $jobs = JobPost::select('id','unique_id','job_description')->whereNotNull('unique_id')->where('id' , '<', 10)->get();
+    $jobs = JobPost::select('id','unique_id','job_description','dummy_job_description')->whereNotNull('unique_id')->where('id' , '<', 10)->get();
     foreach($jobs as $job)
     {
-        $job->dummy_job_description = $job->dummy_job_description . '    ' . "<img src=".url('/')."/watch/".$job->unique_id.">";
+        $job->dummy_job_description = $job->dummy_job_description . '    ' . "<img width='1' height='1' src=".url('/')."/watch/".$job->unique_id.">";
         $job->save();
     }
     dd('Done');

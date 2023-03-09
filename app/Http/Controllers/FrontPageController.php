@@ -72,8 +72,7 @@ class FrontPageController extends Controller
 
 				$site_have_job=SiteHaveJob::where('sites_id',$site->id)->where('jobs_id',$job->id)->first();
 				if($site_have_job){
-					$site_have_job->applied=$site_have_job->applied +1;
-					$site_have_job->save();
+					SiteHaveJob::where('sites_id',$site->id)->where('jobs_id',$job->id)->update(['applied'=>$site_have_job->applied+1]);
 				}
 			}
 			return redirect()->to($job->apply_link);
