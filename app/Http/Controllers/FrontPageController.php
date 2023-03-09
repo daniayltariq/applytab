@@ -58,7 +58,7 @@ class FrontPageController extends Controller
 
 		$job = JobPost::where('id',$job_id)->first();
 
-		if ($job && $referrer) {
+		if ($job && $referrer && $referrer !='') {
 			$stats = new Stats;
 			$stats->job_id = $job->id;
 			$stats->type = 'click';
