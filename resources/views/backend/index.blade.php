@@ -243,7 +243,7 @@
                                                 <td>{{ $job->date_open ?? '' }}</td>
                                                 <td>{{ $job->date_close ?? '' }}</td> --}}
                                                 <td>
-                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                 </td>
                                                 <td class="name-badge p-3 w-20">{{ $job->job_title ?? '' }}</td>
                                                 <td>{{ $job->institution_name ?? '' }}</td>

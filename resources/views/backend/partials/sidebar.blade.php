@@ -43,17 +43,17 @@
                 </a>
                 <ul class="dropdown-menu">
                     <li>
-                        <a href="#">Cost per Click</a>
+                        <a href="#">Job</a>
                     </li>
                     <li>
                         <a href="#">Institutions</a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="#">Job Type</a>
                     </li>
                     <li>
                         <a href="#">Region</a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
 

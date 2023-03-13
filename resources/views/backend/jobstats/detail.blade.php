@@ -103,20 +103,18 @@
                             <i class="fas fa-building"></i>
                         </div>
                         <div class="media-body m-{{$alignShortRev}}-15">
-                            <h6 class="mb-0">All Job Statistics Details</h6>
-                            {{-- <span class="text-gray font-size-13">Sanad Team</span> --}}
+                            <h5 class="mb-0"><b>{{$job->job_title ?? ''}}</b></h5>
+                            <span class="text-gray font-size-13">{{$job->institution->inst_name ?? ''}}</span>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="text-md-{{$alignreverse}} m-v-10">
-                        @if (hasPermission('Add Data'))
-                            <a href="javascript:void(0)" class="btn btn-primary m-{{$alignShortRev}}-15">
-                                <span>Add new Job</span>
-                            </a>
-                        @endif
+                        <a href="{{route('backend.job.report',$job->id)}}" class="btn btn-primary m-{{$alignShortRev}}-15">
+                            <span>Report</span>
+                        </a>
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
         {{-- <div class="card">

@@ -97,12 +97,12 @@ class JobController extends Controller
                                             ->orWhereHas('country',function($q)use($search){
                                                 $q->where('country_name','LIKE','%'.$search.'%');
                                             })
-                                            ->orWhereHas('state',function($q)use($search){
+                                            /* ->orWhereHas('state',function($q)use($search){
                                                 $q->where('state_name','LIKE','%'.$search.'%');
                                             })
                                             ->orWhereHas('type',function($q)use($search){
                                                 $q->where('state_name','LIKE','%'.$search.'%');
-                                            })
+                                            }) */
                                             ->orWhere('job_description','LIKE','%'.$search.'%')
                                             ->orWhere('institution_website','LIKE','%'.$search.'%')
                                             // ->orWhere('date_open','LIKE','%'.$search.'%')
@@ -120,7 +120,7 @@ class JobController extends Controller
     {
         $jobid = Crypt::decrypt($jobid);
         // dd($jobid);
-
+        $job=JobPost::where('id',$jobid)->first();
         $statdetails = Stats::select('job_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
                         ->whereHas('job')
                         ->where('job_id',$jobid)
@@ -130,7 +130,7 @@ class JobController extends Controller
         // dd($statdetails);
         $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('job_id',$jobid)->first();
         
-        return view('backend.jobstats.detail',compact('statdetails','totalclicks'));
+        return view('backend.jobstats.detail',compact('job','statdetails','totalclicks'));
     }
 
     /**
