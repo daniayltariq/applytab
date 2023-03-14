@@ -11,7 +11,8 @@ class Stats extends Model
 {
 
     protected $table = 'applytab_stats';
-    public $timestamps = false;
+    public $timestamps = ["created_at"]; 
+    const UPDATED_AT = null;
     
     public function job()
     {
