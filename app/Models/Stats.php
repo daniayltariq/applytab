@@ -11,7 +11,8 @@ class Stats extends Model
 {
 
     protected $table = 'applytab_stats';
-
+    public $timestamps = false;
+    
     public function job()
     {
         return $this->belongsTo('App\Models\JobPost','job_id');

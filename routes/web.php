@@ -130,13 +130,15 @@ Route::get('/watch/{id}', function (Request $request,$id) {
         $stats->job_id=$job->id;
         $stats->type='view';
         $stats->source=(isset($_SERVER['HTTP_REFERER']) && $_SERVER['HTTP_REFERER']!='' && $_SERVER['HTTP_REFERER']) ? (parse_url($_SERVER['HTTP_REFERER'])['scheme'].'://'.parse_url($_SERVER['HTTP_REFERER'])['host']) :null;
-        $stats->object=json_encode([
+        $stats->ip=$_SERVER['REMOTE_ADDR'];
+        $stats->useragent=$_SERVER['HTTP_USER_AGENT'];
+        /* $stats->object=json_encode([
             'job_id'       => $job->id,
             'ip'        => $_SERVER['REMOTE_ADDR'],
             'date'      => date('Y-m-d H:i:s'),
             'referer'   => $_SERVER['HTTP_REFERER'],
             'useragent' => $_SERVER['HTTP_USER_AGENT']
-        ]);
+        ]); */
         $stats->save();
     }
     
