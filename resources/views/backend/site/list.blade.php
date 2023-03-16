@@ -101,11 +101,11 @@
     <!-- Content Wrapper START -->
     <div class="main-content">
         <div class="page-header">
-            <h2 class="header-title">Jobs</h2>
+            <h2 class="header-title">Sites</h2>
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash">
                     <a href="{{route('backend.job.index')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
-                    <span class="breadcrumb-item active">Jobs</span>
+                    <span class="breadcrumb-item active">Sites</span>
                 </nav>
             </div>
         </div>
@@ -118,7 +118,7 @@
                             <i class="fas fa-building"></i>
                         </div>
                         <div class="media-body m-{{$alignShortRev}}-15">
-                            <h6 class="mb-0">All Jobs</h6>
+                            <h6 class="mb-0">All Sites</h6>
                             {{-- <span class="text-gray font-size-13">Sanad Team</span> --}}
                         </div>
                     </div>
@@ -134,35 +134,6 @@
                 </div> --}}
             </div>
         </div>
-        <div class="card">
-            <div class="card-body">
-                <form class="form-row" action="{{ getFullUrl() }}">
-                    <h3 class="col-md-12">Search Jobs</h3>
-                    <hr>
-                    <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="search_text" name="search_text" value="{{request()->query('search_text')}}">
-                    </div>
-                    <div class="form-group col-md-4">
-                        @php
-                            $site__=request()->query('site_id') ?? '';
-                        @endphp
-                        <select class="form-control" name="site_id" >
-                            <option value="">Select Site..</option>
-                            @foreach ($sites as $site)
-                                <option value="{{$site->id}}" {{ $site__==$site->id ? 'selected' : ''}}>{{$site->site_name}}</option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="form-group col-md-2">
-                        <button class="btn btn-primary" type="submit">Go</button>
-                    </div>
-                    
-                    {{-- <div class="form-group col-md-6">
-                        <button class="btn btn-primary float-right" type="button" onclick="openNav()"><i class="fa fa-filter"></i> Filter</button>
-                    </div> --}}
-                </form>
-            </div>
-        </div>
 
         <div class="row">
             <div class="col-lg-12">
@@ -175,56 +146,37 @@
                                     <table class="table table-hover">
                                         <thead>
 											<tr>
-                                                <th class="bold w-10">Job url</th>
-                                                <th>Title</th>
-                                                {{-- <th>Position</th> --}}
-                                                {{-- <th>Category</th> --}}
-                                                {{-- <th>Type</th> --}}
-                                                <th>Institute</th>
-                                                <th>City</th>
-                                                <th>Date Open</th>
-                                                {{-- <th>Date Close</th> --}}
+                                                <th>#</th>
+                                                <th>Site Name</th>
+                                                <th>Total jobs</th>
+                                                <th>Total Clicks</th>
+                                                <th>Total Views</th>
                                                 <th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											@forelse($jobs as $key => $job)
+                                            @php
+                                                $count=0;
+                                            @endphp
+											@forelse($sites as $key => $site)
                                                 <tr>
+                                                    <td>{{++$count}}</td>
+                                                    <td class="name-badge p-3 w-20">{{ $key ?? '' }}</td>
+                                                    <td>{{ $site->count() ?? '' }}</td>
+                                                    <td>{{ $site->sum('clicks') ?? '' }}</td>
+                                                    <td>{{ $site->sum('views') ?? '' }}</td>
                                                     <td>
-                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
-                                                    </td>
-                                                    <td class="name-badge p-3 w-20">{{ $job->job_title ?? '' }}</td>
-                                                    {{-- <td>{{ $job->position ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $job->category ?? '' }}</td>
-                                                    <td>{{ $job->type ?? '' }}</td> --}}
-                                                    <td>{{ $job->institution_name ?? '' }}</td>
-                                                    <td>{{ $job->institution_city ?? '' }}</td>
-                                                    <td>{{ $job->post_date ?? '' }}</td>
-                                                    {{-- <td>{{ $job->date_close ?? '' }}</td> --}}
-                                                    <td>
-                                                        <div class="dropdown dropdown-inline">
-                                                            <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                <i class="fa fa-ellipsis-h"></i>
-                                                            </button>
-                                                            <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Url</a>
-                                                                <a class="dropdown-item edit_budget" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
-                                                                <a class="dropdown-item job_pixel" data-job-id="{{$job->id}}">Get Pixel</a>
-                                                                <a href="{{route('backend.job.report',$job->id)}}" class="dropdown-item">Download Report</a>
-                                                            </div>
-                                                        </div>
-                                                        
+                                                        <a href="{{route('backend.job.index')}}?jobs={{implode('|',$site->pluck('job_id')->toArray())}}" class="btn btn-primary">View Jobs</a>
                                                     </td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="7" class="text-center">No Jobs found</td>
+                                                    <td colspan="7" class="text-center">No Sites found</td>
                                                 </tr>
                                             @endforelse
 										</tbody>
                                     </table>
                                 </div>
-                                {!!$jobs->appends($_GET)->links()!!}
                             </div>
                         </div>
                     </div>

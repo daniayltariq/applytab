@@ -54,6 +54,11 @@ class JobPost extends Model
         return $this->belongsTo('App\Models\State','institution_state_id');
     }
 
+    public function job_sites()
+    {
+        return $this->hasMany('App\Models\SiteHaveJob','jobs_id');
+    }
+
     public function stats()
     {
         return $this->hasMany('App\Models\Stats','job_id');

@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\{
     CompanyController,
     ContractController,
     JobController,
+    SiteController,
     CarController,
     ProposalController,
     OrderController,
@@ -183,6 +184,7 @@ Route::group([
         Route::get('user/{id}', [UserController::class, 'show'])->name('user.show');
         
         Route::get('job', [JobController::class, 'index'])->name('job.index');
+        Route::get('job-board', [SiteController::class, 'index'])->name('site.index');
         Route::get('institution', [InstitutionController::class, 'index'])->name('institution.index');
         Route::get('contract/{id}', [JobController::class, 'show'])->name('contract.show');
 

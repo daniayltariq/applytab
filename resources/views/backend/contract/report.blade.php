@@ -242,14 +242,14 @@
                                                             <i class="pe-7s-date icon fa fa-eye"></i>
                                                             <p>Total Views</p>
                                                             <h6>
-                                                               3143
+                                                                {{$job->views_count}}
                                                             </h6>
                                                          </td>
                                                          <td>
                                                             <i class="pe-7s-date icon fa fa-bullseye"></i>
                                                             <p>Total Clicks</p>
                                                             <h6>
-                                                               656
+                                                                {{$job->clicks_count}}
                                                             </h6>
                                                          </td>
                                                    </tr>

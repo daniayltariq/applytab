@@ -30,6 +30,14 @@
                 </a>
             </li>
 
+            <li class="nav-item {{url()->current() == route('backend.site.index') ? 'active' :''}}">
+                <a href="{{route('backend.site.index')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-globe"></i>
+                    </span>
+                    <span class="title">Sites </span>
+                </a>
+            </li>
 
             <li class="nav-item dropdown {{\Route::is('backend.contract.*') ? 'active' :''}}">
                 <a class="dropdown-toggle" href="javascript:void(0);">

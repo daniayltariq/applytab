@@ -10,7 +10,7 @@
         <style>
             
             * {
-                font-family: "Quicksand";
+                font-family: "Arial";
             }
 
             .error{

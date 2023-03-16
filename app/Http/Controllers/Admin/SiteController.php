@@ -3,12 +3,8 @@
 namespace App\Http\Controllers\Admin;
 use App\Models\Site;
 use App\Models\User;
-
 use App\Models\Stats;
-
 use App\Models\JobPost;
-use App\Models\Category;
-use App\Models\JobBudget;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +17,7 @@ use App\Models\ContractProductCategory;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\Facades\Validator;
 
-class JobController extends Controller
+class SiteController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -30,62 +26,18 @@ class JobController extends Controller
      */
     public function index(Request $request)
     {
-        // dd($request->all());
-        $jobs=JobPost::select('id','unique_id','job_title','institution_name','institution_city','post_date')->whereNotNull('unique_id')->when($request->query('type'),function($q)use($request){
-            $q->where('user_type',$request->type);
-        })
-        ->when($request->query('search_text'),function($q)use($request){
-            $search=$request->query('search_text');
-            $q->where(function($q)use($search){
-                $q->where('job_title','LIKE','%'.$search.'%')
-                    ->orWhereHas('institution',function($q)use($search){
-                        $q->where('inst_name','LIKE','%'.$search.'%');
-                    })
-                    // ->orWhereHas('city',function($q)use($search){
-                    //     $q->where('city_name','LIKE','%'.$search.'%');
-                    // })
-                    ->orWhereHas('country',function($q)use($search){
-                        $q->where('country_name','LIKE','%'.$search.'%');
-                    })
-                    ->orWhereHas('state',function($q)use($search){
-                        $q->where('state_name','LIKE','%'.$search.'%');
-                    })
-                    ->orWhereHas('type',function($q)use($search){
-                        $q->where('job_type_name','LIKE','%'.$search.'%');
-                    })
-                    ->orWhere('job_description','LIKE','%'.$search.'%')
-                    ->orWhere('institution_website','LIKE','%'.$search.'%')
-                    ;
-            });
-        })
-        ->when($request->query('product_category'),function($q)use($request){
-            $q->whereHas('product_categories',function($q)use($request){
-                $q->where('product_category_id',$request->query('product_category'));
-            });
-        })
-        ->when($request->query('contract_type'),function($q)use($request){
-            $q->where('contract_type',$request->contract_type);
-        })
-        ->when($request->query('extension'),function($q)use($request){
-            $q->where('extension',$request->extension);
-        })
-        ->when($request->query('extension_period'),function($q)use($request){
-            $q->where('extension_period',$request->extension_period);
-        })
-        ->when($request->query('site_id'),function($q)use($request){
-            $q->whereHas('job_sites',function($q)use($request){
-                $q->where('sites_id',$request->query('site_id'));
-            });
-        })
-        ->when($request->query('jobs'),function($q)use($request){
-            $job_ids=explode('|',$request->query('jobs'));
-            $q->whereIn('id',$job_ids);
-        })
-        ->orderBy('post_date','desc')->paginate(15);
-
-        $sites=Site::all();
+        // $sites=Site::withCount(['site_jobs as active_job_count' => function($query) {
+        //     return $query->whereHas('job',function($q){
+        //         return $q->where('status',1);
+        //     });
+        // }])->paginate(10);
+        $sites = Stats::whereNotNull('source')->select('job_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+                        ->groupBy('job_id','source','type')
+                        ->get()
+                        ->groupBy('source');
         
-        return view('backend.contract.list',compact('jobs','sites'));
+        // dd($sites);
+        return view('backend.site.list',compact('sites'));
     }
 
     /**
@@ -156,15 +108,9 @@ class JobController extends Controller
     {
         $job=JobPost::select('id','unique_id','job_title','institution_name','institution_city','post_date','app_deadline','job_description')
                     ->where('id',$id)
-                    ->with('stats')
-                    ->withCount(['stats as views_count' => function($query) {
-                        return $query->where('type','view');
-                    }])
-                    ->withCount(['stats as clicks_count' => function($query) {
-                        return $query->where('type','click');
-                    }])->first();
+                    ->with('stats')->first();
         $stats=(clone $job)->stats->groupBy('source');
-        // dd($job);
+
         return view('backend.contract.report',compact('job','stats'));
     }
 
