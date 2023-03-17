@@ -35,7 +35,7 @@
                     <span class="icon-holder">
                         <i class="fas fa-globe"></i>
                     </span>
-                    <span class="title">Sites </span>
+                    <span class="title">Job Boards</span>
                 </a>
             </li>
 

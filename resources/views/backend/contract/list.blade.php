@@ -144,12 +144,12 @@
                     </div>
                     <div class="form-group col-md-4">
                         @php
-                            $site__=request()->query('site_id') ?? '';
+                            $site__=request()->query('site') ?? '';
                         @endphp
-                        <select class="form-control" name="site_id" >
+                        <select class="form-control" name="site" >
                             <option value="">Select Site..</option>
                             @foreach ($sites as $site)
-                                <option value="{{$site->id}}" {{ $site__==$site->id ? 'selected' : ''}}>{{$site->site_name}}</option>
+                                <option value="{{$site}}" {{ $site__==$site ? 'selected' : ''}}>{{$site}}</option>
                             @endforeach
                         </select>
                     </div>

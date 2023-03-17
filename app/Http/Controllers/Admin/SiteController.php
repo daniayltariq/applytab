@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers\Admin;
+use Carbon\Carbon;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Stats;
@@ -26,15 +27,37 @@ class SiteController extends Controller
      */
     public function index(Request $request)
     {
-        // $sites=Site::withCount(['site_jobs as active_job_count' => function($query) {
-        //     return $query->whereHas('job',function($q){
-        //         return $q->where('status',1);
-        //     });
-        // }])->paginate(10);
-        $sites = Stats::whereNotNull('source')->select('job_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
-                        ->groupBy('job_id','source','type')
-                        ->get()
-                        ->groupBy('source');
+        $startDate = Carbon::now()->startOfDay(); // set the default start date as today's start time
+        $endDate = Carbon::now(); // set the default end date as now
+        
+        if (request()->query('f') == 'yesterday') {
+            $startDate = Carbon::yesterday()->startOfDay();
+            $endDate = Carbon::yesterday()->endOfDay();
+        } elseif (request()->query('f') == 'last_week') {
+            $startDate = Carbon::now()->subWeek()->startOfWeek();
+            $endDate = Carbon::now()->subWeek()->endOfWeek();
+        } elseif (request()->query('f') == 'this_week') {
+            $startDate = Carbon::now()->startOfWeek();
+            $endDate = Carbon::now()->endOfDay();
+        } elseif (request()->query('f') == 'this_month') {
+            $startDate = Carbon::now()->startOfMonth();
+            $endDate = Carbon::now()->endOfDay();
+        } elseif (request()->query('f') == 'this_year') {
+            $startDate = Carbon::now()->startOfYear();
+            $endDate = Carbon::now()->endOfDay();
+        }
+
+        $sites = Stats::whereNotNull('source')
+                        ->when(request()->query('f'),function ($q) use ($startDate,$endDate) {
+                            $q->whereBetween('created_at', [$startDate, $endDate]);
+                        })
+                        ->select('source', 
+                                 DB::raw('COUNT(DISTINCT job_id) AS total_jobs'),
+                                 DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),
+                                 DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views')
+                                )
+                        ->groupBy('source')
+                        ->get();
         
         // dd($sites);
         return view('backend.site.list',compact('sites'));

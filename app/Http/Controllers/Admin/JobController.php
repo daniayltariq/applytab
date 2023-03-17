@@ -72,19 +72,14 @@ class JobController extends Controller
         ->when($request->query('extension_period'),function($q)use($request){
             $q->where('extension_period',$request->extension_period);
         })
-        ->when($request->query('site_id'),function($q)use($request){
-            $q->whereHas('job_sites',function($q)use($request){
-                $q->where('sites_id',$request->query('site_id'));
+        ->when($request->query('site'),function($q)use($request){
+            $q->whereHas('stats',function($q)use($request){
+                $q->where('source',$request->query('site'));
             });
-        })
-        ->when($request->query('jobs'),function($q)use($request){
-            $job_ids=explode('|',$request->query('jobs'));
-            $q->whereIn('id',$job_ids);
         })
         ->orderBy('post_date','desc')->paginate(15);
 
-        $sites=Site::all();
-        
+        $sites=Stats::distinct('source')->pluck('source');
         return view('backend.contract.list',compact('jobs','sites'));
     }
 

@@ -93,6 +93,19 @@
     .dropdown .dropdown-toggle:after {
         content: none !important;
     }
+    .btn-outline-primary{
+        border-color: #283b8c !important;
+        color: #283b8c !important;
+    }
+    .btn-outline-primary:not(:disabled):not(.disabled).active,
+    .btn-outline-primary:not(:disabled):not(.disabled):active,
+    .show>.btn-outline-primary.dropdown-toggle,
+    .btn-outline-primary:hover {
+        background-color: #283b8c !important;
+        border-color: #283b8c !important;
+        color: #fff !important;
+    }
+
 </style>
 @endsection
 
@@ -123,15 +136,20 @@
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-6">
+                <div class="col-md-6">
                     <div class="text-md-{{$alignreverse}} m-v-10">
-                        @if (hasPermission('Add Data'))
-                            <a href="javascript:void(0)" class="btn btn-primary m-{{$alignShortRev}}-15">
-                                <span>Add new Job</span>
-                            </a>
-                        @endif
+                        @php
+                            $filt=request()->query('f');
+                        @endphp
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <a href="{{ getFullUrl(['f'=>'yesterday']) }}" class="btn btn-outline-primary {{$filt=='yesterday' ? 'active' : ''}}">Yesterday</a>
+                            <a href="{{ getFullUrl(['f'=>'last_week']) }}" class="btn btn-outline-primary {{$filt=='last_week' ? 'active' : ''}}">Last Week</a>
+                            <a href="{{ getFullUrl(['f'=>'this_week']) }}" class="btn btn-outline-primary {{$filt=='this_week' ? 'active' : ''}}">This Week</a>
+                            <a href="{{ getFullUrl(['f'=>'this_month']) }}" class="btn btn-outline-primary {{$filt=='this_month' ? 'active' : ''}}">This Month</a>
+                            <a href="{{ getFullUrl(['f'=>'this_year']) }}" class="btn btn-outline-primary {{$filt=='this_year' ? 'active' : ''}}">This Year</a>
+                        </div>
                     </div>
-                </div> --}}
+                </div>
             </div>
         </div>
 
@@ -161,12 +179,12 @@
 											@forelse($sites as $key => $site)
                                                 <tr>
                                                     <td>{{++$count}}</td>
-                                                    <td class="name-badge p-3 w-20">{{ $key ?? '' }}</td>
-                                                    <td>{{ $site->count() ?? '' }}</td>
-                                                    <td>{{ $site->sum('clicks') ?? '' }}</td>
-                                                    <td>{{ $site->sum('views') ?? '' }}</td>
+                                                    <td class="name-badge p-3 w-20">{{ $site->source ?? ''}}</td>
+                                                    <td>{{ $site->total_jobs ?? '' }}</td>
+                                                    <td>{{ $site->clicks ?? '' }}</td>
+                                                    <td>{{ $site->views ?? '' }}</td>
                                                     <td>
-                                                        <a href="{{route('backend.job.index')}}?jobs={{implode('|',$site->pluck('job_id')->toArray())}}" class="btn btn-primary">View Jobs</a>
+                                                        <a href="{{route('backend.job.index')}}?site={{$site->source}}" class="btn btn-primary">View Jobs</a>
                                                     </td>
                                                 </tr>
                                             @empty
