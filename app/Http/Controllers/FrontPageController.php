@@ -66,7 +66,7 @@ class FrontPageController extends Controller
 			$stats = new Stats;
 			$stats->job_id = $job->id;
 			$stats->type = 'click';
-			$stats->referrer = request()->headers->get('referer');
+			$stats->referrer = $_SERVER['HTTP_REFERER'];
 			$stats->ip=$_SERVER['REMOTE_ADDR'];
 			$stats->source = $referrer ? str_replace('www.','',$referrer) : $referrer;
 			$stats->save();
