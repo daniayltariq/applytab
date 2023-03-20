@@ -42,17 +42,20 @@ class FrontPageController extends Controller
 
 		$job_id = null;
 		$referrer = null;
-		
+
 		if (count($ids) == 1) {
 			$job_id = $ids[0];
-			$referrer = parse_url(request()->headers->get('referer'))['host'];
-			$site = Site::where('site_url','LIKE','%'.$referrer.'%')->first();
+			$referrer =request()->headers->get('referer') ? parse_url(request()->headers->get('referer'))['host'] : null;
+			if ($referrer) {
+				$site = Site::where('site_url','LIKE','%'.$referrer.'%')->first();
+			}
+
 		}else{
 			$job_id = $ids[1];
 			$site = Site::where('id',$ids[0])->first();
 
 			if ($site) {
-				$referrer = $site->site_url;
+				$referrer = parse_url($site->site_url)['host'];
 			}
 			
 		}
@@ -63,8 +66,9 @@ class FrontPageController extends Controller
 			$stats = new Stats;
 			$stats->job_id = $job->id;
 			$stats->type = 'click';
+			$stats->referrer = request()->headers->get('referer');
 			
-			$stats->source = $referrer ? str_replace('www.','',parse_url($referrer)['host']) : $referrer;
+			$stats->source = $referrer ? str_replace('www.','',$referrer) : $referrer;
 			$stats->save();
 
 			if (isset($site) && $site) {

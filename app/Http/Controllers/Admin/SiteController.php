@@ -62,7 +62,7 @@ class SiteController extends Controller
                         ->groupBy('source')
                         ->paginate(15);
 
-        $all_sites=Stats::distinct('source')->pluck('source');
+        $all_sites=Stats::whereNotNull('source')->distinct('source')->pluck('source');
         return view('backend.site.list',compact('sites','all_sites'));
     }
 
