@@ -63,7 +63,7 @@ class FrontPageController extends Controller
 			$stats->job_id = $job->id;
 			$stats->type = 'click';
 			
-			$stats->source = $referrer ? parse_url($referrer)['host'] : $referrer;
+			$stats->source = $referrer ? str_replace('www.','',parse_url($referrer)['host']) : $referrer;
 			$stats->save();
 
 			if (isset($site) && $site) {
