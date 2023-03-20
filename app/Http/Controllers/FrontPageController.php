@@ -51,12 +51,12 @@ class FrontPageController extends Controller
 			}
 
 		}else{
-			/* $job_id = $ids[1];
+			$job_id = $ids[1];
 			$site = Site::where('id',$ids[0])->first();
 
 			if ($site) {
 				$referrer = parse_url($site->site_url)['host'];
-			} */
+			}
 			
 		}
 
