@@ -57,9 +57,9 @@ class SiteController extends Controller
                                  DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views')
                                 )
                         ->groupBy('source')
-                        ->get();
+                        ->paginate(3);
         
-        // dd($sites);
+        dd(parse_url('https://communitycollegejobs.com'));
         return view('backend.site.list',compact('sites'));
     }
 

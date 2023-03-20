@@ -195,6 +195,7 @@
 										</tbody>
                                     </table>
                                 </div>
+                                {!!$sites->appends($_GET)->links()!!}
                             </div>
                         </div>
                     </div>
