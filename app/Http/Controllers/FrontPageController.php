@@ -46,6 +46,7 @@ class FrontPageController extends Controller
 		if (count($ids) == 1) {
 			$job_id = $ids[0];
 			$referrer = request()->headers->get('referer');
+			$site = Site::where('site_url','LIKE','%'.$referrer.'%')->first();
 		}else{
 			$job_id = $ids[1];
 			$site = Site::where('id',$ids[0])->first();

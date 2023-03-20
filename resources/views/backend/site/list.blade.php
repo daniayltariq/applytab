@@ -136,23 +136,46 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-6">
-                    <div class="text-md-{{$alignreverse}} m-v-10">
-                        @php
-                            $filt=request()->query('f');
-                        @endphp
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="{{ getFullUrl(['f'=>'yesterday']) }}" class="btn btn-outline-primary {{$filt=='yesterday' ? 'active' : ''}}">Yesterday</a>
-                            <a href="{{ getFullUrl(['f'=>'last_week']) }}" class="btn btn-outline-primary {{$filt=='last_week' ? 'active' : ''}}">Last Week</a>
-                            <a href="{{ getFullUrl(['f'=>'this_week']) }}" class="btn btn-outline-primary {{$filt=='this_week' ? 'active' : ''}}">This Week</a>
-                            <a href="{{ getFullUrl(['f'=>'this_month']) }}" class="btn btn-outline-primary {{$filt=='this_month' ? 'active' : ''}}">This Month</a>
-                            <a href="{{ getFullUrl(['f'=>'this_year']) }}" class="btn btn-outline-primary {{$filt=='this_year' ? 'active' : ''}}">This Year</a>
-                        </div>
-                    </div>
-                </div>
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-body">
+                <form class="form-row" action="{{ getFullUrl() }}">
+                    <h3 class="col-md-12">Search/Filter</h3>
+                    <div class="col-md-4">
+                        @php
+                            $site__=request()->query('site') ?? '';
+                        @endphp
+                        <select class="form-control" name="site" >
+                            <option value="">Select Site..</option>
+                            @foreach ($all_sites as $site)
+                                <option value="{{$site}}" {{ $site__==$site ? 'selected' : ''}}>{{$site}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <button class="btn btn-primary" type="submit">Go</button>
+                    </div>
+                    
+                    <div class="col-md-6">
+                        <div class="text-md-{{$alignreverse}}">
+                            @php
+                                $filt=request()->query('f');
+                            @endphp
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <a href="{{ getFullUrl(['f'=>'yesterday']) }}" class="btn btn-outline-primary {{$filt=='yesterday' ? 'active' : ''}}">Yesterday</a>
+                                <a href="{{ getFullUrl(['f'=>'this_week']) }}" class="btn btn-outline-primary {{$filt=='this_week' ? 'active' : ''}}">This Week</a>
+                                <a href="{{ getFullUrl(['f'=>'last_week']) }}" class="btn btn-outline-primary {{$filt=='last_week' ? 'active' : ''}}">Last Week</a>
+                                <a href="{{ getFullUrl(['f'=>'this_month']) }}" class="btn btn-outline-primary {{$filt=='this_month' ? 'active' : ''}}">This Month</a>
+                                <a href="{{ getFullUrl(['f'=>'this_year']) }}" class="btn btn-outline-primary {{$filt=='this_year' ? 'active' : ''}}">This Year</a>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
         <div class="row">
             <div class="col-lg-12">
                 <!-- Card View -->

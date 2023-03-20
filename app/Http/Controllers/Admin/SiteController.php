@@ -48,6 +48,9 @@ class SiteController extends Controller
         }
 
         $sites = Stats::whereNotNull('source')
+                        ->when($request->query('site'),function($q)use($request){
+                            $q->where('source',$request->query('site'));
+                        })
                         ->when(request()->query('f'),function ($q) use ($startDate,$endDate) {
                             $q->whereBetween('created_at', [$startDate, $endDate]);
                         })
@@ -58,8 +61,9 @@ class SiteController extends Controller
                                 )
                         ->groupBy('source')
                         ->paginate(15);
-        
-        return view('backend.site.list',compact('sites'));
+
+        $all_sites=Stats::distinct('source')->pluck('source');
+        return view('backend.site.list',compact('sites','all_sites'));
     }
 
     /**
