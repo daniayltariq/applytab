@@ -104,7 +104,7 @@
             <h2 class="header-title">Ads</h2>
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash d-flex">
-                    <a href="{{route('backend.adsListing')}}" class="breadcrumb-item my-auto"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
+                    <a href="{{route('backend.adsListing')}}" class="breadcrumb-item my-auto"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Ads Directory</a>
                     <span class="breadcrumb-item active my-auto">Ads</span>
                 </nav>
             </div>
@@ -154,9 +154,10 @@
                                 <div class="table-responsive">
                                     <table class="table table-hover">
                                         <thead>
-											<tr>
-                                                <th class="bold w-10">Ad URL</th>
+                                            <tr>
                                                 <th>Image</th>
+                                                <th class="bold w-10">Ad URL</th>
+                                                {{-- <th class="bold w-10">Ad Slot</th> --}}
                                                 <th>Sites</th>
                                                 <th>Action</th>
 											</tr>
@@ -167,8 +168,9 @@
                                                     {{-- <td>
                                                         <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$item->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                     </td> --}}
+                                                    <td><img width="150px" src="{{ $item->image }}"/></td>
                                                     <td class="name-badge p-3 w-20">{{ $item->ad_url ?? '' }}</td>
-                                                    <td><img width="150px" src="{{ asset('/storage/ad_images/'.$item->image) }}"/></td>
+                                                    {{-- <td>{{$item->slot ?? ''}}</td> --}}
                                                     <td>
                                                         @foreach ($item->adSites as $site)
                                                             <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{$site->site_name}}</span>

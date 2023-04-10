@@ -12,7 +12,6 @@ class Ad extends Model
     // use LogsActivity;
 
     protected $table = 'admanagement_ads';
-    public $timestamps = false;
 
     public function getActivitylogOptions(): LogOptions
     {

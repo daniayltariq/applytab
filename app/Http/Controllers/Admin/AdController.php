@@ -4,8 +4,9 @@ namespace App\Http\Controllers\Admin;
 use App\Models\Ad;
 use App\Models\Site;
 
-use App\Models\User;
+use App\Models\Slot;
 
+use App\Models\User;
 use App\Models\Stats;
 use App\Models\AdSites;
 use App\Models\JobPost;
@@ -56,9 +57,22 @@ class AdController extends Controller
      */
     public function create(Request $request)
     {
-
-        $sites = Site::all();
-        return view('backend.ads.form', compact('sites'));
+        $data = [
+        [
+          "site_id" => "1",
+          "slot_id" => "2"
+        ],
+        [
+          "site_id" => "4",
+          "slot_id" => "3"
+        ],
+        [
+          "site_id" => "5",
+          "slot_id" => "6"
+        ]];
+        $sites  = Site::all();
+        $slots  = Slot::all();
+        return view('backend.ads.form', compact('sites', 'slots', 'data'));
     }
 
     /**
@@ -69,18 +83,23 @@ class AdController extends Controller
      */
     public function store(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
-            'ad_url'    => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
-            'ad_image'  => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
-            'sites'     => 'required|array|exists:sites,id',
+            'ad_url'                => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
+            'ad_image'              => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
+            'site_data'             => 'required|array',
+            'site_data.*.site_id'   => 'required|exists:sites,id',
+            'site_data.*.slot_id'   => 'required|exists:admanagement_slots,id',
+        ], [
+            'site_data.*.site_id.required' => 'Ad Site is required.',
+            'site_data.*.slot_id.required' => 'Ad Slot is required.',
         ]);
 
         if ($validator->fails()) {
             return redirect()->back()
                     ->withErrors($validator)
                     ->withInput()
-                    ->with('error','validation error!');
+                    ->with('error','validation error!')
+                    ->with('site_data_error', $request->site_data);
         }
 
         if ($request->adId) {
@@ -97,17 +116,28 @@ class AdController extends Controller
             $file = $request->file('ad_image');
             $filename = time() . '.' . $file->getClientOriginalExtension();
             $path = $file->storeAs('public/ad_images', $filename);
-            $ad->image  = $filename ;
+            $fullfilename = url('/').'/storage/ad_images/'.$filename;
+            $ad->image  = $fullfilename ;
         }
 
         $ad->ad_url = $request->ad_url;
         $ad->save();
 
-        $sites = $request->sites;
+        $sites = $request->site_data;
 
 
         if($sites){
-            $ad->adSites()->attach($sites);
+
+            foreach ($request->site_data as $key => $site) {
+
+                $adSite = new AdSites();
+
+                $adSite->ad_id    = $ad->id;
+                $adSite->site_id  = $site['site_id'];
+                $adSite->slot_id  = $site['slot_id'];
+                $adSite->save();
+            }
+            // $ad->adSites()->attach($sites);
         }
 
         // // Create Notification
@@ -132,7 +162,7 @@ class AdController extends Controller
      */
     public function show($id)
     {
-        $ad=ad::where('order_id',$id)->first();
+        $ad = Ad::where('order_id',$id)->first();
         return view('backend.ad.report',compact('ad'));
     }
 
@@ -144,17 +174,26 @@ class AdController extends Controller
      */
     public function edit($id)
     {
+
         $ad = Ad::find($id);
         if (!$ad) {
             abort(404);
         }
 
-        // Get all the available sites
         $sites = Site::all();
 
-        // Extract the IDs of the selected sites into an array
-        $selectedSites = $ad->adSites->pluck('id')->toArray();
-        return view('backend.ads.form',compact('ad', 'sites', 'selectedSites'));
+        $slots  = Slot::all();
+
+        $selectedSites = $ad->ad_sites->all();
+
+        $selectedSites = collect($selectedSites)->map(function ($item) {
+            return [
+                'site_id' => $item->site_id,
+                'slot_id' => $item->slot_id,
+            ];
+        })->toArray();
+
+        return view('backend.ads.form',compact('ad', 'sites', 'slots', 'selectedSites'));
     }
 
 
@@ -166,11 +205,11 @@ class AdController extends Controller
      */
     public function destroy($id)
     {
-        $ad=ad::findOrFail($id);
+        $ad = Ad::findOrFail($id);
 
         $ad->adSites()->detach();
         Storage::delete('public/ad_images/' . $ad->image);
         $ad->delete();
-        return redirect()->back()->with("status", "Ad deleted successfully!");
+        return redirect()->route('backend.adsListing')->with("status", "Ad deleted successfully!");
     }
 }

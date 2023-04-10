@@ -38,11 +38,6 @@ use App\Http\Controllers\Admin\{
 //test notification
 // Route::get('test_notification',[App\Http\Controllers\App\DataController::class, 'testNotify']);
 
-Route::get('/', function () {
-    return redirect()->route('login');
-});
-
-
 Route::get('/clear', function () {
    Artisan::call('cache:clear');
    Artisan::call('config:cache');
@@ -52,8 +47,15 @@ Route::get('/clear', function () {
    return "Cache cleared successfully";
 });
 
+Route::get('/link-storage', function () {
+    Artisan::call('storage:link');
+ 
+    return "Link created successfully";
+});
 
-
+Route::get('/', function () {
+    return redirect('http://www.jobadvertize.com/');
+})->name('/');
 
 Route::group([
 	'prefix' => 'backend',
@@ -66,7 +68,7 @@ Route::group([
         'middleware' => ['role:superadmin|customer'],
     ],function(){
 
-        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('ads', [AdController::class, 'index'])->name('adsListing');
         Route::get('job-board', [SiteController::class, 'index'])->name('site.index');

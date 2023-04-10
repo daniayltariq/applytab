@@ -312,6 +312,29 @@
         height: 200px;
     }
 
+    .dropdowns:first-child .remove-btn {
+        display: none;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b:before {
+        content: "";
+        display: none;
+    }
+
+    .select2-container .select2-selection--single {
+        height: 43px;
+        background-color: #fff;
+        border: 1px solid #d9d9d9;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__arrow b {
+        top: 80%;
+    }
+
+    .select2-container--default .select2-selection--single .select2-selection__rendered {
+        color: #444;
+        line-height: 40px;
+    }
 
     @media (max-width:480px) {
         .selector {
@@ -351,7 +374,7 @@
         <div class="page-header">
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash d-flex">
-                    <a href="{{route('backend.dashboard')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
+                    <a href="{{route('backend.adsListing')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Ads Directory</a>
                     <a href="{{ route('backend.adsListing')}}" class="breadcrumb-item">Ads</a>
                     <span class="breadcrumb-item active">{{ isset($ad) && $ad ? 'Update Ad' : 'Add Ad' }}</span>
                 </nav>
@@ -381,51 +404,80 @@
                                 </span>
                             @enderror
                             @if (isset($ad) && $ad)
-                                <img id="preview" class="preview_image mt-3" src="{{ asset('/storage/ad_images/'.$ad->image) }}"/>
+                                <img id="preview" class="preview_image mt-3" src="{{ $ad->image }}"/>
                             @else
                                 <img id="preview" class="preview_image mt-3" style="display: none;"/>
                             @endif
                         </div>
-                        {{-- <div class="form-group col-12">
-
-                        </div> --}}
                     </div>
                     <hr>
                     <div class="form-row cust__frag">
                         <div class="form-group col-12">
 
                             <label class="font-weight-semibold">Ad URL:</label>
-                            <input type="text" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->ad_url : old('ad_url')}}">
+                            <input type="text" placeholder="Ender Ad URL!" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->ad_url : old('ad_url')}}">
                             @error('ad_url')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-                        <div class="col-md-12 mb-3">
-                            <label class="font-weight-600">Select Sites (Multiple sites can be added)</label>
-                            <select name="sites[]" class="form-control select2" multiple>
-                                @foreach($sites as $site)
-                                    <option value="{{ $site->id }}" @if(isset($ad) && in_array($site->id, $selectedSites)) selected @endif>{{ $site->site_name }}</option>
-                                @endforeach
-                            </select>
-                            @error('sites')
-                                <span class="invalid-feedback" role="alert">
-                                    <strong>{{ $message }}</strong>
-                                </span>
-                            @enderror
-                        </div>
                     </div>
+                    <div class="form-row repeater">
+                        <div class="col-12">
+                            <div data-repeater-list="site_data">
+                                <div data-repeater-item>
+                                    <div class="row mb-3">
+                                        <div class="col-5">
+                                            <select name="site_id" class="select2 form-control site-dropdown">
+                                                <option value="" disabled selected>Select Site</option>
+                                                @foreach($sites as $site)
+                                                    <option value="{{ $site->id }}">{{ $site->site_name }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-5">
+                                            <select name="slot_id" class="select2 form-control slot-dropdown">
+                                                <option value="" disabled selected>Select Slot</option>
+                                                @foreach($slots as $slot)
+                                                    <option value="{{ $slot->id }}">{{ $slot->slot_number }}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <div class="col-2">
+                                            <input data-repeater-delete type="button"  class="btn btn-danger" value="Delete" />
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div class="col-5">
+                                            @error('site_data.0.site_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                        <div class="col-5">
+                                            @error('site_data.0.slot_id')
+                                                <div class="invalid-feedback">{{ $message }}</div>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <input data-repeater-create type="button" class="btn btn-primary"  value="Add More"/>
+                        </div>
+                      </div>
                     <div class="form-row">
                         <div class="col-md-4">
                             <button type="submit" class="btn btn-primary m-t-30">Submit</button>
                         </div>
                     </div>
-
                 </form>
             </div>
         </div>
-
     </div>
     <!-- Content Wrapper END -->
 
@@ -433,110 +485,60 @@
 @section('scripts')
 <!-- Third Party Scripts(used by this page)-->
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
-<script src="https://bootstrap-tagsinput.github.io/bootstrap-tagsinput/dist/bootstrap-tagsinput.min.js"></script>
-<script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>
-
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js" integrity="sha512-foIijUdV0fR0Zew7vmw98E6mOWd9gkGWQBWaoA1EOFAx+pY+N8FmmtIYAVj64R98KeD2wzZh1aHK0JSpKmRH8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
     $(document).ready(function(){
-
+        disableTheSelectedInputs();
         $('.select2').select2();
-        $(".datepicker-input").datepicker({
-            dateFormat: 'dd-mm-yy',
-            changeMonth: true,
-            changeYear: true,
+
+      var repeater_elem =  $('.repeater').repeater({
+            show: function () {
+                $(this).slideDown();
+                $('.select2-container').remove();
+                $('.select2').select2();
+
+                $('.select2-container').css('width','100%');
+                disableTheSelectedInputs();
+            },
+            hide: function (remove) {
+                $(this).slideUp(remove);
+                disableTheSelectedInputs();
+            },
+            isFirstItemUndeletable: true
         });
 
-        numeral.register('locale', 'da-dk', {
-            delimiters: {
-                thousands: '.',
-                decimal: ','
-            },
-            abbreviations: {
-                thousand: 'k',
-                million: 'mio',
-                billion: 'mia',
-                trillion: 'b'
-            },
-            ordinal: function (number) {
-                return '.';
-            },
-            currency: {
-                symbol: 'DKK'
-            }
-        });
-        numeral.locale('da-dk');
-        $('#contract_value').on('change', function(){
-            var value=numeral($(this).val()).format('0.0,');
-            $('[name="contract_value"]').val($(this).val());
-            $(this).val(value);
-        })
-
-        $("[name='user_type']").on('change', function(){
-            console.log(32323);
-            if ($(this).val()=='customer') {
-                $('.cust__frag').show();
-                @if(!old('user_type'))
-                    $("[name='customer']").val('');
-                @else
-                    $("[name='customer']").trigger('change')
-                @endif
-                $("[name='salesperson_id']").empty();
-
-                $('.vend__frag').hide();
-            }else{
-                $('.vend__frag').show();
-                @if(!old('user_type'))
-                    $("[name='vendor']").val('');
-                @else
-                    $("[name='vendor']").trigger('change')
-                @endif
-                $("[name='purchaser_id']").empty();
-
-                $('.cust__frag').hide();
-            }
-        })
-
-        // $("[name='sites']").tagsinput();
-
-        @if( old('user_type'))
-            $("[name='user_type']:checked").trigger('change');
+        @if (session()->has('site_data_error'))
+            var tasks={!!json_encode(session()->get('site_data_error'))!!};
+            repeater_elem.setList(tasks);
         @endif
 
-        $("[name='product_category[]']").select2();
-        @if (old('product_category'))
-            $("[name='product_category[]']").val({!! json_encode(old('product_category'))!!}).trigger('change');
+        @if (isset($selectedSites))
+            var tasks={!!json_encode($selectedSites)!!};
+            repeater_elem.setList(tasks);
         @endif
-    })
+    });
 
-    $("[name='customer']").on('change', function(){
-        if ($(this).val()) {
-            getOptions('customer',$("[name='customer']").val());
-        }
-    })
+    $(document).on('change', '.site-dropdown', function() {
+        disableTheSelectedInputs();
+    });
+    var selectedSites = [];
+    function disableTheSelectedInputs() {
+        // enable all options in the site dropdowns
+        $('.site-dropdown option').prop('disabled', false);
 
-    $("[name='vendor']").on('change', function(){
-        if ($(this).val()) {
-            getOptions('vendor',$("[name='vendor']").val());
-        }
-    })
+        // loop through all site dropdowns
+        $('.site-dropdown').each(function() {
+            // get the selected value of the current dropdown
+            var selectedValue = $(this).val();
 
-    function getOptions(type, id){
-        $.ajax({
-            url: "{{ url('/') }}/backend/options?type="+type+"&id="+id,
-            type: 'GET',
-            success: function (res) {
-                // fullPageLoader(false);
-                if (res.status) {
-                    if (type=='customer') {
-                        $("[name='salesperson_id']").html(res.options);
-                    }else if(type=='vendor') {
-                        $("[name='purchaser_id']").html(res.options);
-                    }
-                }
-                else if(res.status) {
-                    toastr.success(res.message)
-                }
+            // if the selected value is not empty
+            if (selectedValue) {
+                // push it into the selectedSites array
+                selectedSites.push(selectedValue);
+
+                // disable the option with the selected value in all other dropdowns
+                $('.site-dropdown').not(this).find('option[value="'+selectedValue+'"]').prop('disabled', true);
             }
         });
     }
@@ -567,43 +569,6 @@
             reader.readAsDataURL(input.files[0]);
         }
     }
-</script>
-
-<script>
-    const dt = new DataTransfer();
-
-    $("#attachment").on('change', function(e){
-        for(var i = 0; i < this.files.length; i++){
-            let fileBloc = $('<span/>', {class: 'file-block'}),
-                fileName = $('<span/>', {class: 'name', text: this.files.item(i).name});
-            fileBloc.append('<span class="file-delete"><span>+</span></span>')
-                .append(fileName);
-            $("#filesList > #files-names").append(fileBloc);
-        };
-        // Ajout des fichiers dans l'objet DataTransfer
-        for (let file of this.files) {
-            dt.items.add(file);
-        }
-        // Mise à jour des fichiers de l'input file après ajout
-        this.files = dt.files;
-
-        // EventListener pour le bouton de suppression créé
-        $('span.file-delete').click(function(){
-            let name = $(this).next('span.name').text();
-            // Supprimer l'affichage du nom de fichier
-            $(this).parent().remove();
-            for(let i = 0; i < dt.items.length; i++){
-                // Correspondance du fichier et du nom
-                if(name === dt.items[i].getAsFile().name){
-                    // Suppression du fichier dans l'objet DataTransfer
-                    dt.items.remove(i);
-                    continue;
-                }
-            }
-            // Mise à jour des fichiers de l'input file après suppression
-            document.getElementById('attachment').files = dt.files;
-        });
-    });
 </script>
 
 @endsection
