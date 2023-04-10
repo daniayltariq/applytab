@@ -25,11 +25,11 @@ class User extends Authenticatable implements MustVerifyEmail
      * @var array
      */
     protected $fillable = [
-        'first_name', 
-        'last_name', 
-        'email', 
-        'phone', 
-        'phone_c_data', 
+        'first_name',
+        'last_name',
+        'email',
+        'phone',
+        'phone_c_data',
         'date_of_birth',
         'gender',
         'nationality',
@@ -67,7 +67,7 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return LogOptions::defaults();
     }
-    
+
     /**
      * Send the password reset notification.
      *
@@ -133,7 +133,7 @@ class User extends Authenticatable implements MustVerifyEmail
         } else {
             return collect();
         }
-        
+
     }
 
     public function getProfileImageAttribute($value)
@@ -165,7 +165,7 @@ class User extends Authenticatable implements MustVerifyEmail
         } else {
             return [];
         }
-        
+
     }
 
     public function user_roles()
@@ -227,5 +227,5 @@ class User extends Authenticatable implements MustVerifyEmail
     {
         return $this->proposals()->has('request')->where('status','PENDING')->get();
     }
-    
+
 }

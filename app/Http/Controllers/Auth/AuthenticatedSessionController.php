@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         if (Auth::check() && \Auth::user()->hasRole('superadmin|customer')) {
-            return redirect()->route('backend.dashboard');
+            return redirect()->route('backend.adsListing');
         }elseif(Auth::check() && auth()->user()->hasRole('endUser')) {
             /* return redirect()->route('enduser.profile.index'); */
             return redirect()->to(session('url.intended'));
@@ -52,7 +52,7 @@ class AuthenticatedSessionController extends Controller
         /* dd($manager->isImpersonating()); */
         if ($manager->isImpersonating()) {
             Auth::user()->leaveImpersonation();
-            return redirect()->route('backend.dashboard');
+            return redirect()->route('backend.adsListing');
         }
 
         Auth::guard('web')->logout();
@@ -62,6 +62,6 @@ class AuthenticatedSessionController extends Controller
         $request->session()->regenerateToken();
 
 
-        return redirect('/');
+        return redirect('/login');
     }
 }

@@ -12,4 +12,12 @@ class Site extends Model
     {
         return $this->hasMany('App\Models\SiteHaveJob','sites_id');
     }
+
+    /**
+     * Sites that belong to the ads.
+    */
+    public function ads()
+    {
+        return $this->belongsToMany(Ad::class, 'admanagement_ad_sites', 'site_id', 'ad_id');
+    }
 }

@@ -101,11 +101,11 @@
     <!-- Content Wrapper START -->
     <div class="main-content">
         <div class="page-header">
-            <h2 class="header-title">Jobs</h2>
+            <h2 class="header-title">Ads</h2>
             <div class="header-sub-title">
-                <nav class="breadcrumb breadcrumb-dash">
-                    <a href="{{route('backend.job.index')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
-                    <span class="breadcrumb-item active">Jobs</span>
+                <nav class="breadcrumb breadcrumb-dash d-flex">
+                    <a href="{{route('backend.adsListing')}}" class="breadcrumb-item my-auto"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
+                    <span class="breadcrumb-item active my-auto">Ads</span>
                 </nav>
             </div>
         </div>
@@ -113,50 +113,30 @@
         <div class="card p-r-15 p-l-15">
             <div class="row align-items-md-center">
                 <div class="col-md-6">
-                    <div class="media m-v-10">
+                    <div class="media m-v-10  d-flex ">
                         <div class="avatar avatar-cyan avatar-icon avatar-square">
-                            <i class="fas fa-building"></i>
+                            <i class="fas fa-ad"></i>
                         </div>
-                        <div class="media-body m-{{$alignShortRev}}-15">
-                            <h6 class="mb-0">All Jobs</h6>
+                        <div class="media-body my-auto m-{{$alignShortRev}}-15">
+                            <h6 class="mb-0">All Ads</h6>
                             {{-- <span class="text-gray font-size-13">Sanad Team</span> --}}
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-6">
-                    <div class="text-md-{{$alignreverse}} m-v-10">
-                        @if (hasPermission('Add Data'))
-                            <a href="javascript:void(0)" class="btn btn-primary m-{{$alignShortRev}}-15">
-                                <span>Add new Job</span>
-                            </a>
-                        @endif
-                    </div>
-                </div> --}}
             </div>
         </div>
         <div class="card">
             <div class="card-body">
                 <form class="form-row" action="{{ getFullUrl() }}">
-                    <h3 class="col-md-12">Search Jobs</h3>
+                    <h3 class="col-md-12">Search Ads</h3>
                     <hr>
                     <div class="form-group col-md-4">
-                        <input type="text" class="form-control" id="search_text" name="search_text" value="{{request()->query('search_text')}}">
-                    </div>
-                    <div class="form-group col-md-4">
-                        @php
-                            $site__=request()->query('site') ?? '';
-                        @endphp
-                        <select class="form-control" name="site" >
-                            <option value="">Select Site..</option>
-                            @foreach ($sites as $site)
-                                <option value="{{$site}}" {{ $site__==$site ? 'selected' : ''}}>{{$site}}</option>
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" id="search" name="search" value="{{request()->query('search')}}">
                     </div>
                     <div class="form-group col-md-2">
                         <button class="btn btn-primary" type="submit">Go</button>
                     </div>
-                    
+
                     {{-- <div class="form-group col-md-6">
                         <button class="btn btn-primary float-right" type="button" onclick="openNav()"><i class="fa fa-filter"></i> Filter</button>
                     </div> --}}
@@ -175,56 +155,54 @@
                                     <table class="table table-hover">
                                         <thead>
 											<tr>
-                                                <th class="bold w-10">Job url</th>
-                                                <th>Title</th>
-                                                {{-- <th>Position</th> --}}
-                                                {{-- <th>Category</th> --}}
-                                                {{-- <th>Type</th> --}}
-                                                <th>Institute</th>
-                                                <th>City</th>
-                                                <th>Date Open</th>
-                                                {{-- <th>Date Close</th> --}}
+                                                <th class="bold w-10">Ad URL</th>
+                                                <th>Image</th>
+                                                <th>Sites</th>
                                                 <th>Action</th>
 											</tr>
 										</thead>
 										<tbody>
-											@forelse($jobs as $key => $job)
+											@forelse($ads as $key => $item)
                                                 <tr>
+                                                    {{-- <td>
+                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$item->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                    </td> --}}
+                                                    <td class="name-badge p-3 w-20">{{ $item->ad_url ?? '' }}</td>
+                                                    <td><img width="150px" src="{{ asset('/storage/ad_images/'.$item->image) }}"/></td>
                                                     <td>
-                                                        <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
+                                                        @foreach ($item->adSites as $site)
+                                                            <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{$site->site_name}}</span>
+                                                        @endforeach
                                                     </td>
-                                                    <td class="name-badge p-3 w-20">{{ $job->job_title ?? '' }}</td>
-                                                    {{-- <td>{{ $job->position ?? '' }}</td> --}}
-                                                    {{-- <td>{{ $job->category ?? '' }}</td>
-                                                    <td>{{ $job->type ?? '' }}</td> --}}
-                                                    <td>{{ $job->institution_name ?? '' }}</td>
-                                                    <td>{{ $job->institution_city ?? '' }}</td>
-                                                    <td>{{ $job->post_date ?? '' }}</td>
-                                                    {{-- <td>{{ $job->date_close ?? '' }}</td> --}}
-                                                    <td>
-                                                        <div class="dropdown dropdown-inline">
+                                                    <td width="200px">
+                                                        <a href="{{route('backend.adEdit',$item->id)}}" class="btn btn-primary btn-sm btn_y">Edit</a>
+                                                        <form method="POST" action="{{ route('backend.adDelete', $item->id) }}" style="display: inline-block;">
+                                                            @csrf
+                                                            {{ method_field('DELETE') }}
+                                                            <button title="Delete record" type="submit" class="btn btn-danger btn-sm btn_r" data-toggle="confirmation">Delete</button>
+                                                        </form>
+                                                        {{-- <div class="dropdown dropdown-inline">
                                                             <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-h"></i>
                                                             </button>
                                                             <div class="dropdown-menu dropdown-menu-right">
-                                                                <a class="dropdown-item edit_url" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Url</a>
-                                                                <a class="dropdown-item edit_budget" data-job-id="{{$job->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
-                                                                <a class="dropdown-item job_pixel" data-job-id="{{$job->id}}">Get Pixel</a>
-                                                                <a href="{{route('backend.job.report',$job->id)}}" class="dropdown-item">Download Report</a>
+                                                                <a class="dropdown-item edit_url" data-job-id="{{$item->id}}"><i class="fa fa-pencil"></i> Update Url</a>
+                                                                <a class="dropdown-item edit_budget" data-job-id="{{$item->id}}"><i class="fa fa-pencil"></i> Update Budget</a>
+                                                                <a class="dropdown-item job_pixel" data-job-id="{{$item->id}}">Get Pixel</a>
+                                                                <a href="{{route('backend.job.report',$item->id)}}" class="dropdown-item">Download Report</a>
                                                             </div>
-                                                        </div>
-                                                        
+                                                        </div> --}}
                                                     </td>
                                                 </tr>
                                             @empty
                                                 <tr>
-                                                    <td colspan="7" class="text-center">No Jobs found</td>
+                                                    <td colspan="7" class="text-center">No Ads found!</td>
                                                 </tr>
                                             @endforelse
 										</tbody>
                                     </table>
                                 </div>
-                                {!!$jobs->appends($_GET)->links()!!}
+                                {!!$ads->appends($_GET)->links()!!}
                             </div>
                         </div>
                     </div>
@@ -234,7 +212,7 @@
     </div>
 
     <div id="filterSidenav" class="sidenav">
-		
+
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<form class="container" method="GET">
             <input type="hidden" name="search_text" value="{{request()->query('search_text')}}">
@@ -259,18 +237,18 @@
                     <select class="form-control" name="product_category">
                         <option value="" selected>Select...</option>
                     </select>
-                    
+
                 </div>
                 <div class="form-group col-md-12">
-                    
+
                     <label class="font-weight-semibold" for="language">Start date</label>
                     <input type="date" name="start_date" id="" class="form-control">
                 </div>
                 <div class="form-group col-md-12">
-                    
+
                     <label class="font-weight-semibold" for="fullAddress">End Date:</label>
                     <input type="date" name="end_date" id="" class="form-control">
-                    
+
                 </div>
 				<div class="col-md-12">
 					<div class="form-group">
@@ -285,23 +263,29 @@
 
     <div class="modal fade" id="jobModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog  modal-lg job_modal_div" role="document">
-            
+
         </div>
     </div>
 @endsection
 
 @section('scripts')
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-confirmation2@4.1.0/dist/bootstrap-confirmation.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.23/daterangepicker.min.js"></script>
 <script type="text/javascript">
-	
+$('[data-toggle=confirmation]').confirmation({
+      rootSelector: '[data-toggle=confirmation]',
+      // other options
+    });
+
+
 	$(document).ready(function(){
 		/* $("[name='status']").bootstrapSwitch(); */
 
 		/* @if(request()->query() && !request()->query('type'))
             openNav();
 		@endif */
-		
+
         /* $('.search__').on('click', function(){
             var search = new URLSearchParams(location.search);
             if (search.has("search_text")) {
@@ -313,7 +297,7 @@
                 window.location.href= $url+'&search_text='+$('#search_text').val();
                 return ;
             }
-            
+
             window.location.reload();
         }) */
 
@@ -341,7 +325,7 @@
                 }
             }
         });
-        
+
     });
 
     $(document).on('click','.edit_budget',function(e){
@@ -356,7 +340,7 @@
                 // fullPageLoader(false);
                 if (res.status=='success') {
                     $(' .job_modal_div').html(res.data);
-                    
+
                     @if(session()->has('budget_error'))
                         var errorString = '<ul class="p-4 text-white">';
                         @foreach ($errors->all() as $error)
@@ -374,7 +358,7 @@
                 }
             }
         });
-        
+
     });
 
     $(document).on('click','.job_pixel',function(e){
@@ -396,7 +380,7 @@
                 }
             }
         });
-        
+
     });
 
     function openNav() {
@@ -417,13 +401,13 @@
 <script src="{{asset('js/repeater.js')}}"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
 <script>
-    
+
     function setSelectPicker()
     {
         $('.selectpicker').selectpicker();
         $('.selectpicker').siblings('.dropdown-toggle').removeClass('btn-light');
     }
-    
+
 </script>
 
 @endsection

@@ -75,7 +75,7 @@
             <h2 class="header-title">Institutions</h2>
             <div class="header-sub-title">
                 <nav class="breadcrumb breadcrumb-dash">
-                    <a href="{{route('backend.job.index')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
+                    <a href="{{route('backend.adsListing')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Home</a>
                     <span class="breadcrumb-item active">Institutions</span>
                 </nav>
             </div>
@@ -116,7 +116,7 @@
                     <div class="form-group col-md-2">
                         <button class="btn btn-primary search__" type="button">Go</button>
                     </div>
-                    
+
                 </form>
             </div>
         </div> --}}
@@ -149,7 +149,7 @@
                                                     <td>{{ $inst->website ?? '' }}</td>
                                                     <td>{{ $inst->system ?? '' }}</td> --}}
                                                     <td>{{ $inst->jobs->count() ?? '' }}</td>
-                                                    
+
                                                 </tr>
                                             @empty
                                                 <tr>
@@ -169,7 +169,7 @@
     </div>
 
     <div id="filterSidenav" class="sidenav">
-		
+
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
 		<form class="container" method="GET">
             <input type="hidden" name="search_text" value="{{request()->query('search_text')}}">
@@ -194,18 +194,18 @@
                     <select class="form-control" name="product_category">
                         <option value="" selected>Select...</option>
                     </select>
-                    
+
                 </div>
                 <div class="form-group col-md-12">
-                    
+
                     <label class="font-weight-semibold" for="language">Start date</label>
                     <input type="date" name="start_date" id="" class="form-control">
                 </div>
                 <div class="form-group col-md-12">
-                    
+
                     <label class="font-weight-semibold" for="fullAddress">End Date:</label>
                     <input type="date" name="end_date" id="" class="form-control">
-                    
+
                 </div>
 				<div class="col-md-12">
 					<div class="form-group">
@@ -223,14 +223,14 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.23/daterangepicker.min.js"></script>
 <script type="text/javascript">
-	
+
 	$(document).ready(function(){
 		/* $("[name='status']").bootstrapSwitch(); */
 
 		/* @if(request()->query() && !request()->query('type'))
             openNav();
 		@endif */
-		
+
         $('.search__').on('click', function(){
             var search = new URLSearchParams(location.search);
             if (search.has("search_text")) {
@@ -242,7 +242,7 @@
                 window.location.href= $url+'&search_text='+$('#search_text').val();
                 return ;
             }
-            
+
             window.location.reload();
         })
 	});
@@ -262,7 +262,7 @@
 </script>
 
 <script>
-	
+
 </script>
 
 @endsection

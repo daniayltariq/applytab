@@ -6,7 +6,7 @@
         -ms-transform: translateY(-50%);
         transform: translateY(-50%);
         width: inherit">
-            <h1 class="logo-unfold"><span class="text-color1">ApplyTab</span></h1>
+            <h1 class="logo-unfold"><span class="text-color1">AdManagement</span></h1>
             <h1 class="logo-fold"><span class="text-color1">A</span><span class="text-color2">T</span></h1>
         </a>
     </div>
@@ -57,14 +57,14 @@
                             <i class="anticon anticon-bell"></i>
                             <span class="m-{{$alignShortRev}}-10">Notification</span>
                         </p>
-                        <a class="btn-sm btn-default btn" href="{{route('backend.view_notifications')}}">
+                        {{-- <a class="btn-sm btn-default btn" href="{{route('backend.view_notifications')}}">
                             <small>View All</small>
-                        </a>
+                        </a> --}}
                     </div>
                     <div class="relative" id="notify_div">
-                        
+
                     </div>
-                    
+
                     <div class="p-v-15 p-h-25 border-top d-flex justify-content-center align-items-center"><a href="{{route('backend.mark_notifications')}}">mark as read</a></div>
                 </div>
             </li>
@@ -97,7 +97,7 @@
                                 <div class="col-auto">
                                     <span class="">Edit Profile</span>
                                 </div>
-                                
+
                             </div>
                             <i class="anticon font-size-10 anticon-{{$alignreverse}}"></i>
                         </div>
@@ -141,7 +141,7 @@
                             <i class="anticon font-size-10 anticon-{{$alignreverse}}"></i>
                         </div>
                     </a>
-                    
+
                     <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                         @csrf
                       </form>

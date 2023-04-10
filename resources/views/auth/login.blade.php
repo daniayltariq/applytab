@@ -13,7 +13,7 @@
 
     <!-- Core css -->
     <link href="{{asset('backend/assets/css/app.min.css')}}" rel="stylesheet">
-    
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css">
     <style>
         .text-color1{
@@ -59,10 +59,10 @@
                             <div class="card {{-- shadow-lg --}}">
                                 <div class="card-body">
                                     <div class="d-flex text-center justify-content-between m-b-30">
-                                        <h1 class="m-b-0 w-100"><span class="text-color1">ApplyTab</span></h1>
+                                        <h1 class="m-b-0 w-100"><span class="text-color1">AdTracker</span></h1>
                                         {{-- <h2 class="m-b-0 text-color2">Sign In</h2> --}}
                                     </div>
-                                    
+
                                     <form method="POST" action="{{ url('/') }}/login">
                                         {{ csrf_field() }}
                                         <div class="form-group">
@@ -70,7 +70,7 @@
                                             <div class="input-affix">
                                                 <i class="prefix-icon anticon anticon-user"></i>
                                                 <input type="email" name="email" class="form-control @error('email') is-invalid @enderror" placeholder="email">
-                                                
+
                                             </div>
                                             @error('email')
                                                 <span class="invalid-feedback d-block" role="alert">
@@ -100,10 +100,10 @@
                                         <div class="form-group">
                                             <div class="d-flex align-items-center justify-content-between">
                                                 {{-- <span class="font-size-13 text-muted">
-                                                    Don't have an account? 
+                                                    Don't have an account?
                                                     <a href="{{ route('register') }}"> Signup</a>
                                                 </span> --}}
-                                                <button class="btn btn-indigo text-white">Sign In</button>
+                                                <button class="btn btn-indigo text-white mt-3">Sign In</button>
                                             </div>
                                         </div>
                                     </form>
@@ -135,19 +135,19 @@
 
     <!-- Core JS -->
     <script src="{{asset('backend/assets/js/app.min.js')}}"></script>
-    
+
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous"></script>
     <script>
         $(document).ready(function () {
             @if(session()->has('error'))
                 toastr.error('{{ session('error') }}')
             @endif
-    
+
             @if(session()->has('warning'))
                 toastr.warning('{{ session('warning') }}')
             @endif
-    
-                
+
+
             @if(session()->has('status'))
                 toastr.success('{{ session('status') }}')
             @endif

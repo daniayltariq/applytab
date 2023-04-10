@@ -28,7 +28,7 @@ class LoginController extends Controller
      *
      * @var string
      */
-    protected $redirectTo = '/backend/dashboard';
+    protected $redirectTo = '/backend/ads';
 
     /**
      * Create a new controller instance.
@@ -38,21 +38,21 @@ class LoginController extends Controller
     public function __construct()
     {
         $this->middleware('guest')->except('logout');
-        
+
     }
 
     public function authenticated()
     {
         dd(auth()->user()->hasAnyRole('superadmin|employee'));
         if (Auth::check() && \Auth::user()->hasAnyRole('superadmin|employee')) {
-            return redirect()->route('backend.dashboard');
+            return redirect()->route('backend.adsListing');
         }
         Auth::logout();
         return redirect('/login');
-        
+
     }
 
-    public function logout(Request $request) 
+    public function logout(Request $request)
     {
         Auth::logout();
         return redirect('/login');

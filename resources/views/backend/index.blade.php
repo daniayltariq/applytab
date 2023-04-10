@@ -68,7 +68,7 @@
                                     <p class="m-b-0 text-muted">Clicks</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-bullseye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val"> {{$data['clicks'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val"> {{-- {{$data['clicks'] ?? ''}} --}}</h2>
                                     </div>
                                     {{-- <span class="badge badge-pill badge-cyan font-size-12">
                                         <i class="anticon anticon-arrow-up"></i>
@@ -97,9 +97,9 @@
                                     <p class="m-b-0 text-muted">Views</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-eye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['views'] ?? ''}}</h2>
+                                        <h2 class="m-b-0 stats-val">{{-- {{$data['views'] ?? ''}} --}}</h2>
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -111,9 +111,9 @@
                                     <p class="m-b-0 text-muted">Jobs</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-tasks stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['active_jobs'] ?? ''}}</h2>
+                                        {{-- <h2 class="m-b-0 stats-val">{{$data['active_jobs'] ?? ''}}</h2> --}}
                                     </div>
-                                    
+
                                 </div>
                             </div>
                         </div>
@@ -125,7 +125,7 @@
                                     <p class="m-b-0 text-muted">Institutes</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-regular fa-building stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{$data['institutions'] ?? ''}}</h2>
+                                        {{-- <h2 class="m-b-0 stats-val">{{$data['institutions'] ?? ''}}</h2> --}}
                                     </div>
                                 </div>
                             </div>
@@ -159,9 +159,9 @@
                     </div>
                 </div>
             </div>
-            
+
         </div>
-        
+
         <div class="row">
             <div class="col-lg-4 d-none">
                 <div class="card">
@@ -229,19 +229,8 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        @forelse($recent_jobs as $key => $job)
+                                        {{-- @forelse($recent_jobs as $key => $job)
                                             <tr>
-                                                {{-- <td>
-                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->unique_id) }}"><i class="fa fa-clipboard"></i>
-                                                     Copy</a>
-                                                </td>
-                                                <td class="name-badge p-3 w-20">{{ $job->title ?? '' }}</td>
-                                                <td>{{ $job->position ?? '' }}</td>
-                                                <td>{{ $job->category ?? '' }}</td>
-                                                <td>{{ $job->type ?? '' }}</td>
-                                                <td>{{ $job->institution->name ?? '' }}</td>
-                                                <td>{{ $job->date_open ?? '' }}</td>
-                                                <td>{{ $job->date_close ?? '' }}</td> --}}
                                                 <td>
                                                     <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                 </td>
@@ -254,7 +243,7 @@
                                             <tr>
                                                 <td colspan="7" class="text-center">No Jobs found</td>
                                             </tr>
-                                        @endforelse
+                                        @endforelse --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -362,7 +351,7 @@
                             zeroLineBorderDash: [3, 4]
                         },
                         ticks: {
-                            max: 80,                            
+                            max: 80,
                             stepSize: 20,
                             display: true,
                             beginAtZero: true,
@@ -375,5 +364,5 @@
         });
     })
 </script>
-    
+
 @endsection
