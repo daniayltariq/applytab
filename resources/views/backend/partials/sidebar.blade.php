@@ -33,7 +33,7 @@
             </li>
 
             <li class="nav-item {{-- {{url()->current() == route('backend.adsListing') ? 'active' :''}} --}}">
-                <a href="{{route('backend.adsListing')}}">
+                <a href="{{route('backend.adstats.index')}}">
                     <span class="icon-holder">
                         <i class="fas fa-chart-bar"></i>
                     </span>

@@ -74,9 +74,9 @@ Route::group([
         Route::get('job-board', [SiteController::class, 'index'])->name('site.index');
         Route::get('contract/{id}', [AdController::class, 'show'])->name('contract.show');
 
-        Route::get('jobstats', [AdController::class, 'jobStats'])->name('jobstats.index');
-        Route::get('jobstats/details/{jobid}', [AdController::class, 'jobStatDetail'])->name('jobstats.detail');
-        Route::get('report/{id}', [AdController::class, 'report'])->name('job.report');
+        Route::get('adstats', [AdController::class, 'adStats'])->name('adstats.index');
+        Route::get('adstats/details/{id}', [AdController::class, 'adStatDetail'])->name('adstats.detail');
+        Route::get('report/{id}', [AdController::class, 'report'])->name('ad.report');
 
     });
 

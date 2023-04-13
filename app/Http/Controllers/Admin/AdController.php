@@ -166,10 +166,20 @@ class AdController extends Controller
      * @param  \App\Content  $content
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function adStatDetail($id)
     {
-        $ad = Ad::where('order_id',$id)->first();
-        return view('backend.ad.report',compact('ad'));
+        $ad = Ad::where('id',$id)->first();
+        $statdetails = Stats::select('ad_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+                        ->where('adtrack',1)
+                        ->whereHas('ad')
+                        ->where('ad_id',$id)
+                        ->groupBy('ad_id','source','type')
+                        ->get()
+                        ->groupBy('type');
+
+        $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('ad_id',$id)->first();
+
+        return view('backend.ads.detail',compact('ad','statdetails','totalclicks'));
     }
 
     /**
@@ -202,6 +212,17 @@ class AdController extends Controller
         return view('backend.ads.form',compact('ad', 'sites', 'slots', 'selectedSites'));
     }
 
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Content  $content
+     * @return \Illuminate\Http\Response
+     */
+    public function adStats()
+    {
+        $ads = Ad::all();
+        return view('backend.ads.stats',compact('ads'));
+    }
 
     /**
      * Remove the specified resource from storage.
