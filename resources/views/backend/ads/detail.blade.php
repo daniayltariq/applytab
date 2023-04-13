@@ -116,6 +116,24 @@
                 </div> --}}
             </div>
         </div>
+        <div class="card p-r-15 p-l-15">
+            <div class="row align-items-md-center">
+                <div class="col-md-6">
+                    <div class="media m-v-10">
+                        <div class="media-body">
+                            <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="col-md-6">
+                    <div class="media m-v-10">
+                        <div class="media-body">
+                            <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
+                        </div>
+                    </div>
+                </div> --}}
+            </div>
+        </div>
 
         <div class="row">
             <div class="col-lg-12">
