@@ -423,6 +423,29 @@
                             @enderror
                         </div>
                     </div>
+                    <div class="form-row">
+                        <div class="form-group col-6">
+
+                            <label class="font-weight-semibold">Ad Expiry:</label>
+                            <input type="date" placeholder="Ender Ad Expiry" class="form-control" name="ad_expiry" value="{{isset($ad) ? \Carbon\Carbon::parse($ad->ad_expiry)->format('Y-m-d')  : old('ad_expiry')}}">
+                            @error('ad_expiry')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                        <div class="form-group col-6">
+    
+                            <label class="font-weight-semibold">Ad Limit:</label>
+                            <input type="text" placeholder="Ender Ad Limit" class="form-control" name="ad_limit" value="{{isset($ad) ? $ad->ad_limit : old('ad_limit')}}">
+                            @error('ad_limit')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div>
+                    
                     <div class="form-row repeater">
                         <div class="col-12">
                             <div data-repeater-list="site_data">

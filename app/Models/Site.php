@@ -20,4 +20,9 @@ class Site extends Model
     {
         return $this->belongsToMany(Ad::class, 'admanagement_ad_sites', 'site_id', 'ad_id');
     }
+    
+    public function getSiteNameAttribute($value)
+    {
+        return preg_replace('#^(https?://)?(www\.)?#i', '', $value);
+    }
 }

@@ -86,6 +86,8 @@ class AdController extends Controller
         $validator = Validator::make($request->all(), [
             'ad_url'                => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
             'ad_image'              => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
+            'ad_expiry'             =>'required|date|after_or_equal:today',
+            'ad_limit'             =>'required|integer',
             'site_data'             => 'required|array',
             'site_data.*.site_id'   => 'required|exists:sites,id',
             'site_data.*.slot_id'   => 'required|exists:admanagement_slots,id',
@@ -120,7 +122,10 @@ class AdController extends Controller
             $ad->image  = $fullfilename ;
         }
 
+        $site=Site::where('id',$id)->first();
         $ad->ad_url = $request->ad_url;
+        $ad->ad_expiry = $request->ad_expiry;
+        $ad->ad_limit = $request->ad_limit;
         $ad->save();
 
         $sites = $request->site_data;
@@ -135,6 +140,8 @@ class AdController extends Controller
                 $adSite->ad_id    = $ad->id;
                 $adSite->site_id  = $site['site_id'];
                 $adSite->slot_id  = $site['slot_id'];
+                $ad->ad_click_url = "https://applytab.com/".$ad->id."?sr=ad_track&site=".$site['site_id'];
+                $ad->ad_pixel_url = "https://applytab.com/watch/".$ad->id."?sr=ad_track";
                 $adSite->save();
             }
             // $ad->adSites()->attach($sites);
