@@ -139,8 +139,8 @@ class AdController extends Controller
                 $adSite->ad_id    = $ad->id;
                 $adSite->site_id  = $site['site_id'];
                 $adSite->slot_id  = $site['slot_id'];
-                $ad->ad_click_url = "https://applytab.com/".$ad->id."?sr=ad_track&site=".$site['site_id'];
-                $ad->ad_pixel_url = "https://applytab.com/watch/".$ad->id."?sr=ad_track";
+                $adSite->ad_click_url = "https://applytab.com/".$ad->id."?sr=ad_track&site=".$site['site_id'];
+                $adSite->ad_pixel_url = "https://applytab.com/watch/".$ad->id."?sr=ad_track";
                 $adSite->save();
             }
             // $ad->adSites()->attach($sites);
