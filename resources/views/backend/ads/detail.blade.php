@@ -121,7 +121,7 @@
                 <div class="col-md-6">
                     <div class="media m-v-10">
                         <div class="media-body">
-                            <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
+                            <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}/{{$ad->ad_limit}}</span>
                         </div>
                     </div>
                 </div>
