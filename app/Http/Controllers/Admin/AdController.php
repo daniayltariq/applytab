@@ -122,7 +122,6 @@ class AdController extends Controller
             $ad->image  = $fullfilename ;
         }
 
-        $site=Site::where('id',$id)->first();
         $ad->ad_url = $request->ad_url;
         $ad->ad_expiry = $request->ad_expiry;
         $ad->ad_limit = $request->ad_limit;
