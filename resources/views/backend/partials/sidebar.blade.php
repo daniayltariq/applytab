@@ -19,7 +19,7 @@
                     <span class="icon-holder">
                         <i class="fas fa-list-alt"></i>
                     </span>
-                    <span class="title">Ads </span>
+                    <span class="title">Ads Directory</span>
                 </a>
             </li>
 

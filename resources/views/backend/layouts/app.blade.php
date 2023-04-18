@@ -19,6 +19,7 @@
 
             body{
                 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                font-size: 18px !important;
             }
 
             .is-folded .side-nav .side-nav-inner .side-nav-menu>li>a.dropdown-toggle{

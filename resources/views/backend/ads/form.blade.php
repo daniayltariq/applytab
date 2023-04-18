@@ -411,7 +411,7 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="form-row cust__frag">
+                    {{-- <div class="form-row">
                         <div class="form-group col-12">
 
                             <label class="font-weight-semibold">Ad URL:</label>
@@ -422,7 +422,7 @@
                                 </span>
                             @enderror
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="form-row">
                         <div class="form-group col-6">
 
@@ -459,13 +459,19 @@
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-5">
+                                        {{-- <div class="col-5">
                                             <select name="slot_id" class="select2 form-control slot-dropdown">
                                                 <option value="" disabled selected>Select Slot</option>
                                                 @foreach($slots as $slot)
                                                     <option value="{{ $slot->id }}">{{ $slot->slot_number }}</option>
                                                 @endforeach
                                             </select>
+                                        </div> --}}
+                                        <div class="form-group col-5">
+                                            <input type="text" placeholder="Enter Ad URL!" class="form-control" name="ad_url">
+                                        </div>
+                                        <div class="form-group col-2">
+                                            <input type="text" placeholder="Enter Ad Limit" class="form-control" name="ad_limit">
                                         </div>
                                         <div class="col-2">
                                             <input data-repeater-delete type="button"  class="btn btn-danger" value="Delete" />

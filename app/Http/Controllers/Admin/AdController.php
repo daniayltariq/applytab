@@ -84,16 +84,18 @@ class AdController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'ad_url'                => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
+            // 'ad_url'                => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
             'ad_image'              => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
             'ad_expiry'             =>'required|date|after_or_equal:today',
             'ad_limit'             =>'required|integer',
             'site_data'             => 'required|array',
             'site_data.*.site_id'   => 'required|exists:sites,id',
-            'site_data.*.slot_id'   => 'required|exists:admanagement_slots,id',
+            'site_data.*.ad_url'   => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
+            'site_data.*.ad_limit'   => 'nullable|integer',
+            // 'site_data.*.slot_id'   => 'required|exists:admanagement_slots,id',
         ], [
             'site_data.*.site_id.required' => 'Ad Site is required.',
-            'site_data.*.slot_id.required' => 'Ad Slot is required.',
+            // 'site_data.*.slot_id.required' => 'Ad Slot is required.',
         ]);
 
         if ($validator->fails()) {
@@ -122,7 +124,7 @@ class AdController extends Controller
             $ad->image  = $fullfilename ;
         }
 
-        $ad->ad_url = $request->ad_url;
+        // $ad->ad_url = $request->ad_url;
         $ad->ad_expiry = $request->ad_expiry;
         $ad->ad_limit = $request->ad_limit;
         $ad->save();
@@ -138,9 +140,11 @@ class AdController extends Controller
 
                 $adSite->ad_id    = $ad->id;
                 $adSite->site_id  = $site['site_id'];
-                $adSite->slot_id  = $site['slot_id'];
-                $adSite->ad_click_url = "https://applytab.com/".$ad->id."?sr=adtrack&site=".$site['site_id'];
-                $adSite->ad_pixel_url = "https://applytab.com/watch/".$ad->id."?sr=adtrack";
+                // $adSite->slot_id  = $site['slot_id'];
+                $adSite->ad_url = $site['ad_url'];
+                $adSite->ad_limit = $site['ad_limit'];
+                // $adSite->ad_click_url = "https://applytab.com/".$ad->id."?sr=adtrack&site=".$site['site_id'];
+                // $adSite->ad_pixel_url = "https://applytab.com/watch/".$ad->id."?sr=adtrack";
                 $adSite->save();
             }
             // $ad->adSites()->attach($sites);
@@ -216,7 +220,9 @@ class AdController extends Controller
         $selectedSites = collect($selectedSites)->map(function ($item) {
             return [
                 'site_id' => $item->site_id,
-                'slot_id' => $item->slot_id,
+                // 'slot_id' => $item->slot_id,
+                'ad_url' => $item->ad_url,
+                'ad_limit' => $item->ad_limit,
             ];
         })->toArray();
 
