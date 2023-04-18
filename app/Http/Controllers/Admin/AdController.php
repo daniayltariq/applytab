@@ -178,16 +178,19 @@ class AdController extends Controller
         //                 ->groupBy('type');
         $statdetails=$ad->adSites->transform(function($site) use ($ad){
             return [
-                "site"  =>  $site->site_name,
-                "clicks" =>  $ad->ad_stats->where('source','LIKE','%'.$site->site_name.'%')->where('type','click')->count(),
-                "views" =>  $ad->ad_stats->where('source','LIKE','%'.$site->site_name.'%')->where('type','view')->count()
+                "site"  =>  rtrim($site->site_name, "/"),
+                "clicks" =>  $ad->ad_stats()->where('source','LIKE','%'.rtrim($site->site_name, "/").'%')->where('type','click')->count(),
+                "views" =>  $ad->ad_stats()->where('source','LIKE','%'.rtrim($site->site_name, "/").'%')->where('type','view')->count()
             ];
         });
-        // dd($statdetails);
 
-        $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('ad_id',$id)->first();
+        $stats = [
+            'clicks' => $ad->ad_stats()->where('type','click')->count(),
+            'views' => $ad->ad_stats()->where('type','view')->count()
+        ];
 
-        return view('backend.ads.detail',compact('ad','statdetails','totalclicks'));
+        // dd($stats);
+        return view('backend.ads.detail',compact('ad','statdetails','stats'));
     }
 
     /**

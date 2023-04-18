@@ -122,7 +122,7 @@
             <div class="col-md-4">
                 <div class="card">
                     <div class="card-body text-center">
-                            <img width="176px" src="{{ $ad->image }}"/>
+                            <img width="185px" src="{{ $ad->image }}"/>
                     </div>
                 </div>
             </div>
@@ -143,12 +143,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    <div class="col-md-6">
                         <div class="card">
                             <div class="card-body">
                                 <div class="media m-v-10">
                                     <div class="media-body">
-                                        <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}/{{$ad->ad_limit}}</span>
+                                        <h5 class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</h5> 
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media m-v-10">
+                                    <div class="media-body"> <h5 class=""><b> Qouta: </b>{{isset($stats['views']) ? $stats['views'] : 0}}/{{$ad->ad_limit}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -173,7 +183,7 @@
                             <p class="m-b-0 text-muted">Clicks</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <i class="fas fa-bullseye stats-icon"></i>
-                                <h2 class="m-b-0 stats-val">{{isset($statdetails['click']) ? $statdetails['click']->count() : 0}}</h2>
+                                <h2 class="m-b-0 stats-val">{{isset($stats['clicks']) ? $stats['clicks'] : 0}}</h2>
                             </div>
                         </div>
                     </div>
@@ -186,7 +196,7 @@
                             <p class="m-b-0 text-muted">Views</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <i class="fas fa-eye stats-icon"></i>
-                                <h2 class="m-b-0 stats-val">{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}</h2>
+                                <h2 class="m-b-0 stats-val">{{isset($stats['views']) ? $stats['views'] : 0}}</h2>
                             </div>
 
                         </div>
