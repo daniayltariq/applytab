@@ -116,23 +116,53 @@
                 </div> --}}
             </div>
         </div>
-        <div class="card p-r-15 p-l-15">
-            <div class="row align-items-md-center">
-                <div class="col-md-6">
-                    <div class="media m-v-10">
-                        <div class="media-body">
-                            <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}/{{$ad->ad_limit}}</span>
+
+        <div class="row align-items-md-center">
+            
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body text-center">
+                            <img width="176px" src="{{ $ad->image }}"/>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div class="row align-items-md-center">
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media m-v-10">
+                                    <div class="avatar avatar-cyan avatar-icon avatar-square">
+                                        <i class="fa fa-link"></i>
+                                    </div>
+                                    <div class="media-body m-{{$alignShortRev}}-15">
+                                        <h5 class="mb-0"><b>Ad Url</b></h5>
+                                        <span class="text-gray font-size-13">{{$ad->ad_url ?? ''}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="media m-v-10">
+                                    <div class="media-body">
+                                        <span class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</span> | <span class=""><b> Qouta: </b>{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}/{{$ad->ad_limit}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                {{-- <div class="col-md-6">
-                    <div class="media m-v-10">
-                        <div class="media-body">
-                            <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
-                        </div>
-                    </div>
-                </div> --}}
             </div>
+            {{-- <div class="col-md-6">
+                <div class="media m-v-10">
+                    <div class="media-body">
+                        <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
+                    </div>
+                </div>
+            </div> --}}
         </div>
 
         <div class="row">
