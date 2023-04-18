@@ -32,7 +32,7 @@ class AuthenticatedSessionController extends Controller
 
         $request->session()->regenerate();
         if (Auth::check() && \Auth::user()->hasRole('superadmin|customer')) {
-            return redirect()->route('backend.adsListing');
+            return redirect()->route('backend.dashboard');
         }elseif(Auth::check() && auth()->user()->hasRole('endUser')) {
             /* return redirect()->route('enduser.profile.index'); */
             return redirect()->to(session('url.intended'));

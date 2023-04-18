@@ -136,6 +136,49 @@
         </div>
 
         <div class="row">
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="justify-content-between align-items-center">
+                            <p class="m-b-0 text-muted">Clicks</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="fas fa-bullseye stats-icon"></i>
+                                <h2 class="m-b-0 stats-val">{{isset($statdetails['click']) ? $statdetails['click']->count() : 0}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="justify-content-between align-items-center">
+                            <p class="m-b-0 text-muted">Views</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="fas fa-eye stats-icon"></i>
+                                <h2 class="m-b-0 stats-val">{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}</h2>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="justify-content-between align-items-center">
+                            <p class="m-b-0 text-muted">Sites</p>
+                            <div class="d-flex justify-content-between align-items-center">
+                                <i class="fas fa-regular fa-building stats-icon"></i>
+                                <h2 class="m-b-0 stats-val">{{$ad->adSites->count() ?? ''}}</h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
             <div class="col-lg-12">
                 <!-- Card View -->
                 <div class="row" id="list-view">
@@ -143,38 +186,31 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-5">
-                                    <div class="col-md-6">
-                                        <span class="detail-bold">Total Views on all sites:</span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <span class="detail">{{isset($statdetails['view']) ? $statdetails['view']->sum('views') : 0}}</span>
-                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                          <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Site</th>
+                                            <th scope="col">Views</th>
+                                            <th scope="col">Clicks</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach ($statdetails as $key => $statdetail)
+                                                <tr>
+                                                    <th scope="row">{{++$key}}</th>
+                                                    <td>{{$statdetail['site']}}</td>
+                                                    <td>{{$statdetail['views']}}</td>
+                                                    <td>{{$statdetail['clicks']}}</td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                      </table>
                                 </div>
-
-                                @if (isset($statdetails['view']))
-                                    @foreach ($statdetails['view'] as $statdetail)
-                                    <div class="row mb-4">
-                                        <div class="col-md-12">
-                                            <span class="detail-bold">{{$statdetail->source}}</span>
-                                            <div class="row">
-                                                <div class="col-md-6">
-                                                    <span class="detail">Views :</span>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    {{$statdetail->views}}
-                                                </div>
-                                            </div>
-                                        </div>
-                                        
-                                    </div>
-                                    @endforeach
-                                @endif
-                                
-                                
                             </div>
                         </div>
                     </div>
-                    <div class="col-md-12">
+                    {{-- <div class="col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <div class="row mb-5">
@@ -205,7 +241,7 @@
                                 @endif
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
         </div>

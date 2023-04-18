@@ -68,7 +68,7 @@
                                     <p class="m-b-0 text-muted">Clicks</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-bullseye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val"> {{-- {{$data['clicks'] ?? ''}} --}}</h2>
+                                        <h2 class="m-b-0 stats-val"> {{$data['clicks'] ?? ''}}</h2>
                                     </div>
                                     {{-- <span class="badge badge-pill badge-cyan font-size-12">
                                         <i class="anticon anticon-arrow-up"></i>
@@ -97,7 +97,7 @@
                                     <p class="m-b-0 text-muted">Views</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-eye stats-icon"></i>
-                                        <h2 class="m-b-0 stats-val">{{-- {{$data['views'] ?? ''}} --}}</h2>
+                                        <h2 class="m-b-0 stats-val">{{$data['views'] ?? ''}}</h2>
                                     </div>
 
                                 </div>
@@ -108,10 +108,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="justify-content-between align-items-center">
-                                    <p class="m-b-0 text-muted">Jobs</p>
+                                    <p class="m-b-0 text-muted">Ads</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-tasks stats-icon"></i>
-                                        {{-- <h2 class="m-b-0 stats-val">{{$data['active_jobs'] ?? ''}}</h2> --}}
+                                        <h2 class="m-b-0 stats-val">{{$data['ads'] ?? ''}}</h2>
                                     </div>
 
                                 </div>
@@ -122,10 +122,10 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="justify-content-between align-items-center">
-                                    <p class="m-b-0 text-muted">Institutes</p>
+                                    <p class="m-b-0 text-muted">Sites</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-regular fa-building stats-icon"></i>
-                                        {{-- <h2 class="m-b-0 stats-val">{{$data['institutions'] ?? ''}}</h2> --}}
+                                        <h2 class="m-b-0 stats-val">{{$data['sites'] ?? ''}}</h2>
                                     </div>
                                 </div>
                             </div>
@@ -133,7 +133,7 @@
                     </div>
                 {{-- </div>
             </div> --}}
-            <div class="col-lg-12">
+            {{-- <div class="col-lg-12">
                 <div class="card">
                     <div class="card-body">
                         <div class="d-flex justify-content-between align-items-center">
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
 
         </div>
 
@@ -193,59 +193,6 @@
                                     </p>
                                     <h5 class="m-b-0">100</h5>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-lg-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-center">
-                            <h5>Recent Jobs</h5>
-                            <hr>
-                            {{-- <div>
-                                <a href="javascript:void(0);" class="btn btn-sm btn-default">View All</a>
-                            </div> --}}
-                        </div>
-                        <div class="m-t-30">
-                            <div class="table-responsive">
-                                <table class="table table-hover">
-                                    <thead>
-                                        <tr>
-                                            {{-- <th class="bold w-10">Job url</th>
-                                            <th>Title</th>
-                                            <th>Position</th>
-                                            <th>Category</th>
-                                            <th>Type</th>
-                                            <th>Institute</th>
-                                            <th>Date Open</th>
-                                            <th>Date Close</th> --}}
-                                            <th class="bold w-10">Job url</th>
-                                            <th>Title</th>
-                                            <th>Institute</th>
-                                            <th>City</th>
-                                            <th>Date Open</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {{-- @forelse($recent_jobs as $key => $job)
-                                            <tr>
-                                                <td>
-                                                    <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$job->id) }}"><i class="fa fa-clipboard"></i> Copy</a>
-                                                </td>
-                                                <td class="name-badge p-3 w-20">{{ $job->job_title ?? '' }}</td>
-                                                <td>{{ $job->institution_name ?? '' }}</td>
-                                                <td>{{ $job->institution_city ?? '' }}</td>
-                                                <td>{{ $job->post_date ?? '' }}</td>
-                                            </tr>
-                                        @empty
-                                            <tr>
-                                                <td colspan="7" class="text-center">No Jobs found</td>
-                                            </tr>
-                                        @endforelse --}}
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>

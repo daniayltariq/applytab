@@ -169,13 +169,21 @@ class AdController extends Controller
     public function adStatDetail($id)
     {
         $ad = Ad::where('id',$id)->first();
-        $statdetails = Stats::select('ad_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
-                        ->where('adtrack',1)
-                        ->whereHas('ad')
-                        ->where('ad_id',$id)
-                        ->groupBy('ad_id','source','type')
-                        ->get()
-                        ->groupBy('type');
+        // $statdetails = Stats::select('ad_id','source','type',DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'),DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+        //                 ->where('adtrack',1)
+        //                 ->whereHas('ad')
+        //                 ->where('ad_id',$id)
+        //                 ->groupBy('ad_id','source','type')
+        //                 ->get()
+        //                 ->groupBy('type');
+        $statdetails=$ad->adSites->transform(function($site) use ($ad){
+            return [
+                "site"  =>  $site->site_name,
+                "clicks" =>  $ad->ad_stats->where('source','LIKE','%'.$site->site_name.'%')->where('type','click')->count(),
+                "views" =>  $ad->ad_stats->where('source','LIKE','%'.$site->site_name.'%')->where('type','view')->count()
+            ];
+        });
+        // dd($statdetails);
 
         $totalclicks = Stats::select(DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'))->where('ad_id',$id)->first();
 

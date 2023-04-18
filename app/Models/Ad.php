@@ -33,6 +33,11 @@ class Ad extends Model
         return $this->hasMany('App\Models\AdSites','ad_id');
     }
 
+    public function ad_stats()
+    {
+        return $this->hasMany('App\Models\Stats','ad_id');
+    }
+
     public function adSites()
     {
         return $this->belongsToMany(Site::class, 'admanagement_ad_sites', 'ad_id', 'site_id');

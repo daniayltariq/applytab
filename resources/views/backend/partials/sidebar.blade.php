@@ -5,14 +5,14 @@
     <div class="side-nav-inner">
         @if($auth_user->hasRole('superadmin') || ($auth_user->hasRole('customer')) )
         <ul class="side-nav-menu scrollable">
-            {{-- <li class="nav-item {{url()->current() == route('backend.dashboard') ? 'active' :''}}">
+            <li class="nav-item {{url()->current() == route('backend.dashboard') ? 'active' :''}}">
                 <a href="{{route('backend.dashboard')}}">
                     <span class="icon-holder">
                         <i class="fas fa-home"></i>
                     </span>
                     <span class="title">Home</span>
                 </a>
-            </li> --}}
+            </li>
 
             <li class="nav-item {{url()->current() == route('backend.adsListing') ? 'active' :''}}">
                 <a href="{{route('backend.adsListing')}}">

@@ -68,7 +68,7 @@ Route::group([
         'middleware' => ['role:superadmin|customer'],
     ],function(){
 
-        // Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+        Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('ads', [AdController::class, 'index'])->name('adsListing');
         Route::get('job-board', [SiteController::class, 'index'])->name('site.index');
