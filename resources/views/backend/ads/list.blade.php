@@ -3,6 +3,7 @@
 @section('styles')
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+<link href="{{asset('backend/assets/vendors/bootstrap4-toggle/css/bootstrap4-toggle.min.css')}}" rel="stylesheet">
 <style>
     th{
         font-weight: 700 !important;
@@ -93,6 +94,16 @@
     .dropdown .dropdown-toggle:after {
         content: none !important;
     }
+
+    .toggle.btn-primary{
+        background-color: #fcb41a;
+        border-color: #fcb41a;
+    }
+
+    .toggle-on, .toggle-on:hover{
+        background-color: #fcb41a;
+        border-color: #fcb41a; 
+    }
 </style>
 @endsection
 
@@ -159,6 +170,7 @@
                                                 <th class="bold w-10">Ad URL</th>
                                                 {{-- <th class="bold w-10">Ad Slot</th> --}}
                                                 <th>Sites</th>
+                                                <th>Publish</th>
                                                 <th>Action</th>
 											</tr>
 										</thead>
@@ -175,6 +187,9 @@
                                                         @foreach ($item->adSites as $site)
                                                             <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{$site->site_name}}</span>
                                                         @endforeach
+                                                    </td>
+                                                    <td>
+                                                        <input class="ad_status_update" id="ad_status_update_{{ $item->id }}" type="checkbox" @if($item->status) checked @endif value="1" data-ad="{{ $item->id }}" data-toggle="toggle" data-on="Yes" data-off="No" data-size="sm">
                                                     </td>
                                                     <td width="200px">
                                                         <a href="{{route('backend.adEdit',$item->id)}}" class="btn btn-primary btn-sm btn_y">Edit</a>
@@ -274,8 +289,9 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap-confirmation2@4.1.0/dist/bootstrap-confirmation.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.14.1/moment.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.23/daterangepicker.min.js"></script>
+<script src="{{asset('backend/assets/vendors/bootstrap4-toggle/js/bootstrap4-toggle.min.js')}}"></script>
 <script type="text/javascript">
-$('[data-toggle=confirmation]').confirmation({
+    $('[data-toggle=confirmation]').confirmation({
       rootSelector: '[data-toggle=confirmation]',
       // other options
     });
@@ -307,6 +323,29 @@ $('[data-toggle=confirmation]').confirmation({
             $('.edit_budget[data-job-id='+{{session()->get('budget_error')}}+']').trigger('click');
         @endif
 	});
+    
+    $(document).on('change','.ad_status_update',function(){
+        var that = $(this);
+        
+        if(window.confirm("Are you Sure you want to change your ad status?") == true) {
+            if (!this.checked) {
+                status=0;
+            } else {
+                status=1;
+            }
+            $.get("{{ url('/') }}/backend/ad/status?ad="+$(this).data('ad')+"&status="+status, function( data ) {
+                if (data.status) {
+                    toastr.success(data.message)
+                }else{
+                    // that.bootstrapToggle('toggle')
+                    toastr.error(data.message)
+                }
+            });
+        }else{
+            location.reload(true);
+        }
+    });
+
 
     $(document).on('click','.edit_url',function(e){
         e.preventDefault();

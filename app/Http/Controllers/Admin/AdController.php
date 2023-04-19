@@ -230,6 +230,31 @@ class AdController extends Controller
     }
 
     /**
+     * Update Status.
+     *
+     * @param  \App\Content  $content
+     * @return \Illuminate\Http\Response
+     */
+    public function status(Request $request){
+
+        $ad = Ad::where('id',$request->query('ad'))->first();
+
+        if($ad && in_array($request->query('status'),[0,1])){
+            $ad->status = $request->query('status');
+            $ad->save();
+            return response()->json([
+                'message' => 'Status Updated',
+                'status' => 1
+            ]);
+        }
+
+        return response()->json([
+            'message' => 'Something went wrong',
+            'status' => 0
+        ]);
+
+    }
+    /**
      * Display the specified resource.
      *
      * @param  \App\Content  $content

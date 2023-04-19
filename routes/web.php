@@ -71,8 +71,8 @@ Route::group([
         Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
         Route::get('ads', [AdController::class, 'index'])->name('adsListing');
+        Route::get('ad/status', [AdController::class, 'status'])->name('ad.status');
         Route::get('job-board', [SiteController::class, 'index'])->name('site.index');
-        Route::get('contract/{id}', [AdController::class, 'show'])->name('contract.show');
 
         Route::get('adstats', [AdController::class, 'adStats'])->name('adstats.index');
         Route::get('adstats/details/{id}', [AdController::class, 'adStatDetail'])->name('adstats.detail');
@@ -93,14 +93,11 @@ Route::group([
 
         Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
         Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');
-        Route::get('contract/{id}/edit', [ContractController::class, 'edit'])->name('contract.edit');
         Route::get('job_update/{id}', [AdController::class, 'fieldUpdate'])->name('job_update');
         Route::post('job_update/{id}', [AdController::class, 'fieldUpdate'])->name('job_update');
-        Route::get('updateStatus/{id}', [ContractController::class, 'updateStatus'])->name('contract.update_status');
 
         Route::put('category/{id}', [CategoryController::class, 'update'])->name('category.update');
         Route::put('user/{id}', [UserController::class, 'update'])->name('user.update');
-        Route::put('contract/{id}', [ContractController::class, 'update'])->name('contract.update');
     });
 
 
