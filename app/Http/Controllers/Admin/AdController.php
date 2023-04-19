@@ -127,6 +127,7 @@ class AdController extends Controller
         // $ad->ad_url = $request->ad_url;
         $ad->ad_expiry = $request->ad_expiry;
         $ad->ad_limit = $request->ad_limit;
+        $ad->cost_per_click = $request->cost_per_click;
         $ad->save();
 
         $sites = $request->site_data;

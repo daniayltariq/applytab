@@ -411,18 +411,18 @@
                         </div>
                     </div>
                     <hr>
-                    {{-- <div class="form-row">
+                    <div class="form-row">
                         <div class="form-group col-12">
 
-                            <label class="font-weight-semibold">Ad URL:</label>
-                            <input type="text" placeholder="Ender Ad URL!" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->ad_url : old('ad_url')}}">
-                            @error('ad_url')
+                            <label class="font-weight-semibold">Cost per click:</label>
+                            <input type="text" placeholder="Ender Ad URL!" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->cost_per_click : old('cost_per_click')}}">
+                            @error('cost_per_click')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-                    </div> --}}
+                    </div>
                     <div class="form-row">
                         <div class="form-group col-6">
 
