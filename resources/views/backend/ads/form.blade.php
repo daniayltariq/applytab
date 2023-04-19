@@ -396,7 +396,7 @@
                             <input type="file" name="ad_image" id="ad_image" class="custom-input-file custom-input-file--2" data-multiple-caption="{count} files selected"/>
                             <label for="ad_image">
                                 <i class="fas fa-upload"></i>
-                                <span >Choose Image!</span>
+                                <span >Choose Ad Image!</span>
                             </label>
                             @error('ad_image')
                                 <span class="invalid-feedback" role="alert">
@@ -411,22 +411,40 @@
                         </div>
                     </div>
                     <hr>
-                    <div class="form-row">
+                    {{-- <div class="form-row">
                         <div class="form-group col-12">
 
+                            <label class="font-weight-semibold">Ad URL:</label>
+                            <input type="text" placeholder="Ender Ad URL!" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->ad_url : old('ad_url')}}">
+                            @error('ad_url')
+                                <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                                </span>
+                            @enderror
+                        </div>
+                    </div> --}}
+                    <div class="form-row">
+                        <div class="form-group col-4">
+
                             <label class="font-weight-semibold">Cost per click:</label>
-                            <input type="text" placeholder="Ender Ad URL!" class="form-control" name="ad_url" value="{{isset($ad) ? $ad->cost_per_click : old('cost_per_click')}}">
+                            <div class="input-group mb-3">
+                                <div class="input-group-prepend">
+                                  <span class="input-group-text">$</span>
+                                </div>
+                                <input type="text" class="form-control" name="cost_per_click" value="{{old('cost_per_click') ??$ad->cost_per_click }}">
+                                {{-- <div class="input-group-append">
+                                  <span class="input-group-text">.00</span>
+                                </div> --}}
+                            </div>
                             @error('cost_per_click')
                                 <span class="invalid-feedback" role="alert">
                                 <strong>{{ $message }}</strong>
                                 </span>
                             @enderror
                         </div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group col-6">
+                        <div class="form-group col-4">
 
-                            <label class="font-weight-semibold">Ad Expiry:</label>
+                            <label class="font-weight-semibold">Add expiration date:</label>
                             <input type="date" placeholder="Ender Ad Expiry" class="form-control" name="ad_expiry" value="{{isset($ad) ? \Carbon\Carbon::parse($ad->ad_expiry)->format('Y-m-d')  : old('ad_expiry')}}">
                             @error('ad_expiry')
                                 <span class="invalid-feedback" role="alert">
@@ -434,9 +452,9 @@
                                 </span>
                             @enderror
                         </div>
-                        <div class="form-group col-6">
+                        <div class="form-group col-4">
     
-                            <label class="font-weight-semibold">Ad Limit:</label>
+                            <label class="font-weight-semibold">No of times ad should appear on all job boards:</label>
                             <input type="text" placeholder="Ender Ad Limit" class="form-control" name="ad_limit" value="{{isset($ad) ? $ad->ad_limit : old('ad_limit')}}">
                             @error('ad_limit')
                                 <span class="invalid-feedback" role="alert">
@@ -453,7 +471,7 @@
                                     <div class="row mb-3">
                                         <div class="col-5">
                                             <select name="site_id" class="select2 form-control site-dropdown">
-                                                <option value="" disabled selected>Select Site</option>
+                                                <option value="" disabled selected>Select Job Board</option>
                                                 @foreach($sites as $site)
                                                     <option value="{{ $site->id }}">{{ $site->site_name }}</option>
                                                 @endforeach
@@ -468,10 +486,10 @@
                                             </select>
                                         </div> --}}
                                         <div class="form-group col-5">
-                                            <input type="text" placeholder="Enter Ad URL!" class="form-control" name="ad_url">
+                                            <input type="text" placeholder="The page that add will link to" class="form-control" name="ad_url">
                                         </div>
                                         <div class="form-group col-2">
-                                            <input type="text" placeholder="Enter Ad Limit" class="form-control" name="ad_limit">
+                                            <input type="text" placeholder="Ad limit on specific site" class="form-control" name="ad_limit">
                                         </div>
                                         <div class="col-2">
                                             <input data-repeater-delete type="button"  class="btn btn-danger" value="Delete" />

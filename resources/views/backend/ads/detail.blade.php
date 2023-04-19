@@ -99,11 +99,11 @@
                 <div class="col-md-6">
                     <div class="media m-v-10">
                         <div class="avatar avatar-cyan avatar-icon avatar-square">
-                            <i class="fa fa-link"></i>
+                            <i class="fa fa-file"></i>
                         </div>
                         <div class="media-body m-{{$alignShortRev}}-15">
-                            <h5 class="mb-0"><b>Ad Url</b></h5>
-                            <span class="text-gray font-size-13">{{$ad->ad_url ?? ''}}</span>
+                            <h5 class="mb-0"><b>Ad Report</b></h5>
+                            {{-- <span class="text-gray font-size-13">{{$ad->ad_url ?? ''}}</span> --}}
                         </div>
                     </div>
                 </div>
@@ -133,11 +133,16 @@
                             <div class="card-body">
                                 <div class="media m-v-10">
                                     <div class="avatar avatar-cyan avatar-icon avatar-square">
-                                        <i class="fa fa-link"></i>
+                                        <i class="fa fa-dollar-sign"></i>
                                     </div>
+                                    @php
+                                        $clicks=isset($stats['clicks']) ? $stats['clicks'] : 0;
+                                        $cost=$clicks ? number_format($ad->cost_per_click/$clicks,0) : 0;
+                                    @endphp
                                     <div class="media-body m-{{$alignShortRev}}-15">
-                                        <h5 class="mb-0"><b>Ad Url</b></h5>
-                                        <span class="text-gray font-size-13">{{$ad->ad_url ?? ''}}</span>
+                                        <h5 class="mb-2">
+                                            <b>Cost per Click</b></h5>
+                                            <span class="text-dark font-size-18">${{$cost}}</span>
                                     </div>
                                 </div>
                             </div>
@@ -158,7 +163,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="media m-v-10">
-                                    <div class="media-body"> <h5 class=""><b> Qouta: </b>{{isset($stats['views']) ? $stats['views'] : 0}}/{{$ad->ad_limit}}</h5>
+                                    <div class="media-body"> <h5 class=""><b> Quota: </b>{{isset($stats['views']) ? $stats['views'] : 0}}/{{$ad->ad_limit}}</h5>
                                     </div>
                                 </div>
                             </div>
@@ -169,7 +174,7 @@
             {{-- <div class="col-md-6">
                 <div class="media m-v-10">
                     <div class="media-body">
-                        <span class=""><b> Qouta: </b>{{$ad->ad_limit}}</span>
+                        <span class=""><b> Quota: </b>{{$ad->ad_limit}}</span>
                     </div>
                 </div>
             </div> --}}
@@ -193,7 +198,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="justify-content-between align-items-center">
-                            <p class="m-b-0 text-muted">Views</p>
+                            <p class="m-b-0 text-muted">Impressions</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <i class="fas fa-eye stats-icon"></i>
                                 <h2 class="m-b-0 stats-val">{{isset($stats['views']) ? $stats['views'] : 0}}</h2>
@@ -230,8 +235,8 @@
                                         <thead>
                                           <tr>
                                             <th scope="col">#</th>
-                                            <th scope="col">Site</th>
-                                            <th scope="col">Views</th>
+                                            <th scope="col">Job Board</th>
+                                            <th scope="col">Impressions</th>
                                             <th scope="col">Clicks</th>
                                           </tr>
                                         </thead>

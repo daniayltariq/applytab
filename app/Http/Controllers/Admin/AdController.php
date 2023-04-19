@@ -88,6 +88,7 @@ class AdController extends Controller
             'ad_image'              => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
             'ad_expiry'             =>'required|date|after_or_equal:today',
             'ad_limit'             =>'required|integer',
+            'cost_per_click'             =>'required|integer',
             'site_data'             => 'required|array',
             'site_data.*.site_id'   => 'required|exists:sites,id',
             'site_data.*.ad_url'   => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
@@ -99,6 +100,7 @@ class AdController extends Controller
         ]);
 
         if ($validator->fails()) {
+            // dd($validator->errors());
             return redirect()->back()
                     ->withErrors($validator)
                     ->withInput()
