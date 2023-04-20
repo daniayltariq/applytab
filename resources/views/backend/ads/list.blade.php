@@ -192,12 +192,17 @@
                                                         <input class="ad_status_update" id="ad_status_update_{{ $item->id }}" type="checkbox" @if($item->status) checked @endif value="1" data-ad="{{ $item->id }}" data-toggle="toggle" data-on="Yes" data-off="No" data-size="sm">
                                                     </td>
                                                     <td width="200px">
-                                                        <a href="{{route('backend.adEdit',$item->id)}}" class="btn btn-primary btn-sm btn_y">Edit</a>
-                                                        <form method="POST" action="{{ route('backend.adDelete', $item->id) }}" style="display: inline-block;">
-                                                            @csrf
-                                                            {{ method_field('DELETE') }}
-                                                            <button title="Delete record" type="submit" class="btn btn-danger btn-sm btn_r" data-toggle="confirmation">Delete</button>
-                                                        </form>
+                                                        @if ($item->ad_expiry > now())
+                                                            
+                                                            <a href="{{route('backend.adEdit',$item->id)}}" class="btn btn-primary btn-sm btn_y">Edit</a>
+                                                            <form method="POST" action="{{ route('backend.adDelete', $item->id) }}" style="display: inline-block;">
+                                                                @csrf
+                                                                {{ method_field('DELETE') }}
+                                                                <button title="Delete record" type="submit" class="btn btn-danger btn-sm btn_r" data-toggle="confirmation">Delete</button>
+                                                            </form>
+                                                        @else
+                                                            <a href="{{route('backend.ad.renew',$item->id)}}" class="btn btn-primary btn-sm btn_y">Renew</a>
+                                                        @endif
                                                         {{-- <div class="dropdown dropdown-inline">
                                                             <button type="button" class="btn btn-default btn-icon btn-sm btn-icon-md" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                                 <i class="fa fa-ellipsis-h"></i>

@@ -12,6 +12,7 @@ use App\Models\AdSites;
 use App\Models\JobPost;
 use App\Models\Category;
 use App\Models\JobBudget;
+use App\Models\Institution;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -36,16 +37,20 @@ class AdController extends Controller
     {
         $ads = new Ad;
 
-        if ($request->query('search')) {
-            $ads = $ads->where(function ($q) use ($request) {
-                $q->where('ad_url', 'LIKE', '%' . $request->query('search') . '%')
-                ->orWhereHas('adSites', function($q) use ($request){
-                    $q->where('site_name', 'LIKE', '%' . $request->query('search') . '%');
+        $ads = $ads->when($request->query('search'),function($q) use ($request){
+                $q->where(function ($q) use ($request) {
+                    $q->where('ad_url', 'LIKE', '%' . $request->query('search') . '%')
+                    ->orWhereHas('adSites', function($q) use ($request){
+                        $q->where('site_name', 'LIKE', '%' . $request->query('search') . '%');
+                    });
                 });
-            });
-        }
-
-        $ads = $ads->paginate(15);
+            })
+            ->when($request->query('q')=='archived',function($q){
+                $q->whereDate('ad_expiry','<=',now() );
+            })
+            ->when($request->query('q')=='active',function($q){
+                $q->whereDate('ad_expiry','>',now() )->where('status',1);
+            })->paginate(15);
 
         return view('backend.ads.list',compact('ads'));
     }
@@ -72,7 +77,14 @@ class AdController extends Controller
         ]];
         $sites  = Site::all();
         $slots  = Slot::all();
-        return view('backend.ads.form', compact('sites', 'slots', 'data'));
+        $adv=null;
+        if ($request->institute) {
+            $adv = Institution::find($request->institute);
+            if (!$adv) {
+                abort(404);
+            }
+        }
+        return view('backend.ads.form', compact('sites', 'slots', 'data','adv'));
     }
 
     /**
@@ -87,15 +99,17 @@ class AdController extends Controller
             // 'ad_url'                => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
             'ad_image'              => $request->has('adId') ? 'nullable|mimes:jpeg,jpg,png,gif|max:10000' : 'required|mimes:jpeg,jpg,png,gif|max:10000',
             'ad_expiry'             =>'required|date|after_or_equal:today',
-            'ad_limit'             =>'required|integer',
-            'cost_per_click'             =>'required|integer',
+            'ad_limit'              =>'required|integer',
+            'cost_per_click'        =>'required|integer',
+            'adv_id'                =>'nullable|exists:institution_list,id',
             'site_data'             => 'required|array',
             'site_data.*.site_id'   => 'required|exists:sites,id',
-            'site_data.*.ad_url'   => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
-            'site_data.*.ad_limit'   => 'nullable|integer',
+            'site_data.*.ad_url'    => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
+            'site_data.*.ad_limit'  => 'nullable|integer',
             // 'site_data.*.slot_id'   => 'required|exists:admanagement_slots,id',
         ], [
             'site_data.*.site_id.required' => 'Ad Site is required.',
+            'adv_id.exists' => 'Advertiser is not valid.',
             // 'site_data.*.slot_id.required' => 'Ad Slot is required.',
         ]);
 
@@ -127,6 +141,9 @@ class AdController extends Controller
         }
 
         // $ad->ad_url = $request->ad_url;
+        if ($request->adv_id) {
+            $ad->institution_id = $request->adv_id;
+        }
         $ad->ad_expiry = $request->ad_expiry;
         $ad->ad_limit = $request->ad_limit;
         $ad->cost_per_click = $request->cost_per_click;
@@ -230,6 +247,102 @@ class AdController extends Controller
         })->toArray();
 
         return view('backend.ads.form',compact('ad', 'sites', 'slots', 'selectedSites'));
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Content  $content
+     * @return \Illuminate\Http\Response
+     */
+    public function renew(Request $request,$id)
+    {
+        if ($request->isMethod('GET')) {
+        
+            $ad = Ad::find($id);
+            if (!$ad) {
+                abort(404);
+            }
+    
+            $sites = Site::all();
+    
+            $slots  = Slot::all();
+    
+            $selectedSites = $ad->ad_sites->all();
+    
+            $selectedSites = collect($selectedSites)->map(function ($item) {
+                return [
+                    'site_id' => $item->site_id,
+                    // 'slot_id' => $item->slot_id,
+                    'ad_url' => $item->ad_url,
+                    'ad_limit' => $item->ad_limit,
+                ];
+            })->toArray();
+    
+            return view('backend.ads.renew',compact('ad', 'sites', 'slots', 'selectedSites'));
+        } elseif ($request->isMethod('POST')) {
+            
+            $validator = Validator::make($request->all(), [
+                'ad_image'              => 'nullable|mimes:jpeg,jpg,png,gif|max:10000',
+                'ad_expiry'             =>'required|date|after_or_equal:today',
+                'ad_limit'             =>'required|integer',
+                'cost_per_click'             =>'required|integer',
+                'site_data'             => 'required|array',
+                'site_data.*.site_id'   => 'required|exists:sites,id',
+                'site_data.*.ad_url'   => 'required|regex:/^https?:\\/\\/(?:www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\.[a-zA-Z0-9()]{1,6}\\b(?:[-a-zA-Z0-9()@:%_\\+.~#?&\\/=]*)$/',
+                'site_data.*.ad_limit'   => 'nullable|integer',
+            ], [
+                'site_data.*.site_id.required' => 'Ad Site is required.',
+            ]);
+    
+            if ($validator->fails()) {
+                // dd($validator->errors());
+                return redirect()->back()
+                        ->withErrors($validator)
+                        ->withInput()
+                        ->with('error','validation error!')
+                        ->with('site_data_error', $request->site_data);
+            }
+    
+            $old_ad = Ad::findOrFail($id);
+
+            $ad = new Ad;
+    
+            if($request->hasFile('ad_image')) {
+                $file = $request->file('ad_image');
+                $filename = time() . '.' . $file->getClientOriginalExtension();
+                $path = $file->storeAs('public/ad_images', $filename);
+                $fullfilename = url('/').'/storage/ad_images/'.$filename;
+                $ad->image  = $fullfilename ;
+            }else{
+                $ad->image  = $old_ad->image ;
+            }
+    
+            $ad->ad_expiry = $request->ad_expiry;
+            $ad->ad_limit = $request->ad_limit;
+            $ad->cost_per_click = $request->cost_per_click;
+            $ad->renew_from=$old_ad->id;
+            $ad->save();
+    
+            $sites = $request->site_data;
+    
+    
+            if($sites){
+    
+                foreach ($request->site_data as $key => $site) {
+    
+                    $adSite = new AdSites();
+    
+                    $adSite->ad_id    = $ad->id;
+                    $adSite->site_id  = $site['site_id'];
+                    $adSite->ad_url = $site['ad_url'];
+                    $adSite->ad_limit = $site['ad_limit'];
+                    $adSite->save();
+                }
+            }
+    
+            return redirect()->route('backend.adsListing',['q'=>'active'])->with("status", 'Ad has been renewed');
+        }
     }
 
     /**

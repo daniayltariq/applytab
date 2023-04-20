@@ -376,20 +376,17 @@
                 <nav class="breadcrumb breadcrumb-dash d-flex">
                     <a href="{{route('backend.adsListing')}}" class="breadcrumb-item"><i class="anticon anticon-home m-{{$alignShort}}-5"></i>Ads Directory</a>
                     <a href="{{ route('backend.adsListing')}}" class="breadcrumb-item">Ads</a>
-                    <span class="breadcrumb-item active">{{ isset($ad) && $ad ? 'Update Ad' : 'Add Ad' }}</span>
+                    <span class="breadcrumb-item active">Renew Ad </span>
                 </nav>
             </div>
         </div>
         <div class="card">
             <div class="card-header">
-                <h4 class="card-title font-size-18">{{ isset($ad) && $ad ? 'Update Ad' : 'Add New Ad' }}</h4>
+                <h4 class="card-title font-size-18">Renew Ad</h4>
             </div>
             <div class="card-body">
-                <form action="{{ route('backend.adStore') }}" id="contract__form" method="POST" enctype="multipart/form-data">
+                <form action="{{ route('backend.ad.renew',$ad->id) }}" method="POST" enctype="multipart/form-data">
                     @csrf
-                    @if ((isset($ad) && $ad))
-                            <input type="hidden" name="adId" value="{{$ad->id}}">
-                    @endif
                     <div class="form-row">
                         <div class="form-group col-12">
                             <label for="" class="font-weight-600">Ad Image</label>
@@ -423,20 +420,6 @@
                             @enderror
                         </div>
                     </div> --}}
-                    @if (isset($adv) || (isset($ad) && $ad->institution_id))
-                        @php
-                            $ins_name=isset($adv) ? $adv->inst_name : $ad->institution->inst_name;
-                            $ins_id=isset($adv) ? $adv->id : $ad->institution->id;
-                        @endphp
-                        <div class="form-row mb-3">
-                            <div class="col-4">
-                                <label class="font-weight-semibold">Advertiser:</label>
-                                <select name="adv_id" class=" form-control">
-                                    <option value="{{$ins_id}}" selected>{{$ins_name}}</option>
-                                </select>
-                            </div>
-                        </div>
-                    @endif
                     <div class="form-row">
                         <div class="form-group col-4">
 
@@ -445,7 +428,7 @@
                                 <div class="input-group-prepend">
                                   <span class="input-group-text">$</span>
                                 </div>
-                                <input type="text" class="form-control" name="cost_per_click" value="{{old('cost_per_click') ??$ad->cost_per_click ?? '' }}">
+                                <input type="text" class="form-control" name="cost_per_click" value="{{old('cost_per_click') ??$ad->cost_per_click }}">
                                 {{-- <div class="input-group-append">
                                   <span class="input-group-text">.00</span>
                                 </div> --}}

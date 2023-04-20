@@ -8,21 +8,12 @@ use App\Models\JobPost;
 use App\Models\Institution;
 use Laravel\Sanctum\PersonalAccessToken;
 use App\Http\Controllers\Admin\{
-    CategoryController,
-    CouponController,
-    ContactController,
     UserController,
     DashboardController,
-    CompanyController,
-    ContractController,
     AdController,
+    AdvertiserController,
     SiteController,
-    CarController,
-    ProposalController,
-    OrderController,
     ReportController,
-    BlogController,
-    InstitutionController
 };
 
 /*
@@ -74,6 +65,9 @@ Route::group([
         Route::get('ad/status', [AdController::class, 'status'])->name('ad.status');
         Route::get('job-board', [SiteController::class, 'index'])->name('site.index');
 
+        Route::get('ad/{id}/renew', [AdController::class, 'renew'])->name('ad.renew');
+        Route::post('ad/{id}/renew', [AdController::class, 'renew'])->name('ad.renew');
+
         Route::get('adstats', [AdController::class, 'adStats'])->name('adstats.index');
         Route::get('adstats/details/{id}', [AdController::class, 'adStatDetail'])->name('adstats.detail');
         Route::get('report/{id}', [AdController::class, 'report'])->name('ad.report');
@@ -89,7 +83,13 @@ Route::group([
         Route::get('ad/edit/{id}', [AdController::class, 'edit'])->name('adEdit');
         Route::post('ad/store', [AdController::class, 'store'])->name('adStore');
         Route::delete('ad/delete/{id}', [AdController::class, 'destroy'])->name('adDelete');
-
+        
+        Route::get('advertiser', [AdvertiserController::class, 'index'])->name('advertiser.index');
+        Route::get('advertiser/create', [AdvertiserController::class, 'create'])->name('advertiser.create');
+        Route::get('advertiser/edit/{id}', [AdvertiserController::class, 'edit'])->name('advertiser.edit');
+        Route::post('advertiser/store', [AdvertiserController::class, 'store'])->name('advertiser.store');
+        Route::delete('advertiser/delete/{id}', [AdvertiserController::class, 'destroy'])->name('advertiser.delete');
+        Route::get('advertiser/{id}/details', [AdvertiserController::class, 'adStatDetail'])->name('advertiser.show');
 
         Route::get('category/{id}/edit', [CategoryController::class, 'edit'])->name('category.edit');
         Route::get('user/{id}/edit', [UserController::class, 'edit'])->name('user.edit');

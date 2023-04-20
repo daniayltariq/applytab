@@ -28,6 +28,11 @@ class Ad extends Model
         return \Carbon\Carbon::parse($value)->format('d-m-Y');
     }
 
+    public function institution()
+    {
+        return $this->belongsTo('App\Models\Institution','institution_id');
+    }
+
     public function ad_sites()
     {
         return $this->hasMany('App\Models\AdSites','ad_id');

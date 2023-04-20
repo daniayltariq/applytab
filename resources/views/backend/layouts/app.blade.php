@@ -101,6 +101,11 @@
                 width: 5px;
             }
 
+            .sidehr{
+                border-top: 1px solid #cbcbcb !important;
+                margin-top: 15px !important;
+                margin-bottom: 15px !important;
+            }
         </style>
     </head>
     <!-- end::Head -->

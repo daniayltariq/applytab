@@ -13,13 +13,48 @@
                     <span class="title">Home</span>
                 </a>
             </li>
-
-            <li class="nav-item {{url()->current() == route('backend.adsListing') ? 'active' :''}}">
+            <hr class="sidehr">
+            <li class="nav-item {{url()->full() == route('backend.advertiser.index') ? 'active' :''}}">
+                <a href="{{route('backend.advertiser.index')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-university"></i>
+                    </span>
+                    <span class="title">Advertisers</span>
+                </a>
+            </li>
+            
+            <li class="nav-item {{url()->current() == route('backend.advertiser.create') ? 'active' :''}}">
+                <a href="{{route('backend.advertiser.create')}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-plus-circle"></i>
+                    </span>
+                    <span class="title">Create Advertiser</span>
+                </a>
+            </li>
+            <hr class="sidehr">
+            <li class="nav-item {{url()->full() == route('backend.adsListing') ? 'active' :''}}">
                 <a href="{{route('backend.adsListing')}}">
                     <span class="icon-holder">
                         <i class="fas fa-list-alt"></i>
                     </span>
                     <span class="title">Ads Directory</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{url()->full() == route('backend.adsListing',['q'=>'archived']) ? 'active' :''}}">
+                <a href="{{route('backend.adsListing',['q'=>'archived'])}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-list-alt"></i>
+                    </span>
+                    <span class="title">Archived Ads</span>
+                </a>
+            </li>
+            <li class="nav-item {{url()->full() == route('backend.adsListing',['q'=>'active']) ? 'active' :''}}">
+                <a href="{{route('backend.adsListing',['q'=>'active'])}}">
+                    <span class="icon-holder">
+                        <i class="fas fa-list-alt"></i>
+                    </span>
+                    <span class="title">Active Ads</span>
                 </a>
             </li>
 
@@ -31,7 +66,7 @@
                     <span class="title">Ad Create</span>
                 </a>
             </li>
-
+            <hr class="sidehr">
             <li class="nav-item {{-- {{url()->current() == route('backend.adsListing') ? 'active' :''}} --}}">
                 <a href="{{route('backend.adstats.index')}}">
                     <span class="icon-holder">
