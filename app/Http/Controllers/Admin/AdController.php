@@ -77,6 +77,7 @@ class AdController extends Controller
         ]];
         $sites  = Site::all();
         $slots  = Slot::all();
+        $institutes = Institution::all();
         $adv=null;
         if ($request->institute) {
             $adv = Institution::find($request->institute);
@@ -84,7 +85,7 @@ class AdController extends Controller
                 abort(404);
             }
         }
-        return view('backend.ads.form', compact('sites', 'slots', 'data','adv'));
+        return view('backend.ads.form', compact('sites', 'slots', 'data','adv','institutes'));
     }
 
     /**
@@ -246,7 +247,8 @@ class AdController extends Controller
             ];
         })->toArray();
 
-        return view('backend.ads.form',compact('ad', 'sites', 'slots', 'selectedSites'));
+        $institutes = Institution::all();
+        return view('backend.ads.form',compact('ad', 'sites', 'slots', 'selectedSites','institutes'));
     }
 
     /**

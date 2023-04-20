@@ -423,20 +423,23 @@
                             @enderror
                         </div>
                     </div> --}}
-                    @if (isset($adv) || (isset($ad) && $ad->institution_id))
+                    {{-- @if (isset($adv) || (isset($ad) && $ad->institution_id)) --}}
                         @php
-                            $ins_name=isset($adv) ? $adv->inst_name : $ad->institution->inst_name;
-                            $ins_id=isset($adv) ? $adv->id : $ad->institution->id;
+                            $ins_name=isset($adv) ? $adv->inst_name : ($ad->institution->inst_name?? null);
+                            $ins_id=isset($adv) ? $adv->id : ($ad->institution->id??null);
                         @endphp
                         <div class="form-row mb-3">
                             <div class="col-4">
                                 <label class="font-weight-semibold">Advertiser:</label>
                                 <select name="adv_id" class=" form-control">
-                                    <option value="{{$ins_id}}" selected>{{$ins_name}}</option>
+                                    <option value="" disabled selected>Select advertiser</option>
+                                    @foreach($institutes as $inst)
+                                        <option value="{{$inst->id}}"  {{$ins_id && $ins_id==$inst->id ? 'selected' : ''}}>{{$inst->inst_name}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                         </div>
-                    @endif
+                    {{-- @endif --}}
                     <div class="form-row">
                         <div class="form-group col-4">
 
