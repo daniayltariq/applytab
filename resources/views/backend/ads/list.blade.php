@@ -166,11 +166,11 @@
                                     <table class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Image</th>
-                                                <th class="bold w-10">Ad URL</th>
+                                                <th>Ad Image</th>
+                                                {{-- <th class="bold w-10">Ad URL</th> --}}
                                                 {{-- <th class="bold w-10">Ad Slot</th> --}}
-                                                <th>Sites</th>
-                                                <th>Publish</th>
+                                                <th>Job Boards</th>
+                                                <th>Publish Status</th>
                                                 <th>Action</th>
 											</tr>
 										</thead>
@@ -181,11 +181,11 @@
                                                         <a class="copy-job-url" href="javascript:void(0)" data-clipboard-text="{{ route('job-post',$item->unique_id) }}"><i class="fa fa-clipboard"></i> Copy</a>
                                                     </td> --}}
                                                     <td><img width="150px" src="{{ $item->image }}"/></td>
-                                                    <td class="name-badge p-3 w-20">{{ $item->ad_url ?? '' }}</td>
+                                                    {{-- <td class="name-badge p-3 w-20">{{ $item->ad_url ?? '' }}</td> --}}
                                                     {{-- <td>{{$item->slot ?? ''}}</td> --}}
                                                     <td>
                                                         @foreach ($item->adSites as $site)
-                                                            <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{$site->site_name}}</span>
+                                                            <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{str_replace('/', '', $site->site_name)}}</span>
                                                         @endforeach
                                                     </td>
                                                     <td>

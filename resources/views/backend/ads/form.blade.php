@@ -426,7 +426,7 @@
                     <div class="form-row">
                         <div class="form-group col-4">
 
-                            <label class="font-weight-semibold">Cost per click:</label>
+                            <label class="font-weight-semibold">Add Budget for this ad:</label>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                   <span class="input-group-text">$</span>
@@ -473,7 +473,7 @@
                                             <select name="site_id" class="select2 form-control site-dropdown">
                                                 <option value="" disabled selected>Select Job Board</option>
                                                 @foreach($sites as $site)
-                                                    <option value="{{ $site->id }}">{{ $site->site_name }}</option>
+                                                    <option value="{{ $site->id }}">{{ str_replace('/', '', $site->site_name) }}</option>
                                                 @endforeach
                                             </select>
                                         </div>

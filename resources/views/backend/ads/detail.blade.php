@@ -137,7 +137,7 @@
                                     </div>
                                     @php
                                         $clicks=isset($stats['clicks']) ? $stats['clicks'] : 0;
-                                        $cost=$clicks ? number_format($ad->cost_per_click/$clicks,0) : 0;
+                                        $cost=$clicks ? number_format(($ad->cost_per_click/$clicks),2, '.', '') : 0;
                                     @endphp
                                     <div class="media-body m-{{$alignShortRev}}-15">
                                         <h5 class="mb-2">
@@ -212,7 +212,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="justify-content-between align-items-center">
-                            <p class="m-b-0 text-muted">Sites</p>
+                            <p class="m-b-0 text-muted">Job Board</p>
                             <div class="d-flex justify-content-between align-items-center">
                                 <i class="fas fa-regular fa-building stats-icon"></i>
                                 <h2 class="m-b-0 stats-val">{{$ad->adSites->count() ?? ''}}</h2>
