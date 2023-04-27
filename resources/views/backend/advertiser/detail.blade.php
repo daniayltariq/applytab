@@ -190,7 +190,7 @@
                                                     <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{str_replace('/', '', $site->site_name)}}</span>
                                                 @endforeach
                                             </td>
-                                            <td>{{$item->ad_stats()->where('type','views')->count()}}</td>
+                                            <td>{{$item->ad_stats()->where('type','view')->count()}}</td>
                                             <td>
                                                 @php
                                                     $clicks=$item->ad_stats()->where('type','click')->count();
@@ -244,7 +244,7 @@
                                                     <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{str_replace('/', '', $site->site_name)}}</span>
                                                 @endforeach
                                             </td>
-                                            <td>{{$item->ad_stats()->where('type','views')->count()}}</td>
+                                            <td>{{$item->ad_stats()->where('type','view')->count()}}</td>
                                             <td>
                                                 @php
                                                     $clicks=$item->ad_stats()->where('type','click')->count();

@@ -431,12 +431,14 @@
                         <div class="form-row mb-3">
                             <div class="col-4">
                                 <label class="font-weight-semibold">Advertiser:</label>
-                                <select name="adv_id" class=" form-control">
+
+                                <select class="select2 form-control js-example-basic-single" id="adv_id" name="adv_id">
                                     <option value="" disabled selected>Select advertiser</option>
                                     @foreach($institutes as $inst)
                                         <option value="{{$inst->id}}"  {{$ins_id && $ins_id==$inst->id ? 'selected' : ''}}>{{$inst->inst_name}}</option>
                                     @endforeach
-                                </select>
+                                </select>                                
+
                             </div>
                         </div>
                     {{-- @endif --}}
@@ -552,6 +554,11 @@
 <script src = "https://code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.repeater/1.2.1/jquery.repeater.min.js" integrity="sha512-foIijUdV0fR0Zew7vmw98E6mOWd9gkGWQBWaoA1EOFAx+pY+N8FmmtIYAVj64R98KeD2wzZh1aHK0JSpKmRH8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script type="text/javascript">
+
+    $(document).ready(function() {
+        $('#adv_id').select2();
+    });
+
     $(document).ready(function(){
         disableTheSelectedInputs();
         $('.select2').select2();
