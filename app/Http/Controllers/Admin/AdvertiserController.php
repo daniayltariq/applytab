@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 use App\Models\User;
+use App\Models\Stats;
 use App\Models\Institution;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -109,8 +110,24 @@ class AdvertiserController extends Controller
         $archived_ads=$inst->ads()->whereDate('ad_expiry','<=',now())->with('ad_stats')->get();
         $active_ads=$inst->ads()->whereDate('ad_expiry','>',now() )->with('ad_stats')->where('status',1)->get();
 
-        // dd($archived_ads,$active_ads);
-        return view('backend.advertiser.detail',compact('inst','stats','archived_ads','active_ads'));
+        $months = ["January", "February", "March", "April", "May", "June", "July"];
+        $monthlyStats = array_fill_keys($months, ['impressions' => 0, 'clicks' => 0]);
+
+        $graph = Stats::select('ad_id', 'type', DB::raw('YEAR(created_at) as year'), DB::raw('MONTH(created_at) as month'), DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'), DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+            ->whereIn('ad_id', $inst->ads()->pluck('id')->toArray())
+            ->groupBy('ad_id', 'type', 'year', 'month')
+            ->get();
+
+        foreach ($graph as $stat) {
+            $monthIndex = $stat->month - 1;
+            $monthlyStats[$months[$monthIndex]]['impressions'] += $stat->views;
+            $monthlyStats[$months[$monthIndex]]['clicks'] += $stat->clicks;
+        }
+
+        // $monthlyStats = array_values($monthlyStats);
+
+        // dd(collect($monthlyStats)->pluck('clicks'));
+        return view('backend.advertiser.detail',compact('inst','stats','archived_ads','active_ads','monthlyStats'));
     }
 
     /**
