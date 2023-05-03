@@ -77,6 +77,10 @@
     .dropdown-item{
         cursor: pointer;
     }
+
+    #filter:focus{
+        box-shadow: none !important;
+    }
 </style>
 @endsection
 
@@ -157,7 +161,18 @@
 
         <div class="card">
             <div class="card-body">
-                <div class="row">
+                <div class="row justify-content-end">
+                    <div class="col-md-2">
+                        <form action="" id="filter_form">
+                            <select id="filter" name="filter" class="form-control border-0">
+                                <option value="7-days" {{request()->query('filter')=='7-days' ? 'selected' :''}}>Last 7 Days</option>
+                                <option value="14-days" {{request()->query('filter')=='14-days' ? 'selected' :''}}>Last 14 Days</option>
+                                <option value="30-days" {{request()->query('filter')=='30-days' ? 'selected' :''}}>Last 30 Days</option>
+                                <option value="this-month" {{request()->query('filter')=='this-month' ? 'selected' :''}}>This Month</option>
+                                <option value="last-month" {{request()->query('filter')=='last-month' ? 'selected' :''}}>Last Month</option>
+                            </select>
+                        </form>
+                    </div>
                     <div class="col-lg-12">
                         <canvas class="chart" style="height: 205px" id="line-chart"></canvas>
                     </div>
@@ -316,6 +331,10 @@
         transparent: 'rgba(255, 255, 255, 0)'
     };
     $(document).ready(function(){
+
+        $('#filter').on('change', function(){
+            $('#filter_form').submit();
+        })
         //Line Chart
         const lineChart = document.getElementById("line-chart");
         const lineCtx = lineChart.getContext('2d');
@@ -323,7 +342,8 @@
         const lineConfig = new Chart(lineCtx, {
             type: 'line',
             data: {
-            labels: ["January", "February", "March", "April", "May", "June", "July"],
+            // labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: {!!json_encode($filter)!!},
             datasets: [{
                     label: 'Impressions',
                     backgroundColor: colors.transparent,
@@ -358,7 +378,9 @@
                             display: true,
                             fontColor: colors.grayLight,
                             fontSize: 13,
-                            padding: 10
+                            padding: 10,
+                            autoSkip: true,
+                            maxTicksLimit: 20
                         }
                     }],
                     yAxes: [{
@@ -371,11 +393,11 @@
                         },
                         ticks: {
                             display: true,
-                            max: 100,                            
-                            stepSize: 20,
+                            max: {!!$stats['graph-max-y-axis']!!},                            
+                            stepSize: {!!$stats['graph-max-y-axis'] > 2000 ? 500 : ($stats['graph-max-y-axis'] > 500 && $stats['graph-max-y-axis'] < 2000  ? 200 :20) !!},
                             fontColor: colors.grayLight,
                             fontSize: 13,
-                            padding: 10
+                            padding: 10,
                         }  
                     }],
                 },
