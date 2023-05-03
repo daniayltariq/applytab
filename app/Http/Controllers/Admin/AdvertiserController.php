@@ -112,7 +112,7 @@ class AdvertiserController extends Controller
                         }])->get()->pluck('ad_stats')->flatten()->count()
         ];
 
-        $stats['graph-max-y-axis'] = 100+($stats['clicks'] > $stats['views'] ? $stats['clicks'] : $stats['views']);
+        $stats['graph-max-y-axis'] = 100;
 
         $archived_ads=$inst->ads()->whereDate('ad_expiry','<=',now())->with('ad_stats')->get();
         $active_ads=$inst->ads()->whereDate('ad_expiry','>',now() )->with('ad_stats')->where('status',1)->get();
@@ -164,13 +164,16 @@ class AdvertiserController extends Controller
         foreach ($graph as $stat) {
             $monthlyStats[$stat->date]['impressions'] += $stat->views;
             $monthlyStats[$stat->date]['clicks'] += $stat->clicks;
+
+            $max = ($monthlyStats[$stat->date]['clicks'] > $monthlyStats[$stat->date]['impressions'] ? $monthlyStats[$stat->date]['clicks'] : $monthlyStats[$stat->date]['impressions']);
+            $stats['graph-max-y-axis'] = $stats['graph-max-y-axis'] > $max ? $stats['graph-max-y-axis'] : $max;
         }
 
         foreach ($filter as $key => $f) {
             $filter[$key]=Carbon::parse($f)->format('M d');
         }
         // $monthlyStats = array_values($monthlyStats);
-
+        // dd($stats['graph-max-y-axis']);
         return view('backend.advertiser.detail',compact('inst','stats','archived_ads','active_ads','monthlyStats','filter'));
     }
 
