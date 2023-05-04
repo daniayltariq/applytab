@@ -131,6 +131,28 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="row justify-content-end">
+                                    <div class="col-md-2">
+                                        <form action="" id="filter_form">
+                                            <select id="filter" name="filter" class="form-control border-0">
+                                                <option value="7-days" {{request()->query('filter')=='7-days' ? 'selected' :''}}>Last 7 Days</option>
+                                                <option value="14-days" {{request()->query('filter')=='14-days' ? 'selected' :''}}>Last 14 Days</option>
+                                                <option value="30-days" {{request()->query('filter')=='30-days' ? 'selected' :''}}>Last 30 Days</option>
+                                                <option value="this-month" {{request()->query('filter')=='this-month' ? 'selected' :''}}>This Month</option>
+                                                <option value="last-month" {{request()->query('filter')=='last-month' ? 'selected' :''}}>Last Month</option>
+                                            </select>
+                                        </form>
+                                    </div>
+                                    <div class="col-lg-12">
+                                        <canvas class="chart" style="height: 205px" id="line-chart"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 {{-- </div>
             </div> --}}
             {{-- <div class="col-lg-12">
@@ -240,73 +262,76 @@
     };
     $(document).ready(function(){
 
-        const salesChart = document.getElementById("sales_chart");
-        const salesChartCtx = salesChart.getContext('2d');
-        salesChart.height = 120;
-        const salesChartConfig = new Chart(salesChartCtx, {
-            type: 'bar',
+        //line chart
+        $('#filter').on('change', function(){
+            $('#filter_form').submit();
+        })
+        //Line Chart
+        const lineChart = document.getElementById("line-chart");
+        const lineCtx = lineChart.getContext('2d');
+        lineChart.height = 120;
+        const lineConfig = new Chart(lineCtx, {
+            type: 'line',
             data: {
-            labels: [ 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+            // labels: ["January", "February", "March", "April", "May", "June", "July"],
+            labels: {!!json_encode($filter)!!},
             datasets: [{
-                label: 'Online',
-                backgroundColor: colors.blue,
-                borderWidth: 0,
-                data: [ 20, 30, 35, 45, 55, 45]
-            },
-            {
-                label: 'Offline',
-                backgroundColor: colors.blueLight,
-                borderWidth: 0,
-                data: [ 25, 35, 40, 50, 60, 50]
+                    label: 'Impressions',
+                    backgroundColor: colors.transparent,
+                    borderColor: colors.blue,
+                    pointBackgroundColor: colors.blue,
+                    pointBorderColor: colors.white,
+                    pointHoverBackgroundColor: colors.blueLight,
+                    pointHoverBorderColor: colors.blueLight,
+                    data: {!!json_encode(collect($monthlyStats)->pluck('impressions')->toArray())!!}
+                },
+                {
+                    label: 'Clicks',
+                    backgroundColor: colors.transparent,
+                    borderColor: colors.cyan,
+                    pointBackgroundColor: colors.cyan,
+                    pointBorderColor: colors.white,
+                    pointHoverBackgroundColor: colors.cyanLight,
+                    pointHoverBorderColor: colors.cyanLight,
+                    data: {!!json_encode(collect($monthlyStats)->pluck('clicks')->toArray())!!}
                 }]
             },
             options: {
-                scaleShowVerticalLines: false,
-                responsive: true,
                 legend: {
-					display: false
-				},
+                    display: false
+                },
                 scales: {
-                    xAxes: [{
-                        categoryPercentage: 0.35,
-                        barPercentage: 0.70,
-                        display: true,
-                        scaleLabel: {
+                    xAxes: [{ 
+                        gridLines: [{
                             display: false,
-                            labelString: 'Month'
-                        },
-                        gridLines: false,
+                        }],
                         ticks: {
                             display: true,
-                            beginAtZero: true,
+                            fontColor: colors.grayLight,
                             fontSize: 13,
-                            padding: 10
+                            padding: 10,
+                            autoSkip: true,
+                            maxTicksLimit: 20
                         }
                     }],
                     yAxes: [{
-                        display: true,
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Value'
-                        },
                         gridLines: {
                             drawBorder: false,
-                            offsetGridLines: false,
                             drawTicks: false,
                             borderDash: [3, 4],
                             zeroLineWidth: 1,
-                            zeroLineBorderDash: [3, 4]
+                            zeroLineBorderDash: [3, 4]  
                         },
                         ticks: {
-                            max: 80,
-                            stepSize: 20,
                             display: true,
-                            beginAtZero: true,
+                            max: {!!$data['graph-max-y-axis']!!},                            
+                            stepSize: {!!$data['graph-max-y-axis'] > 2000 ? 500 : ($data['graph-max-y-axis'] > 500 && $data['graph-max-y-axis'] < 2000  ? 200 :20) !!},
+                            fontColor: colors.grayLight,
                             fontSize: 13,
-                            padding: 10
-                        }
-                    }]
-                }
+                            padding: 10,
+                        }  
+                    }],
+                },
             }
         });
     })

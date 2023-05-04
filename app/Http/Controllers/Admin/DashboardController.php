@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use App\Models\Site;
 use App\Models\User;
 use App\Models\Stats;
+use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Validator;
 
 class DashboardController extends Controller
 {
-  	public function index() 
+  	public function index(Request $request) 
   	{
 		$ads=Ad::count();
         $sites  = Site::count();
@@ -30,8 +31,66 @@ class DashboardController extends Controller
 			'ads'=>$ads,
 			'sites'=>$sites,
 		];
-		
-	    return view('backend.index',compact('data'));
+
+		$data['graph-max-y-axis'] = 100;
+
+        $filter = [];
+        if ($request->query('filter')) {
+            if (str_contains($request->query('filter'), 'days')) {
+                $days=explode("-",$request->query('filter'));
+                $days=$days[0];
+                // Get the current date
+                $currentDate = Carbon::now();
+                $filter = [];
+                for ($i = 1; $i <= $days; $i++) {
+                    $filter[] = $currentDate->subDay()->format('Y-m-d');
+                }
+                $filter=array_reverse($filter);
+            } elseif($request->query('filter')=='this-month'){
+                $period = CarbonPeriod::create(now()->startOfMonth(), now());
+                foreach($period as $date)
+                {
+                  $filter[] = $date->format('Y-m-d');
+                }
+            } elseif($request->query('filter')=='last-month'){
+                $period = CarbonPeriod::create(now()->subMonth()->startOfMonth(), now()->subMonth()->endOfMonth());
+                foreach($period as $date)
+                {
+                  $filter[] = $date->format('Y-m-d');
+                }
+            }
+            
+        }else{
+            // Get the current date
+            $currentDate = Carbon::now();
+            $filter = [];
+            for ($i = 1; $i <= 7; $i++) {
+                $filter[] = $currentDate->subDay()->format('Y-m-d');
+            }
+            $filter=array_reverse($filter);
+        }
+
+        $monthlyStats = array_fill_keys($filter, ['impressions' => 0, 'clicks' => 0]);
+
+        $graph = Stats::select('ad_id', 'type', DB::raw('DATE(created_at) as date'), DB::raw('SUM(CASE WHEN type = "click" THEN 1 ELSE 0 END) AS clicks'), DB::raw('SUM(CASE WHEN type = "view" THEN 1 ELSE 0 END) AS views'))
+            ->whereNotNull('ad_id')
+            ->whereBetween('created_at', [$filter[0] . ' 00:00:00', end($filter) . ' 23:59:59'])
+            ->groupBy('ad_id', 'type', 'date')
+            ->get();
+
+        foreach ($graph as $stat) {
+            $monthlyStats[$stat->date]['impressions'] += $stat->views;
+            $monthlyStats[$stat->date]['clicks'] += $stat->clicks;
+
+            $max = ($monthlyStats[$stat->date]['clicks'] > $monthlyStats[$stat->date]['impressions'] ? $monthlyStats[$stat->date]['clicks'] : $monthlyStats[$stat->date]['impressions']);
+            $data['graph-max-y-axis'] = $data['graph-max-y-axis'] > $max ? $data['graph-max-y-axis'] : $max;
+        }
+
+        foreach ($filter as $key => $f) {
+            $filter[$key]=Carbon::parse($f)->format('M d');
+        }
+
+	    return view('backend.index',compact('data','monthlyStats','filter'));
   	}
 	  
   	public function terms_and_condition(Request $request) 
