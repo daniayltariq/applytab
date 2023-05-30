@@ -94,7 +94,7 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="justify-content-between align-items-center">
-                                    <p class="m-b-0 text-muted">Views</p>
+                                    <p class="m-b-0 text-muted">Impressions</p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <i class="fas fa-eye stats-icon"></i>
                                         <h2 class="m-b-0 stats-val">{{$data['views'] ?? ''}}</h2>

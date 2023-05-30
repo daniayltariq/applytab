@@ -33,7 +33,7 @@ class AdvertiserController extends Controller
         $advertisers = $advertisers->when($request->query('search'),function($q) use ($request){
                 $q->where(function ($q) use ($request) {
                     $q->where('inst_name', 'LIKE', '%' . $request->query('search') . '%')
-                        ->orWhere('acronym', 'LIKE', '%' . $request->query('search') . '%');
+                        ->orWhere('keywords', 'LIKE', '%' . $request->query('search') . '%');
                 });
             })->paginate(15);
 
