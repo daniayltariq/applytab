@@ -43,6 +43,11 @@ class AdController extends Controller
                     ->orWhereHas('adSites', function($q) use ($request){
                         $q->where('site_name', 'LIKE', '%' . $request->query('search') . '%');
                     });
+                })
+                ->orWhere(function ($q) use ($request) {
+                    $q->whereHas('institution', function($q) use ($request){
+                        $q->where('inst_name', 'LIKE', '%' . $request->query('search') . '%');
+                    });
                 });
             })
             ->when($request->query('q')=='archived',function($q){
