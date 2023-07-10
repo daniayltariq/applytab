@@ -189,7 +189,7 @@
                                                             <span class="badge rounded-pill bg-primary text-color1 mb-1 mt-1 px-2 py-1">{{str_replace('/', '', $site->site_name)}}</span>
                                                         @endforeach
                                                     </td>
-                                                    <td>{{Carbon\Carbon::parse($item->ad_expiry)->format('d-M-Y')}}</td>
+                                                    <td>{{date__format($item->ad_expiry)}}</td>
                                                     <td>
                                                         <input class="ad_status_update" id="ad_status_update_{{ $item->id }}" type="checkbox" @if($item->status) checked @endif value="1" data-ad="{{ $item->id }}" data-toggle="toggle" data-on="Yes" data-off="No" data-size="sm">
                                                     </td>

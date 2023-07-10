@@ -153,7 +153,7 @@
                             <div class="card-body">
                                 <div class="media m-v-10">
                                     <div class="media-body">
-                                        <h5 class=""><b> Expires at: </b>{{Carbon\Carbon::parse($ad->ad_expiry)->format('m-d-Y')}}</h5> 
+                                        <h5 class=""><b> Expires at: </b>{{date__format($ad->ad_expiry)}}</h5> 
                                     </div>
                                 </div>
                             </div>

@@ -91,6 +91,14 @@ if (!function_exists('getFullUrl'))
     }
 }
 
+if(!function_exists('date__format'))
+{
+    function date__format($date)
+    {
+        return ($date =='0000-00-00' || $date =='00-00-0000') ? '' : \Carbon\Carbon::parse($date)->format('n/j/Y');
+    }
+}
+
 if(!function_exists('get_user_by_md5'))
 {
     function get_user_by_md5($token)
