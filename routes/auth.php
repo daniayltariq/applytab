@@ -25,6 +25,9 @@ Route::get('/webapp/68s4da1/login/UoiEXtymwHVgw', [AuthenticatedSessionControlle
                 ->middleware('guest')
                 ->name('login');
 
+// Route::get('/webapp/9745983/qr/jgllghjld', [AuthenticatedSessionController::class, 'googleAuthQR'])
+//                 ->name('googleauthenticator');
+
 Route::post('/login', [AuthenticatedSessionController::class, 'store'])
                 ->middleware('guest');
 
